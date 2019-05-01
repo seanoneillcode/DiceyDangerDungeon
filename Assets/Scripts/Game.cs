@@ -9,6 +9,7 @@ public class Game : MonoBehaviour
     [HideInInspector]  public Node selectedNode;
 
     public int playerHealth = 5;
+    public int diceResult = -1;
 
     private Actor activeActor;
 
@@ -26,9 +27,38 @@ public class Game : MonoBehaviour
             if (activeActor.IsAtTarget())
             {
                 Debug.Log("perform the action at the node");
+                Node node = GetOverlap(activeActor);
+                if (node != null)
+                {
+                    Debug.Log("node is " + node.gameObject.name);
+                    diceResult = UnityEngine.Random.Range(1, 6);
+                    Debug.Log("rolled a " + diceResult);
+                    Debug.Log("risk was " + node.risk);
+                    if (diceResult < node.risk)
+                    {
+                        Debug.Log("hurt the player ");
+                        playerHealth = playerHealth - 1;
+                    }
+                }
                 activeActor = null;
             }
         }
+    }
+
+    private Node GetOverlap(Actor actor)
+    {
+        //BoxCollider actorCollider = actor.GetComponent<BoxCollider>();
+        GameObject actorCollider = actor.gameObject;
+        Collider[] colliders = Physics.OverlapBox(actorCollider.transform.position, actorCollider.transform.localScale / 2, Quaternion.identity, LayerMask.GetMask("Nodes"));
+        foreach (Collider collider in colliders)
+        {
+            Node node = collider.gameObject.GetComponent<Node>();
+            if (node != null)
+            {
+                return node;
+            }
+        }
+        return null;
     }
 
     internal void SelectActor(Actor actor)

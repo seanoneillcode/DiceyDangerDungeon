@@ -18,7 +18,6 @@ public class Lifebar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        image.fillAmount = (referenceHolder.game.playerHealth + 1 / 5f) * 0.662f;
+        image.fillAmount = (referenceHolder.game.playerHealth / 5f);
     }
 }
