@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
+    private Game game;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        game = FindObjectOfType<Game>();
     }
 
     // Update is called once per frame
@@ -19,12 +21,18 @@ public class InputHandler : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Nodes", "Actors")))
             {
-                Transform objectHit = hit.transform;
-                Actor actor = hit.transform.gameObject.GetComponent<Actor>();
-                if (actor != null)
+                Node node = hit.transform.gameObject.GetComponent<Node>();
+                game.SelectNode(node);
+
+                if (node == null)
                 {
-                    actor.selected = true;
+                    Actor actor = hit.transform.gameObject.GetComponent<Actor>();
+                    game.SelectActor(actor);
                 }
+            } else
+            {
+                game.SelectActor(null);
+                game.SelectNode(null);
             }
         }
     }
