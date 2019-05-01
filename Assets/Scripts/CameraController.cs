@@ -33,7 +33,8 @@ public class CameraController : MonoBehaviour
         }
 
         moveAmount += new Vector3(Input.GetAxis("Horizontal") * speed, 0, Input.GetAxis("Vertical") * speed) * Time.deltaTime;
-        transform.position = transform.position + moveAmount;
+        transform.position += (transform.right * moveAmount.x);
+        transform.position += (transform.forward * moveAmount.z);
     }
 
 }
