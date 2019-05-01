@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Node : MonoBehaviour
 {
     public int risk;
+    public Actor actor;
 
     // Start is called before the first frame update
     void Start()
@@ -21,4 +22,6 @@ public class Node : MonoBehaviour
     {
 
     }
+
+
 }
