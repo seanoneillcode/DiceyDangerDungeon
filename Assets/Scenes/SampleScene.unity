@@ -701,6 +701,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 004613558a2b24c4aae6e4ba7a8fbf84, type: 3}
+--- !u!1 &697550448 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1821397455156227461, guid: ac5f8a576cd20634f8be6eff4f650439,
+    type: 3}
+  m_PrefabInstance: {fileID: 1821397454433063425}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &697550451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697550448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2974a3c980d2f648a1c7d07d745b75e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalMaterial: {fileID: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  speed: 2
 --- !u!1 &1045552049
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +835,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -252}
+  m_AnchoredPosition: {x: 0, y: -120}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1140295160
@@ -1130,7 +1151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe8dd29271d0ad44b71b193353b78fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 1316002183432672294, guid: 71c3ae63ea4436944b5951719126fe15,
+    type: 3}
 --- !u!4 &1466288486
 Transform:
   m_ObjectHideFlags: 0
@@ -2003,5 +2025,10 @@ PrefabInstance:
       propertyPath: risk
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7268489251996088098, guid: 6bb4648e57bdd5b43a0d36fc5a3c06ae,
+        type: 3}
+      propertyPath: actor
+      value: 
+      objectReference: {fileID: 697550451}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bb4648e57bdd5b43a0d36fc5a3c06ae, type: 3}

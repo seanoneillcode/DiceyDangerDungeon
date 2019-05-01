@@ -20,8 +20,15 @@ public class Node : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
-
+    public void RemoveRisk()
+    {
+        risk = 0;
+        Text riskText = GetComponentInChildren<Text>();
+        if (riskText != null)
+        {
+            riskText.gameObject.SetActive(false);
+        }
+    }
 }

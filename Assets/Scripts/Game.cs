@@ -12,11 +12,12 @@ public class Game : MonoBehaviour
     public int diceResult = -1;
 
     private Actor activeActor;
+    private ExplosionHandler explosionHandler;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        explosionHandler = FindObjectOfType<ExplosionHandler>();
     }
 
     // Update is called once per frame
@@ -28,16 +29,25 @@ public class Game : MonoBehaviour
             {
                 Debug.Log("perform the action at the node");
                 Node node = GetOverlap(activeActor);
-                if (node != null)
+                if (node != null && node.risk > 0)
                 {
                     Debug.Log("node is " + node.gameObject.name);
                     diceResult = UnityEngine.Random.Range(1, 6);
                     Debug.Log("rolled a " + diceResult);
-                    Debug.Log("risk was " + node.risk);
+                    Debug.Log("risk was " + node.risk)
                     if (diceResult < node.risk)
                     {
                         Debug.Log("hurt the player ");
                         playerHealth = playerHealth - 1;
+                    }
+                    node.RemoveRisk();
+                    if (node.actor != null)
+                    {
+                        explosionHandler.Explode(node.actor.gameObject.transform.position);
+                        Destroy(node.actor.gameObject);
+                    } else
+                    {
+                        Debug.Log("Node doesn't have an actor");
                     }
                 }
                 activeActor = null;
