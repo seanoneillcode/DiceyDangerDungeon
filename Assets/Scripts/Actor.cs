@@ -42,4 +42,9 @@ public class Actor : MonoBehaviour
             renderer.material = refMaterial;
         }
     }
+
+    public bool IsAtTarget()
+    {
+        return targetPos.Equals(transform.position);
+    }
 }
