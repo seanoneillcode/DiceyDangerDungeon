@@ -20,10 +20,10 @@ public class InputHandler : MonoBehaviour
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Nodes", "Actors")))
             {
                 Transform objectHit = hit.transform;
-                Debug.Log("hit something");
+                Debug.Log("hit an actor or node");
                 // Do something with the object that was hit by the raycast.
             }
         }
