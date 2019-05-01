@@ -34,7 +34,7 @@ public class Game : MonoBehaviour
                     Debug.Log("node is " + node.gameObject.name);
                     diceResult = UnityEngine.Random.Range(1, 6);
                     Debug.Log("rolled a " + diceResult);
-                    Debug.Log("risk was " + node.risk)
+                    Debug.Log("risk was " + node.risk);
                     if (diceResult < node.risk)
                     {
                         Debug.Log("hurt the player ");
