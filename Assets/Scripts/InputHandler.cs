@@ -15,16 +15,16 @@ public class InputHandler : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("left click");
-            // check where is clicked
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Nodes", "Actors")))
             {
                 Transform objectHit = hit.transform;
-                Debug.Log("hit an actor or node");
-                // Do something with the object that was hit by the raycast.
+                Actor actor = hit.transform.gameObject.GetComponent<Actor>();
+                if (actor != null)
+                {
+                    actor.selected = true;
+                }
             }
         }
     }
