@@ -11,8 +11,8 @@ public class HighlightController : MonoBehaviour
     private GameObject floorMouseHighlight;
 
     private Game game;
-    private Actor lastHighlightedActor;
-    private Actor lastSelectedActor;
+    private Player lastHighlightedPlayer;
+    private Player lastSelectedPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -25,23 +25,32 @@ public class HighlightController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (lastHighlightedActor != null)
+        if (lastHighlightedPlayer != null)
         {
-            lastHighlightedActor.Highlight(null);
-            lastHighlightedActor = null;
+            lastHighlightedPlayer.Highlight(null);
+            lastHighlightedPlayer = null;
         }
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Actors", "Nodes")))
         {
-            Actor actor = hit.transform.gameObject.GetComponent<Actor>();
-            if (actor != null)
+            Player player = hit.transform.gameObject.GetComponent<Player>();
+            if (player != null)
             {
-                actor.Highlight(highlightMouseMaterial);
-                lastHighlightedActor = actor;
+                player.Highlight(highlightMouseMaterial);
+                lastHighlightedPlayer = player;
             }
+            
             Node node = hit.transform.gameObject.GetComponent<Node>();
+            if (player == null && node == null)
+            {
+                Actor actor = hit.transform.gameObject.GetComponent<Actor>();
+                if (actor != null && actor.node != null)
+                {
+                    node = actor.node;
+                }
+            }
             if (node != null && node != game.selectedNode)
             {
                 floorMouseHighlight.SetActive(true);
@@ -55,16 +64,16 @@ public class HighlightController : MonoBehaviour
             floorMouseHighlight.SetActive(false);
         }
 
-        if (game.selectedActor != null)
+        if (game.selectedPlayer != null)
         {
-            game.selectedActor.Highlight(highlightSelectMaterial);
-            lastSelectedActor = game.selectedActor;
+            game.selectedPlayer.Highlight(highlightSelectMaterial);
+            lastSelectedPlayer = game.selectedPlayer;
         } else
         {
-            if (lastSelectedActor != null)
+            if (lastSelectedPlayer != null)
             {
-                lastSelectedActor.Highlight(null);
-                lastSelectedActor = null;
+                lastSelectedPlayer.Highlight(null);
+                lastSelectedPlayer = null;
             }
         }
 
@@ -82,10 +91,5 @@ public class HighlightController : MonoBehaviour
         {
             floorHighlight.SetActive(false);
         }
-    }
-
-    private void RemoveHighlight(Actor actor)
-    {
-        actor.Highlight(null);
     }
 }

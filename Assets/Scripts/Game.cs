@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    [HideInInspector]  public Actor selectedActor;
+    [HideInInspector]  public Player selectedPlayer;
     [HideInInspector]  public Node selectedNode;
 
     public int playerHealth = 5;
     public int diceResult = -1;
 
-    private Actor activeActor;
+    private Player activePlayer;
     private ExplosionHandler explosionHandler;
     private Node actionedNode;
 
@@ -24,11 +24,11 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (activeActor != null)
+        if (activePlayer != null)
         {
-            if (activeActor.IsAtTarget())
+            if (activePlayer.IsAtTarget())
             {
-                Node node = GetOverlap(activeActor);
+                Node node = GetOverlap(activePlayer);
                 if (node != null && node.risk > 0 && node != actionedNode)
                 {
                     Debug.Log("perform the action at the node");
@@ -45,7 +45,7 @@ public class Game : MonoBehaviour
                     }));
 
                     StartCoroutine(ExecuteAfterTime(2.5f, () => {
-                        MoveActorAction(activeActor, node);
+                        MovePlayerAction(activePlayer, node);
                         actionedNode = null;
                         diceResult = -1;
                     }));
@@ -65,7 +65,6 @@ public class Game : MonoBehaviour
             Debug.Log("hurt the player ");
             playerHealth = playerHealth - 1;
         }
-        
     }
 
     private void RemoveActorStep(Node node)
@@ -82,14 +81,13 @@ public class Game : MonoBehaviour
         node.RemoveRisk();
     }
 
-    private void MoveActorAction(Actor actor, Node node) {
-        actor.targetPos = node.transform.position;
+    private void MovePlayerAction(Player player, Node node) {
+        player.targetPos = node.transform.position;
     }
 
-    private Node GetOverlap(Actor actor)
+    private Node GetOverlap(Player player)
     {
-        //BoxCollider actorCollider = actor.GetComponent<BoxCollider>();
-        GameObject actorCollider = actor.gameObject;
+        GameObject actorCollider = player.gameObject;
         Collider[] colliders = Physics.OverlapBox(actorCollider.transform.position, actorCollider.transform.localScale / 2, Quaternion.identity, LayerMask.GetMask("Nodes"));
         foreach (Collider collider in colliders)
         {
@@ -102,23 +100,23 @@ public class Game : MonoBehaviour
         return null;
     }
 
-    internal void SelectActor(Actor actor)
+    internal void SelectPlayer(Player player)
     {
-        selectedActor = actor;
+        selectedPlayer = player;
     }
 
     internal void SelectNode(Node node)
     {
-        if (selectedActor != null && node != null)
+        if (selectedPlayer != null && node != null)
         {
-            activeActor = selectedActor;
+            activePlayer = selectedPlayer;
             if (node.actor != null)
             {
-                Vector3 direction = Vector3.Normalize(node.transform.position - selectedActor.transform.position);
-                selectedActor.targetPos = node.transform.position - (direction * 0.8f);
+                Vector3 direction = Vector3.Normalize(node.transform.position - selectedPlayer.transform.position);
+                selectedPlayer.targetPos = node.transform.position - (direction * 0.8f);
             } else
             {
-                selectedActor.targetPos = node.transform.position;
+                selectedPlayer.targetPos = node.transform.position;
             }
         }
         selectedNode = node;

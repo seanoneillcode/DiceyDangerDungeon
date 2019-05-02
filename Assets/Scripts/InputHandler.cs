@@ -21,17 +21,26 @@ public class InputHandler : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Nodes", "Actors")))
             {
+                Player player = hit.transform.gameObject.GetComponent<Player>();
                 Node node = hit.transform.gameObject.GetComponent<Node>();
+                if (player == null && node == null)
+                {
+                    Actor actor = hit.transform.gameObject.GetComponent<Actor>();
+                    if (actor != null && actor.node != null)
+                    {
+                        node = actor.node;
+                    }
+                }
                 game.SelectNode(node);
 
                 if (node == null)
                 {
-                    Actor actor = hit.transform.gameObject.GetComponent<Actor>();
-                    game.SelectActor(actor);
+                    
+                    game.SelectPlayer(player);
                 }
             } else
             {
-                game.SelectActor(null);
+                game.SelectPlayer(null);
                 game.SelectNode(null);
             }
         }
