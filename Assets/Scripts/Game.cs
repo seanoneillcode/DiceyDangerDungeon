@@ -10,15 +10,18 @@ public class Game : MonoBehaviour
 
     public int playerHealth = 5;
     public int diceResult = -1;
+    public bool hasReachedGoal;
 
     private Player activePlayer;
     private ExplosionHandler explosionHandler;
     private Node actionedNode;
 
+
     // Start is called before the first frame update
     void Start()
     {
         explosionHandler = FindObjectOfType<ExplosionHandler>();
+        hasReachedGoal = false;
     }
 
     // Update is called once per frame
@@ -36,19 +39,27 @@ public class Game : MonoBehaviour
 
                     actionedNode = node;
 
-                    StartCoroutine(ExecuteAfterTime(0.5f, () => {
+                    StartCoroutine(ExecuteAfterTime(0.8f, () => {
                         RollDiceStep(node);
                     }));
 
-                    StartCoroutine(ExecuteAfterTime(1.5f, () => {
+                    StartCoroutine(ExecuteAfterTime(1.6f, () => {
                         RemoveActorStep(node);
                     }));
 
-                    StartCoroutine(ExecuteAfterTime(2.5f, () => {
+                    StartCoroutine(ExecuteAfterTime(2.4f, () => {
                         MovePlayerAction(activePlayer, node);
                         actionedNode = null;
                         diceResult = -1;
                     }));
+                }
+                if (node != null)
+                {
+                    Goal goal = node.gameObject.GetComponent<Goal>();
+                    if (goal != null)
+                    {
+                        hasReachedGoal = true;
+                    }
                 }
             }
         }

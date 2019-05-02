@@ -54,12 +54,10 @@ public class Node : MonoBehaviour
             {
                 if (collider.gameObject.GetComponent<Player>() == null)
                 {
-                    Debug.Log("actor WAS found for " + gameObject.name);
                     return actor;
                 }
             }
         }
-        Debug.Log("no actor found for " + gameObject.name);
         return null;
     }
 }
