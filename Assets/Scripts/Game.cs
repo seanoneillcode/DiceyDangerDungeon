@@ -8,7 +8,7 @@ public class Game : MonoBehaviour
     [HideInInspector]  public Player selectedPlayer;
     [HideInInspector]  public Node selectedNode;
 
-    public int playerHealth = 5;
+    public int playerHealth = 2;
     public int diceResult = -1;
     public bool hasReachedGoal;
 
@@ -23,6 +23,7 @@ public class Game : MonoBehaviour
         explosionHandler = FindObjectOfType<ExplosionHandler>();
         hasReachedGoal = false;
     }
+
 
     // Update is called once per frame
     void Update()
@@ -48,9 +49,13 @@ public class Game : MonoBehaviour
                     }));
 
                     StartCoroutine(ExecuteAfterTime(2.4f, () => {
-                        MovePlayerAction(activePlayer, node);
+                        if (playerHealth > 0)
+                        {
+                            MovePlayerAction(activePlayer, node);
+                            
+                            diceResult = -1;
+                        }
                         actionedNode = null;
-                        diceResult = -1;
                     }));
                 }
                 if (node != null)
@@ -65,31 +70,49 @@ public class Game : MonoBehaviour
         }
     }
 
+    public bool IsConnected(Node nodeA, Node nodeB)
+    {
+        foreach( Link link in nodeA.links)
+        {
+            if (link.nodeA == nodeB || link.nodeB == nodeB)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void RollDiceStep(Node node)
     {
         diceResult = UnityEngine.Random.Range(1, 6);
         Debug.Log("rolled a " + diceResult);
         Debug.Log("risk was " + node.risk);
+    }
 
+    private void RemoveActorStep(Node node)
+    {
         if (diceResult < node.risk)
         {
             Debug.Log("hurt the player ");
             playerHealth = playerHealth - 1;
         }
-    }
-
-    private void RemoveActorStep(Node node)
-    {
-        if (node.actor != null)
+        if (playerHealth < 1)
         {
-            explosionHandler.Explode(node.actor.gameObject.transform.position);
-            Destroy(node.actor.gameObject);
-        }
-        else
+            explosionHandler.Explode(activePlayer.gameObject.transform.position);
+            Destroy(activePlayer.gameObject);
+        } else
         {
-            Debug.Log("Node doesn't have an actor");
+            if (node.actor != null)
+            {
+                explosionHandler.Explode(node.actor.gameObject.transform.position);
+                Destroy(node.actor.gameObject);
+            }
+            else
+            {
+                Debug.Log("Node doesn't have an actor");
+            }
+            node.RemoveRisk();
         }
-        node.RemoveRisk();
     }
 
     private void MovePlayerAction(Player player, Node node) {
@@ -98,6 +121,10 @@ public class Game : MonoBehaviour
 
     private Node GetOverlap(Player player)
     {
+        if (player == null)
+        {
+            return null;
+        }
         GameObject actorCollider = player.gameObject;
         Collider[] colliders = Physics.OverlapBox(actorCollider.transform.position, actorCollider.transform.localScale / 2, Quaternion.identity, LayerMask.GetMask("Nodes"));
         foreach (Collider collider in colliders)
@@ -111,6 +138,12 @@ public class Game : MonoBehaviour
         return null;
     }
 
+    public bool CanHighlightNode(Node node)
+    {
+        Node playerNode = GetOverlap(selectedPlayer);
+        return playerNode != null && IsConnected(playerNode, node);
+    }
+
     internal void SelectPlayer(Player player)
     {
         selectedPlayer = player;
@@ -118,6 +151,11 @@ public class Game : MonoBehaviour
 
     internal void SelectNode(Node node)
     {
+        if (!CanHighlightNode(node))
+        {
+            return;
+        }
+
         if (selectedPlayer != null && node != null)
         {
             activePlayer = selectedPlayer;
@@ -131,6 +169,11 @@ public class Game : MonoBehaviour
             }
         }
         selectedNode = node;
+    }
+
+    public bool isPlayerDead()
+    {
+        return playerHealth < 1 && actionedNode == null;
     }
 
     IEnumerator ExecuteAfterTime(float time, Action task)

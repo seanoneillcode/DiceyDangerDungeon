@@ -271,6 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   risk: 0
   actor: {fileID: 0}
+  links: []
 --- !u!65 &5428539253635028227
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -282,8 +283,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5220857, y: 0.07485676, z: 1.5204067}
-  m_Center: {x: -0.016887426, y: -0.009174347, z: 0.020488739}
+  m_Size: {x: 1.5220857, y: 0.39035225, z: 1.5204067}
+  m_Center: {x: -0.016887426, y: -0.16692209, z: 0.020488739}
 --- !u!1 &8679436563460160420
 GameObject:
   m_ObjectHideFlags: 0

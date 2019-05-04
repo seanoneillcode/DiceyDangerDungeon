@@ -26,6 +26,11 @@ public class MenuPanel : MonoBehaviour
             once = true;
             StartCoroutine(ExecuteAfterTime(0.8f));
         }
+        if (referenceHolder.game.isPlayerDead() && !once)
+        {
+            once = true;
+            StartCoroutine(ExecuteAfterTime(0.8f));
+        }
     }
 
     public void Restart()

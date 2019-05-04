@@ -51,7 +51,7 @@ public class HighlightController : MonoBehaviour
                     node = actor.node;
                 }
             }
-            if (node != null && node != game.selectedNode)
+            if (node != null && node != game.selectedNode && game.CanHighlightNode(node))
             {
                 floorMouseHighlight.SetActive(true);
                 floorMouseHighlight.transform.position = node.gameObject.transform.position;
@@ -82,7 +82,7 @@ public class HighlightController : MonoBehaviour
 
     private void HighlightFloors()
     {
-        if (game.selectedNode != null)
+        if (game.selectedNode != null && game.CanHighlightNode(game.selectedNode))
         {
             floorHighlight.SetActive(true);
             floorHighlight.transform.position = game.selectedNode.gameObject.transform.position;
