@@ -9,12 +9,16 @@ public class Game : MonoBehaviour
     [HideInInspector]  public Node selectedNode;
 
     public int playerHealth = 2;
-    public int diceResult = -1;
+    private int diceResult = -1;
+    public int finalDiceRoll = -1;
     public bool hasReachedGoal;
 
-    private Player activePlayer;
+    public Player player;
     private ExplosionHandler explosionHandler;
-    private Node actionedNode;
+    public Node actionedNode;
+    internal int currentRisk;
+    private bool hasRolled;
+    private bool isRolling;
 
 
     // Start is called before the first frame update
@@ -22,41 +26,24 @@ public class Game : MonoBehaviour
     {
         explosionHandler = FindObjectOfType<ExplosionHandler>();
         hasReachedGoal = false;
+        hasRolled = false;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (activePlayer != null)
+        if (player != null)
         {
-            if (activePlayer.IsAtTarget())
+            if (player.IsAtTarget())
             {
-                Node node = GetOverlap(activePlayer);
+                Node node = GetOverlap(player);
                 if (node != null && node.risk > 0 && node != actionedNode)
                 {
                     Debug.Log("perform the action at the node");
                     Debug.Log("node is " + node.gameObject.name);
 
                     actionedNode = node;
-
-                    StartCoroutine(ExecuteAfterTime(0.8f, () => {
-                        RollDiceStep(node);
-                    }));
-
-                    StartCoroutine(ExecuteAfterTime(1.6f, () => {
-                        RemoveActorStep(node);
-                    }));
-
-                    StartCoroutine(ExecuteAfterTime(2.4f, () => {
-                        if (playerHealth > 0)
-                        {
-                            MovePlayerAction(activePlayer, node);
-                            
-                            diceResult = -1;
-                        }
-                        actionedNode = null;
-                    }));
                 }
                 if (node != null)
                 {
@@ -66,8 +53,57 @@ public class Game : MonoBehaviour
                         hasReachedGoal = true;
                     }
                 }
+                
             }
         }
+        if (isRolling)
+        {
+            diceResult = UnityEngine.Random.Range(1, 6);
+        }
+        else
+        {
+            diceResult = -1;
+        }
+    }
+
+    public int GetDiceRoll()
+    {
+        if (finalDiceRoll > 0)
+        {
+            return finalDiceRoll;
+        } else
+        {
+            return diceResult;
+        }
+    }
+
+    internal void RollDice()
+    {
+        if (actionedNode == null || hasRolled)
+        {
+            return;
+        }
+        hasRolled = true;
+        isRolling = true;
+        StartCoroutine(ExecuteAfterTime(0.8f, () =>
+        {
+            isRolling = false;
+            finalDiceRoll = UnityEngine.Random.Range(1, 6);
+        }));
+
+        StartCoroutine(ExecuteAfterTime(1.6f, () => {
+            RemoveActorStep(actionedNode);
+        }));
+
+        StartCoroutine(ExecuteAfterTime(2.4f, () => {
+            if (playerHealth > 0)
+            {
+                MovePlayerAction(player, actionedNode);
+                finalDiceRoll = -1;
+            }
+            actionedNode = null;
+            hasRolled = false;
+        }));
     }
 
     public bool IsConnected(Node nodeA, Node nodeB)
@@ -82,24 +118,25 @@ public class Game : MonoBehaviour
         return false;
     }
 
-    private void RollDiceStep(Node node)
-    {
-        diceResult = UnityEngine.Random.Range(1, 6);
-        Debug.Log("rolled a " + diceResult);
-        Debug.Log("risk was " + node.risk);
-    }
+    //private void RollDiceStep(Node node)
+    //{
+    //    diceResult = UnityEngine.Random.Range(1, 6);
+    //    Debug.Log("rolled a " + diceResult);
+    //    Debug.Log("risk was " + node.risk);
+    //}
 
     private void RemoveActorStep(Node node)
     {
-        if (diceResult < node.risk)
+        if (finalDiceRoll < node.risk)
         {
             Debug.Log("hurt the player ");
             playerHealth = playerHealth - 1;
         }
         if (playerHealth < 1)
         {
-            explosionHandler.Explode(activePlayer.gameObject.transform.position);
-            Destroy(activePlayer.gameObject);
+            explosionHandler.Explode(player.gameObject.transform.position);
+            Destroy(player.gameObject);
+            player = null;
         } else
         {
             if (node.actor != null)
@@ -156,10 +193,9 @@ public class Game : MonoBehaviour
             return;
         }
 
-        if (selectedPlayer != null && node != null)
+        if (selectedPlayer != null && node != null && actionedNode == null)
         {
-            activePlayer = selectedPlayer;
-            if (node.actor != null)
+            if (node.actor != null && selectedPlayer.IsAtTarget())
             {
                 Vector3 direction = Vector3.Normalize(node.transform.position - selectedPlayer.transform.position);
                 selectedPlayer.targetPos = node.transform.position - (direction * 0.8f);

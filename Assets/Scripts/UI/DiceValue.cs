@@ -22,10 +22,10 @@ public class DiceValue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (referenceHolder.game.diceResult > 0)
+        if (referenceHolder.game.GetDiceRoll() > 0)
         {
             panel.SetActive(true);
-            numberText.text = "" + referenceHolder.game.diceResult;
+            numberText.text = "" + referenceHolder.game.GetDiceRoll();
         } else
         {
             panel.SetActive(false);

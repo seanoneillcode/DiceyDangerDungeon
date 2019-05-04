@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
     public int boundary = 48;
     public int speed = 4;
     public bool mouseMoveEnabled = true;
+    private Vector3 dragOrigin;
+    private float dragSpeed = 0.5f;
 
     void Update()
     {
@@ -35,6 +37,23 @@ public class CameraController : MonoBehaviour
         moveAmount += new Vector3(Input.GetAxis("Horizontal") * speed, 0, Input.GetAxis("Vertical") * speed) * Time.deltaTime;
         transform.position += (transform.right * moveAmount.x);
         transform.position += (transform.forward * moveAmount.z);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            dragOrigin = Input.mousePosition;
+            return;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
+
+            transform.position += (transform.right * pos.x * -dragSpeed);
+            transform.position += (transform.forward * pos.y * -dragSpeed);
+
+            //transform.Translate(move, Space.World);
+        }
+
     }
 
 }
