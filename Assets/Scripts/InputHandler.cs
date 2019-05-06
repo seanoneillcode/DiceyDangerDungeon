@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputHandler : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class InputHandler : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Nodes", "Actors")))
@@ -40,6 +42,10 @@ public class InputHandler : MonoBehaviour
                 }
             } else
             {
+                if (EventSystem.current.IsPointerOverGameObject())
+                {
+                    return;
+                }
                 game.SelectPlayer(null);
                 game.SelectNode(null);
             }

@@ -27,7 +27,6 @@ public class Game : MonoBehaviour
         explosionHandler = FindObjectOfType<ExplosionHandler>();
         hasReachedGoal = false;
         hasRolled = false;
-        player = FindObjectOfType<Player>();
     }
 
     // Update is called once per frame

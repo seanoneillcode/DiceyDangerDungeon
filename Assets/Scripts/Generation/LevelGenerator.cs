@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
+    private Game game;
 
     public GameObject nodePrefab;
     public GameObject linkPrefab;
@@ -18,6 +19,7 @@ public class LevelGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        game = FindObjectOfType<Game>();
         points = new Point[SIZE][];
         for (int i = 0; i < SIZE; i++)
         {
@@ -31,7 +33,9 @@ public class LevelGenerator : MonoBehaviour
         Point startPoint = GeneratePoints();
         ConvertPointRecursively(startPoint);
         GameObject playerObj = Instantiate(playerPrefab, startPoint.pos, Quaternion.identity, map);
-        playerObj.GetComponent<Player>().speed = 4f;
+        Player player = playerObj.GetComponent<Player>();
+        player.speed = 4f;
+        game.player = player;
     }
 
     private void ConvertPointRecursively(Point point)
