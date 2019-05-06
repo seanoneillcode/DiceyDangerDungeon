@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public Material originalMaterial;
     [HideInInspector] public Vector3 targetPos;
 
-    public float speed = 0.15f;
+    public float speed = 2f;
 
     // Start is called before the first frame update
     void Start()

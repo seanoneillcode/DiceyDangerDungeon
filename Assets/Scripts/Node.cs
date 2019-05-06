@@ -27,11 +27,6 @@ public class Node : MonoBehaviour
                 riskText.gameObject.SetActive(false);
             }
         }
-        actor = GetOverlap(this);
-        if (actor != null)
-        {
-            actor.node = this;
-        }
     }
 
     // Update is called once per frame
@@ -56,23 +51,5 @@ public class Node : MonoBehaviour
             this.links = new List<Link>();
         }
         this.links.Add(link);
-    }
-
-    private Actor GetOverlap(Node node)
-    {
-        GameObject actorCollider = node.gameObject;
-        Collider[] colliders = Physics.OverlapBox(actorCollider.transform.position, actorCollider.transform.localScale / 2, Quaternion.identity, LayerMask.GetMask("Actors"));
-        foreach (Collider collider in colliders)
-        {
-            Actor actor = collider.gameObject.GetComponent<Actor>();
-            if (actor != null)
-            {
-                if (collider.gameObject.GetComponent<Player>() == null)
-                {
-                    return actor;
-                }
-            }
-        }
-        return null;
     }
 }

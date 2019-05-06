@@ -27,8 +27,8 @@ public class Game : MonoBehaviour
         explosionHandler = FindObjectOfType<ExplosionHandler>();
         hasReachedGoal = false;
         hasRolled = false;
+        player = FindObjectOfType<Player>();
     }
-
 
     // Update is called once per frame
     void Update()
@@ -53,7 +53,7 @@ public class Game : MonoBehaviour
                         hasReachedGoal = true;
                     }
                 }
-                
+
             }
         }
         if (isRolling)
@@ -117,13 +117,6 @@ public class Game : MonoBehaviour
         }
         return false;
     }
-
-    //private void RollDiceStep(Node node)
-    //{
-    //    diceResult = UnityEngine.Random.Range(1, 6);
-    //    Debug.Log("rolled a " + diceResult);
-    //    Debug.Log("risk was " + node.risk);
-    //}
 
     private void RemoveActorStep(Node node)
     {

@@ -9,6 +9,13 @@ public class CameraController : MonoBehaviour
     public bool mouseMoveEnabled = true;
     private Vector3 dragOrigin;
     private float dragSpeed = 0.5f;
+    private Game game;
+    private Vector3 targetPos = new Vector3();
+
+    private void Start()
+    {
+        game = FindObjectOfType<Game>();
+    }
 
     void Update()
     {
@@ -53,6 +60,13 @@ public class CameraController : MonoBehaviour
 
             //transform.Translate(move, Space.World);
         }
+
+        if (game.selectedPlayer != null)
+        {
+            targetPos = game.selectedPlayer.transform.position;
+            transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime);
+        }
+
 
     }
 
