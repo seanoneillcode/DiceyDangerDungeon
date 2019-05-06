@@ -7,12 +7,9 @@ public class Link : MonoBehaviour
     public Node nodeA;
     public Node nodeB;
 
-    bool m_Started;
-
     private void Start()
     {
         SetNodes();
-        m_Started = true;
     }
 
     private void SetNodes()
@@ -41,16 +38,6 @@ public class Link : MonoBehaviour
                 node.AddLink(this);
             }
         }
-    }
-
-    void OnDrawGizmos()
-    {
-        BoxCollider thisCollider = gameObject.GetComponent<BoxCollider>();
-        Gizmos.color = Color.red;
-        //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
-        if (m_Started)
-            //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
-            Gizmos.DrawWireCube(transform.localPosition + thisCollider.center, thisCollider.bounds.extents * 2);
     }
 
     public Node GetOtherNode(Node otherNode)

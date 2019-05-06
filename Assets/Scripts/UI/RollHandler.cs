@@ -24,7 +24,6 @@ public class RollHandler : MonoBehaviour
     {
         if (referenceHolder.game.actionedNode != null)
         {
-            Debug.Log("have actioned Node ");
             panel.SetActive(true);
             riskText.text = "" + referenceHolder.game.actionedNode.risk;
             if (referenceHolder.game.GetDiceRoll() > 0)

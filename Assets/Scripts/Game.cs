@@ -16,7 +16,6 @@ public class Game : MonoBehaviour
     public Player player;
     private ExplosionHandler explosionHandler;
     public Node actionedNode;
-    internal int currentRisk;
     private bool hasRolled;
     private bool isRolling;
 

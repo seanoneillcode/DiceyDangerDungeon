@@ -7,15 +7,15 @@ public class MenuPanel : MonoBehaviour
 {
     private ReferenceHolder referenceHolder;
     private bool once;
+    private bool isVisible;
+
     // Start is called before the first frame update
     void Start()
     {
         referenceHolder = GetComponentInParent<ReferenceHolder>();
-        foreach( Transform transform in transform)
-        {
-            transform.gameObject.SetActive(false);
-        }
+        isVisible = false;
         once = false;
+        UpdateVisible();
     }
 
     // Update is called once per frame
@@ -43,12 +43,23 @@ public class MenuPanel : MonoBehaviour
         Application.Quit();
     }
 
+    public void Toggle()
+    {
+        this.isVisible = !this.isVisible;
+        UpdateVisible();
+    }
+
+    public void UpdateVisible()
+    {
+        foreach (Transform transform in transform)
+        {
+            transform.gameObject.SetActive(this.isVisible);
+        }
+    }
+
     IEnumerator ExecuteAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        foreach (Transform transform in transform)
-        {
-            transform.gameObject.SetActive(true);
-        }
+        Toggle();
     }
 }
