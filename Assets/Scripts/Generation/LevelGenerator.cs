@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -14,7 +15,7 @@ public class LevelGenerator : MonoBehaviour
     public Transform map;
 
     private Point[][] points;
-    private const int SIZE = 8;
+    private const int SIZE = 4;
 
     private Point lastPoint;
     private List<PointLink> links;
@@ -32,87 +33,134 @@ public class LevelGenerator : MonoBehaviour
         GenerateLevel();
     }
 
+    private HashSet<Point> MergeGroups(HashSet<Point> groupA, HashSet<Point> groupB)
+    {
+        if (groupA.Equals(groupB))
+        {
+            return groupA;
+        }
+        foreach (Point point in groupB)
+        {
+            groupA.Add(point);
+        }
+        return groupA;
+    }
+
+    private HashSet<Point> GetGroup(List<HashSet<Point>> groups, Point point)
+    {
+        if (point == null)
+        {
+            return null;
+        }
+        foreach (HashSet<Point> group in groups)
+        {
+            if (group.Contains(point))
+            {
+                return group;
+            }
+        }
+        return null;
+    }
+
     private Point GenerateGrid()
     {
-        for (int i = 0; i < SIZE; i++)
+        List<HashSet<Point>> groups = new List<HashSet<Point>>();
+
+        for (int x = 0; x < SIZE; x++)
         {
-            for (int j = 0; j < SIZE; j++)
+            for (int z = 0; z < SIZE; z++)
             {
                 PointType thisType = PointType.NONE;
-                if (RollCheck(3))
+                if ((z + 1 + (x % 2)) % 2 == 0)
                 {
                     thisType = PointType.RISK;
                 }
-                // add point to current
                 
-                Point point = new Point(thisType, new Vector3(j * 4, 0, i * 4));
+                Point point = new Point(thisType, new Vector3(x * 4, 0, z * 4));
                 point.risk = Random.Range(1, 6);
                 AddPoint(point);
 
-                if (j > 0 && RollCheck(2))
+                HashSet<Point> newGroup = new HashSet<Point>();
+                newGroup.Add(point);
+                groups.Add(newGroup);
+
+                if (x > 0 && RollCheck(2))
                 {
-                    Point previousPoint = GetPoint(point.pos - new Vector3(4,0,0));
+                    Point previousPoint = GetPoint(new Vector3(point.pos.x - 4, point.pos.y, point.pos.z));
                     if (previousPoint != null)
                     {
                         links.Add(new PointLink(point, previousPoint));
+                        HashSet<Point> otherGroup = GetGroup(groups, previousPoint);
+                        if (!otherGroup.Equals(newGroup))
+                        {
+                            MergeGroups(otherGroup, newGroup);
+                            groups.Remove(newGroup);
+                        }
+                        newGroup = otherGroup;
                     }
                 }
-                if (i > 0 && RollCheck(2))
+                if (z > 0 && RollCheck(2))
                 {
-                    Point previousPoint = GetPoint(point.pos - new Vector3(0, 0, 4));
+                    Point previousPoint = GetPoint(new Vector3(point.pos.x, point.pos.y, point.pos.z - 4));
                     if (previousPoint != null)
                     {
                         links.Add(new PointLink(point, previousPoint));
+                        HashSet<Point> otherGroup = GetGroup(groups, previousPoint);
+                        if (!otherGroup.Equals(newGroup))
+                        {
+                            MergeGroups(otherGroup, newGroup);
+                            groups.Remove(newGroup);
+                        }
+                        newGroup = otherGroup;
                     }
                 }
-                
             }
         }
 
-        Point startPoint = null;
-
-        // remove orphans
-        for (int i = 0; i < SIZE; i++)
+        // if there's more than 1 group
+        while (groups.Count > 1)
         {
-            for (int j = 0; j < SIZE; j++)
+            // get the first group
+            HashSet<Point> group = new HashSet<Point>(groups[0]);
+            // iterate over ever point
+            foreach ( Point point in group)
             {
-                Point point = GetPoint(new Vector3(j * 4, 0, i * 4));
-                if (point != null)
-                {
-                    bool isOrphan = true;
-                    foreach(PointLink pointLink in links)
-                    {
-                        if (pointLink.from.Equals(point) || pointLink.to.Equals(point))
-                        {
-                            isOrphan = false;
-                            break;
-                        }
-                    }
-                    if (isOrphan)
-                    {
-                        RemovePoint(point);
-                    }
-                    else {
-                        if (startPoint == null)
-                        {
-                            startPoint = point;
-                        }
-                        lastPoint = point;
-                    }
-                }
+                // if point has neighbour point in other group
+                Point left = GetPoint(point.pos + new Vector3(-4, 0, 0));
+                Point right = GetPoint(point.pos + new Vector3(4, 0, 0));
+                Point up = GetPoint(point.pos + new Vector3(0, 0, 4));
+                Point down = GetPoint(point.pos + new Vector3(0, 0, -4));
+
+                CheckPoint(groups, point, left);
+                CheckPoint(groups, point, right);
+                CheckPoint(groups, point, up);
+                CheckPoint(groups, point, down);
             }
         }
 
-
-
-        //Point lastPoint = new Point(PointType.END, new Vector3(Random.Range(0, SIZE) * 4, 0, Random.Range(0, SIZE) * 4));
-        //AddPoint(lastPoint);
-        //Point startPoint = new Point(PointType.START, new Vector3(Random.Range(0, SIZE) * 4, 0, Random.Range(0, SIZE) * 4));
-        //AddPoint(startPoint);
-
+        Point startPoint = points[0][0];
+        lastPoint = points[SIZE - 1][SIZE - 1];
         startPoint.type = PointType.START;
         lastPoint.type = PointType.END;
         return startPoint;
+    }
+
+    private void CheckPoint(List<HashSet<Point>> groups, Point origin, Point other)
+    {
+        HashSet<Point> otherGroup = GetGroup(groups, other);
+        if (otherGroup != null && !otherGroup.Contains(origin))
+        {
+            links.Add(new PointLink(origin, other));
+            HashSet<Point> originGroup = GetGroup(groups, origin);
+            if (!originGroup.Equals(otherGroup))
+            {
+                MergeGroups(originGroup, otherGroup);
+                groups.Remove(otherGroup);
+            }
+            else {
+                Debug.LogError("wat");
+            }
+        }
     }
 
     public void GenerateLevel()
@@ -282,7 +330,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (pos.x < 0 || pos.z < 0 || pos.x > (SIZE * 4) - 1 || pos.z > (SIZE * 4) - 1)
         {
-            Debug.LogError("tried to get point that doesn't exist. " + pos.x + "," + pos.z);
+            //Debug.LogError("tried to get point that doesn't exist. " + pos.x + "," + pos.z);
             return null;
         }
         return points[Mathf.FloorToInt(pos.z / 4)][Mathf.FloorToInt(pos.x / 4)];
