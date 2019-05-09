@@ -1345,6 +1345,7 @@ MonoBehaviour:
   riskText: {fileID: 472149379}
   rollText: {fileID: 979930092}
   rollButton: {fileID: 1767132842}
+  missedImage: {fileID: 1478359780}
 --- !u!1 &926240598
 GameObject:
   m_ObjectHideFlags: 0
