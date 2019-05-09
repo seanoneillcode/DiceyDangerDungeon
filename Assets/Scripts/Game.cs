@@ -50,6 +50,13 @@ public class Game : MonoBehaviour
                     {
                         hasReachedGoal = true;
                     }
+                    HealthPickup healthPickup = node.gameObject.GetComponent<HealthPickup>();
+                    if (healthPickup != null && !healthPickup.consumed)
+                    {
+                        healthPickup.Consume();
+                        explosionHandler.PickupPlant(healthPickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
+                        playerHealth++;
+                    }
                 }
 
             }

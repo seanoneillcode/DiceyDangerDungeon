@@ -63,6 +63,7 @@ public enum PointType {
     BOON,
     TREASURE,
     NONE,
+    HEALTH,
     END
 }
 

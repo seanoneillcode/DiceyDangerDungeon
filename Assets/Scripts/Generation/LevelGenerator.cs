@@ -10,6 +10,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject nodePrefab;
     public GameObject linkPrefab;
     public GameObject goalPrefab;
+    public GameObject healthPrefab;
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
     public Transform map;
@@ -138,6 +139,25 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
+        // iterate over ever point
+        foreach (Point point in groups[0])
+        {
+            int count = 0;
+            foreach (PointLink link in links)
+            {
+                if (link.from.Equals(point) || link.to.Equals(point))
+                {
+                    count++;
+                }
+            }
+            if (count < 2)
+            {
+                Debug.Log("found lonely node");
+                point.type = PointType.HEALTH;
+            }
+        }
+
+
         Point startPoint = points[0][0];
         lastPoint = points[SIZE - 1][SIZE - 1];
         startPoint.type = PointType.START;
@@ -230,6 +250,10 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.END)
         {
             return goalPrefab;
+        }
+        if (type == PointType.HEALTH)
+        {
+            return healthPrefab;
         }
         return nodePrefab;
     }
