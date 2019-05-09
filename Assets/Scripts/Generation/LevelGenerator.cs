@@ -11,6 +11,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject linkPrefab;
     public GameObject goalPrefab;
     public GameObject healthPrefab;
+    public GameObject potionPrefab;
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
     public Transform map;
@@ -154,6 +155,10 @@ public class LevelGenerator : MonoBehaviour
             {
                 Debug.Log("found lonely node");
                 point.type = PointType.HEALTH;
+                if (UnityEngine.Random.Range(0, 4) == 1)
+                {
+                    point.type = PointType.POTION;
+                }
             }
         }
 
@@ -254,6 +259,10 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.HEALTH)
         {
             return healthPrefab;
+        }
+        if (type == PointType.POTION)
+        {
+            return potionPrefab;
         }
         return nodePrefab;
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,5 +48,11 @@ public class Player : MonoBehaviour
     public bool IsAtTarget()
     {
         return targetPos.Equals(transform.position);
+    }
+
+    internal void Teleport(Vector3 newPos)
+    {
+        transform.position = newPos;
+        targetPos = newPos;
     }
 }

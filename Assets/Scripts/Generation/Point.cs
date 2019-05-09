@@ -59,11 +59,9 @@ public enum PointType {
 
     START,
     RISK,
-    TRAP,
-    BOON,
-    TREASURE,
     NONE,
     HEALTH,
+    POTION,
     END
 }
 

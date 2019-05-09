@@ -57,13 +57,20 @@ public class Game : MonoBehaviour
                         explosionHandler.PickupPlant(healthPickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
                         playerHealth++;
                     }
+                    PotionPickup potionPickup = node.gameObject.GetComponent<PotionPickup>();
+                    if (potionPickup != null && !potionPickup.consumed)
+                    {
+                        potionPickup.Consume();
+                        explosionHandler.PickupPlant(potionPickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
+                        player.Teleport(new Vector3(4 * UnityEngine.Random.Range(0, 4), 0, 4 * UnityEngine.Random.Range(0, 4)));
+                    }
                 }
 
             }
         }
         if (isRolling)
         {
-            diceResult = UnityEngine.Random.Range(1, 6);
+            diceResult = UnityEngine.Random.Range(1, 7);
         }
         else
         {
