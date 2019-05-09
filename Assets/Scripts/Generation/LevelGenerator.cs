@@ -162,7 +162,6 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-
         Point startPoint = points[0][0];
         lastPoint = points[SIZE - 1][SIZE - 1];
         startPoint.type = PointType.START;

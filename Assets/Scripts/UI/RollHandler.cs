@@ -10,6 +10,7 @@ public class RollHandler : MonoBehaviour
     public Text riskText;
     public Text rollText;
     public GameObject rollButton;
+    public GameObject missedImage;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +18,7 @@ public class RollHandler : MonoBehaviour
         referenceHolder = GetComponentInParent<ReferenceHolder>();
         panel = transform.GetChild(0).gameObject;
         panel.SetActive(false);
+        missedImage.SetActive(false);
     }
 
     // Update is called once per frame
@@ -33,6 +35,13 @@ public class RollHandler : MonoBehaviour
             else
             {
                 rollText.text = "";
+            }
+            if (referenceHolder.game.DidMissEnemy())
+            {
+                missedImage.SetActive(true);
+            } else
+            {
+                missedImage.SetActive(false);
             }
         }
         else

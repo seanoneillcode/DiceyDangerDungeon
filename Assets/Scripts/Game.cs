@@ -18,7 +18,7 @@ public class Game : MonoBehaviour
     public Node actionedNode;
     private bool hasRolled;
     private bool isRolling;
-
+    private bool hitEnemy;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +26,7 @@ public class Game : MonoBehaviour
         explosionHandler = FindObjectOfType<ExplosionHandler>();
         hasReachedGoal = false;
         hasRolled = false;
+        hitEnemy = false;
     }
 
     // Update is called once per frame
@@ -100,19 +101,23 @@ public class Game : MonoBehaviour
         StartCoroutine(ExecuteAfterTime(0.8f, () =>
         {
             isRolling = false;
+            hitEnemy = false;
             finalDiceRoll = UnityEngine.Random.Range(1, 6);
         }));
 
         StartCoroutine(ExecuteAfterTime(1.6f, () => {
-            RemoveActorStep(actionedNode);
+            ResolveRolls(actionedNode);
         }));
 
         StartCoroutine(ExecuteAfterTime(2.4f, () => {
-            if (playerHealth > 0)
+            if (hitEnemy)
             {
-                MovePlayerAction(player, actionedNode);
-                finalDiceRoll = -1;
+                if (playerHealth > 0)
+                {
+                    MovePlayerAction(player, actionedNode);
+                }
             }
+            finalDiceRoll = -1;
             actionedNode = null;
             hasRolled = false;
         }));
@@ -130,30 +135,28 @@ public class Game : MonoBehaviour
         return false;
     }
 
-    private void RemoveActorStep(Node node)
+    private void ResolveRolls(Node node)
     {
         if (finalDiceRoll < node.risk)
         {
             Debug.Log("hurt the player ");
             playerHealth = playerHealth - 1;
         }
-        if (playerHealth < 1)
-        {
-            explosionHandler.Explode(player.gameObject.transform.position);
-            Destroy(player.gameObject);
-            player = null;
-        } else
-        {
+        else {
+            hitEnemy = true;
             if (node.actor != null)
             {
                 explosionHandler.Explode(node.actor.gameObject.transform.position);
                 Destroy(node.actor.gameObject);
             }
-            else
-            {
-                Debug.Log("Node doesn't have an actor");
-            }
             node.RemoveRisk();
+        }
+        if (playerHealth < 1)
+        {
+            explosionHandler.Explode(player.gameObject.transform.position);
+            Destroy(player.gameObject);
+            player = null;
+            hitEnemy = true;
         }
     }
 
@@ -221,5 +224,10 @@ public class Game : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         task();
+    }
+
+    public bool DidMissEnemy()
+    {
+        return !hitEnemy && finalDiceRoll > -1 && finalDiceRoll < actionedNode.risk;
     }
 }
