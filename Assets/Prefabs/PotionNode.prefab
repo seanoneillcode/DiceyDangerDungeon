@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4436101403550721442}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.687, z: 0.306}
-  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_LocalPosition: {x: 0, y: 0.787, z: 0.306}
+  m_LocalScale: {x: 6, y: 6, z: 1}
   m_Children: []
   m_Father: {fileID: 7294547377918492838}
   m_RootOrder: 3
@@ -136,12 +136,12 @@ PrefabInstance:
     - target: {fileID: 6927445084178223466, guid: 004613558a2b24c4aae6e4ba7a8fbf84,
         type: 3}
       propertyPath: m_Name
-      value: PotionNode Variant
+      value: PotionNode
       objectReference: {fileID: 0}
     - target: {fileID: 5553591871334677115, guid: 004613558a2b24c4aae6e4ba7a8fbf84,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5553591871334677115, guid: 004613558a2b24c4aae6e4ba7a8fbf84,
         type: 3}
@@ -151,7 +151,7 @@ PrefabInstance:
     - target: {fileID: 5553591871334677115, guid: 004613558a2b24c4aae6e4ba7a8fbf84,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5553591871334677115, guid: 004613558a2b24c4aae6e4ba7a8fbf84,
         type: 3}

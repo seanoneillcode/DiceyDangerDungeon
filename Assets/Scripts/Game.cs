@@ -102,7 +102,7 @@ public class Game : MonoBehaviour
         {
             isRolling = false;
             hitEnemy = false;
-            finalDiceRoll = UnityEngine.Random.Range(1, 6);
+            finalDiceRoll = UnityEngine.Random.Range(1, 7);
         }));
 
         StartCoroutine(ExecuteAfterTime(1.6f, () => {
