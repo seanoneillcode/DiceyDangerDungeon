@@ -63,6 +63,8 @@ public enum PointType {
     HEALTH,
     POTION,
     END,
-    POISON
+    POISON,
+    GHOST,
+    FRIEND
 }
 

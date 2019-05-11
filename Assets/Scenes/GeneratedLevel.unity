@@ -3125,6 +3125,10 @@ MonoBehaviour:
     type: 3}
   goalPrefab: {fileID: 5886033730692805907, guid: a7681e388315afc4a95b9013040daa0c,
     type: 3}
+  ghostPrefab: {fileID: 3401080609227009920, guid: eddaca22e2174d4489633b48485f850a,
+    type: 3}
+  dwarfPrefab: {fileID: 5195293806390176176, guid: 6fd84e361f27f4c4789a2a4e044ea62a,
+    type: 3}
   healthPrefab: {fileID: 1339385312655549245, guid: 135aabe5f21aad843a8a75661c462604,
     type: 3}
   potionPrefab: {fileID: 5190988772183419831, guid: 03951dea97bc5084fa2484b0aba81bc7,

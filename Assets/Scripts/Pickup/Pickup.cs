@@ -7,11 +7,17 @@ public class Pickup : MonoBehaviour
     public GameObject consumedItem;
     public bool consumed;
     public PickupType type;
+    public bool isCurse;
 
     // Start is called before the first frame update
     void Start()
     {
         consumed = false;
+        isCurse = false;
+        if (type == PickupType.MAX_HEALTH_DEC || type == PickupType.GHOST)
+        {
+            isCurse = true;
+        }
     }
 
     // Update is called once per frame

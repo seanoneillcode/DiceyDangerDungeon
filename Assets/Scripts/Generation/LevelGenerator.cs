@@ -10,6 +10,8 @@ public class LevelGenerator : MonoBehaviour
     public GameObject nodePrefab;
     public GameObject linkPrefab;
     public GameObject goalPrefab;
+    public GameObject ghostPrefab;
+    public GameObject dwarfPrefab;
     public GameObject healthPrefab;
     public GameObject potionPrefab;
     public GameObject poisonPrefab;
@@ -74,13 +76,9 @@ public class LevelGenerator : MonoBehaviour
             for (int z = 0; z < SIZE; z++)
             {
                 PointType thisType = PointType.NONE;
-                if ((z + 1 + (x % 2)) % 2 == 0)
-                {
-                    thisType = PointType.RISK;
-                }
                 
                 Point point = new Point(thisType, new Vector3(x * 4, 0, z * 4));
-                point.risk = Random.Range(2, 7);
+                point.risk = 0;
                 AddPoint(point);
 
                 HashSet<Point> newGroup = new HashSet<Point>();
@@ -115,6 +113,19 @@ public class LevelGenerator : MonoBehaviour
                             groups.Remove(newGroup);
                         }
                         newGroup = otherGroup;
+                    }
+                }
+                if ((z + 1 + (x % 2)) % 2 == 0)
+                {
+                    point.risk = Random.Range(2, 7);
+                    point.type = PointType.RISK;
+                    if (UnityEngine.Random.Range(0, 4) == 1)
+                    {
+                        point.type = PointType.POISON;
+                    }
+                    if (UnityEngine.Random.Range(0, 4) == 1)
+                    {
+                        point.type = PointType.GHOST;
                     }
                 }
             }
@@ -156,15 +167,16 @@ public class LevelGenerator : MonoBehaviour
             {
                 Debug.Log("found lonely node");
                 point.type = PointType.HEALTH;
+                point.risk = 0;
                 if (UnityEngine.Random.Range(0, 4) == 1)
                 {
-                    if (UnityEngine.Random.Range(0, 2) == 0)
-                    {
-                        point.type = PointType.POTION;
-                    } else
-                    {
-                        point.type = PointType.POISON;
-                    }
+                    point.type = PointType.POTION;
+                    point.risk = Random.Range(2, 7);
+                }
+                if (UnityEngine.Random.Range(0, 2) == 1)
+                {
+                    point.type = PointType.FRIEND;
+                    point.risk = Random.Range(2, 7);
                 }
             }
         }
@@ -172,7 +184,9 @@ public class LevelGenerator : MonoBehaviour
         Point startPoint = points[0][0];
         lastPoint = points[SIZE - 1][SIZE - 1];
         startPoint.type = PointType.START;
+        startPoint.risk = 0;
         lastPoint.type = PointType.END;
+        lastPoint.risk = 0;
         return startPoint;
     }
 
@@ -228,10 +242,10 @@ public class LevelGenerator : MonoBehaviour
     {
         GameObject nodeTypePrefab = GetPrefab(point.type);
         GameObject nodeObject = Instantiate(nodeTypePrefab, point.pos, Quaternion.identity, map);
+        Node node = nodeObject.GetComponent<Node>();
+        node.risk = point.risk;
         if (point.type == PointType.RISK)
         {
-            Node node = nodeObject.GetComponent<Node>();
-            node.risk = point.risk;
             GameObject enemyObject = Instantiate(enemyPrefab, point.pos, Quaternion.identity, map);
             Actor enemyActor = enemyObject.GetComponent<Actor>();
             node.actor = enemyActor;
@@ -273,6 +287,14 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.POISON)
         {
             return poisonPrefab;
+        }
+        if (type == PointType.GHOST)
+        {
+            return ghostPrefab;
+        }
+        if (type == PointType.FRIEND)
+        {
+            return dwarfPrefab;
         }
         return nodePrefab;
     }

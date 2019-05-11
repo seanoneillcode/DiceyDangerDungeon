@@ -55,20 +55,11 @@ public class Game : MonoBehaviour
                     Pickup pickup = node.gameObject.GetComponent<Pickup>();
                     if (pickup != null && !pickup.consumed)
                     {
-                        pickup.Consume();
-                        explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
-                        switch(pickup.type)
+                        if (pickup.type == Pickup.PickupType.HEALTH)
                         {
-                            case Pickup.PickupType.HEALTH:
-                                playerHealth++;
-                                break;
-                            case Pickup.PickupType.MAX_HEALTH_INC:
-                                maxPlayerHealth += 1;
-                                playerHealth += 1;
-                                break;
-                            case Pickup.PickupType.MAX_HEALTH_DEC:
-                                maxPlayerHealth -= 1;
-                                break;
+                            pickup.Consume();
+                            explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
+                            playerHealth++;
                         }
                     }
                 }
@@ -149,12 +140,40 @@ public class Game : MonoBehaviour
         return false;
     }
 
+    private void ApplyPickupToPlayer(Pickup pickup)
+    {
+        switch (pickup.type)
+        {
+            case Pickup.PickupType.MAX_HEALTH_INC:
+                maxPlayerHealth += 1;
+                playerHealth += 1;
+                break;
+            case Pickup.PickupType.MAX_HEALTH_DEC:
+                maxPlayerHealth -= 1;
+                break;
+        }
+    }
+
     private void ResolveRolls(Node node)
     {
         if (finalDiceRoll < node.risk)
         {
-            Debug.Log("hurt the player ");
-            playerHealth = playerHealth - 1;
+            if (node.actor != null)
+            {
+                playerHealth = playerHealth - 1;
+            }
+            Pickup pickup = node.gameObject.GetComponent<Pickup>();
+            if (pickup != null && !pickup.consumed)
+            {
+                pickup.Consume();
+                explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
+                hitEnemy = true;
+                node.RemoveRisk();
+                if (pickup.isCurse)
+                {
+                    ApplyPickupToPlayer(pickup);
+                }
+            }
         }
         else {
             hitEnemy = true;
@@ -162,6 +181,16 @@ public class Game : MonoBehaviour
             {
                 explosionHandler.Explode(node.actor.gameObject.transform.position);
                 Destroy(node.actor.gameObject);
+            }
+            Pickup pickup = node.gameObject.GetComponent<Pickup>();
+            if (pickup != null && !pickup.consumed)
+            {
+                pickup.Consume();
+                explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
+                if (!pickup.isCurse)
+                {
+                    ApplyPickupToPlayer(pickup);
+                }
             }
             node.RemoveRisk();
         }
