@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PotionPickup : MonoBehaviour
+public class Pickup : MonoBehaviour
 {
-    public GameObject plant;
+    public GameObject consumedItem;
     public bool consumed;
+    public PickupType type;
 
     // Start is called before the first frame update
     void Start()
@@ -16,14 +17,24 @@ public class PotionPickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (consumed && plant.activeSelf)
+        if (consumed && consumedItem.activeSelf)
         {
-            plant.SetActive(false);
+            consumedItem.SetActive(false);
         }
     }
 
     public void Consume()
     {
         consumed = true;
+    }
+
+    public enum PickupType
+    {
+        HEALTH,
+        MAX_HEALTH_INC,
+        MAX_HEALTH_DEC,
+        TELEPORT,
+        FRIEND,
+        GHOST
     }
 }

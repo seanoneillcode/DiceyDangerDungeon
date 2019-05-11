@@ -19,6 +19,7 @@ public class Game : MonoBehaviour
     private bool hasRolled;
     private bool isRolling;
     private bool hitEnemy;
+    public int maxPlayerHealth = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -51,19 +52,24 @@ public class Game : MonoBehaviour
                     {
                         hasReachedGoal = true;
                     }
-                    HealthPickup healthPickup = node.gameObject.GetComponent<HealthPickup>();
-                    if (healthPickup != null && !healthPickup.consumed)
+                    Pickup pickup = node.gameObject.GetComponent<Pickup>();
+                    if (pickup != null && !pickup.consumed)
                     {
-                        healthPickup.Consume();
-                        explosionHandler.PickupPlant(healthPickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
-                        playerHealth++;
-                    }
-                    PotionPickup potionPickup = node.gameObject.GetComponent<PotionPickup>();
-                    if (potionPickup != null && !potionPickup.consumed)
-                    {
-                        potionPickup.Consume();
-                        explosionHandler.PickupPlant(potionPickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
-                        player.Teleport(new Vector3(4 * UnityEngine.Random.Range(0, 4), 0, 4 * UnityEngine.Random.Range(0, 4)));
+                        pickup.Consume();
+                        explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
+                        switch(pickup.type)
+                        {
+                            case Pickup.PickupType.HEALTH:
+                                playerHealth++;
+                                break;
+                            case Pickup.PickupType.MAX_HEALTH_INC:
+                                maxPlayerHealth += 1;
+                                playerHealth += 1;
+                                break;
+                            case Pickup.PickupType.MAX_HEALTH_DEC:
+                                maxPlayerHealth -= 1;
+                                break;
+                        }
                     }
                 }
 
@@ -76,6 +82,10 @@ public class Game : MonoBehaviour
         else
         {
             diceResult = -1;
+        }
+        if (playerHealth > maxPlayerHealth)
+        {
+            playerHealth = maxPlayerHealth;
         }
     }
 
@@ -98,18 +108,22 @@ public class Game : MonoBehaviour
         }
         hasRolled = true;
         isRolling = true;
-        StartCoroutine(ExecuteAfterTime(0.8f, () =>
+        StartCoroutine(ExecuteAfterTime(0.4f, () =>
         {
             isRolling = false;
             hitEnemy = false;
             finalDiceRoll = UnityEngine.Random.Range(1, 7);
+            if (playerHealth == 1 && finalDiceRoll < actionedNode.risk)
+            {
+                finalDiceRoll = UnityEngine.Random.Range(1, 7);
+            }
         }));
 
-        StartCoroutine(ExecuteAfterTime(1.6f, () => {
+        StartCoroutine(ExecuteAfterTime(0.8f, () => {
             ResolveRolls(actionedNode);
         }));
 
-        StartCoroutine(ExecuteAfterTime(2.4f, () => {
+        StartCoroutine(ExecuteAfterTime(1.6f, () => {
             if (hitEnemy)
             {
                 if (playerHealth > 0)

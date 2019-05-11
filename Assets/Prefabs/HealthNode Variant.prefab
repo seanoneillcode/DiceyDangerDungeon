@@ -196,8 +196,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ef549988a08e4499175515f8dd5f5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plant: {fileID: 745204224482553803}
+  consumedItem: {fileID: 745204224482553803}
   consumed: 0
+  type: 0
 --- !u!1 &1418830043476032986
 GameObject:
   m_ObjectHideFlags: 0

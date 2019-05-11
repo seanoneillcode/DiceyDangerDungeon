@@ -12,6 +12,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject goalPrefab;
     public GameObject healthPrefab;
     public GameObject potionPrefab;
+    public GameObject poisonPrefab;
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
     public Transform map;
@@ -79,7 +80,7 @@ public class LevelGenerator : MonoBehaviour
                 }
                 
                 Point point = new Point(thisType, new Vector3(x * 4, 0, z * 4));
-                point.risk = Random.Range(1, 6);
+                point.risk = Random.Range(2, 7);
                 AddPoint(point);
 
                 HashSet<Point> newGroup = new HashSet<Point>();
@@ -157,7 +158,13 @@ public class LevelGenerator : MonoBehaviour
                 point.type = PointType.HEALTH;
                 if (UnityEngine.Random.Range(0, 4) == 1)
                 {
-                    point.type = PointType.POTION;
+                    if (UnityEngine.Random.Range(0, 2) == 0)
+                    {
+                        point.type = PointType.POTION;
+                    } else
+                    {
+                        point.type = PointType.POISON;
+                    }
                 }
             }
         }
@@ -262,6 +269,10 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.POTION)
         {
             return potionPrefab;
+        }
+        if (type == PointType.POISON)
+        {
+            return poisonPrefab;
         }
         return nodePrefab;
     }
