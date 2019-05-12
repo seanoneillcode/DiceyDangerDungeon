@@ -46,10 +46,10 @@ public class Pickup : MonoBehaviour
                 game.maxPlayerHealth -= 1;
                 break;
             case Pickup.PickupType.FRIEND:
-                game.hasFriend = true;
+                game.friendHelp += 1;
                 break;
             case Pickup.PickupType.GHOST:
-                game.hasGhost = true;
+                game.ghostHindrence += 1;
                 break;
         }
     }

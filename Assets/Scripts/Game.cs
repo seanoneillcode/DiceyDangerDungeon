@@ -13,8 +13,8 @@ public class Game : MonoBehaviour
     public int finalDiceRoll = -1;
     public bool hasReachedGoal;
 
-    public bool hasFriend = false;
-    public bool hasGhost = false;
+    public int friendHelp = 0;
+    public int ghostHindrence = 0;
 
     public Player player;
     private ExplosionHandler explosionHandler;
@@ -88,15 +88,19 @@ public class Game : MonoBehaviour
         explosionHandler.PickupPlant(pos);
     }
 
+    internal int GetDiceRollWithmodifiers()
+    {
+        return finalDiceRoll + friendHelp - ghostHindrence;
+    }
+
     public int GetDiceRoll()
     {
-        if (finalDiceRoll > 0)
+        int result = diceResult;
+        if (!isRolling)
         {
-            return finalDiceRoll;
-        } else
-        {
-            return diceResult;
+            result = GetDiceRollWithmodifiers();
         }
+        return result;
     }
 
     internal void RollDice()
@@ -116,15 +120,6 @@ public class Game : MonoBehaviour
             {
                 finalDiceRoll = UnityEngine.Random.Range(1, 7);
             }
-            if (hasFriend)
-            {
-                finalDiceRoll = finalDiceRoll + 1;
-            }
-            if (hasGhost)
-            {
-                finalDiceRoll = finalDiceRoll - 1;
-            }
-
         }));
 
         StartCoroutine(ExecuteAfterTime(0.8f, () => {
@@ -159,7 +154,7 @@ public class Game : MonoBehaviour
 
     private void ResolveRolls(Node node)
     {
-        node.HandleRoll(finalDiceRoll >= node.risk, this);
+        node.HandleRoll(GetDiceRollWithmodifiers() >= node.risk, this);
         if (playerHealth < 1)
         {
             explosionHandler.Explode(player.gameObject.transform.position);
@@ -237,6 +232,6 @@ public class Game : MonoBehaviour
 
     public bool DidMissEnemy()
     {
-        return !hitEnemy && finalDiceRoll > -1 && finalDiceRoll < actionedNode.risk;
+        return !hitEnemy && GetDiceRollWithmodifiers() > -1 && GetDiceRollWithmodifiers() < actionedNode.risk;
     }
 }

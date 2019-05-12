@@ -84,13 +84,13 @@ public class Node : MonoBehaviour
             pickup.Consume();
             game.ExplodePosition(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
             RemoveRisk();
-            if (!pickup.isCurse && didSucceed)
+            if ((!pickup.isCurse && didSucceed) || (pickup.isCurse && !didSucceed))
             {
                 pickup.ApplyPickupToPlayer(game);
             }
             if (character != null)
             {
-                if (didSucceed || (!didSucceed && pickup.isCurse))
+                if ((didSucceed && !pickup.isCurse) || (!didSucceed && pickup.isCurse))
                 {
                     character.SetFollow(game.player.transform);
                 }

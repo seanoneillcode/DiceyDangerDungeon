@@ -20,7 +20,7 @@ public class LevelGenerator : MonoBehaviour
     public Transform map;
 
     private Point[][] points;
-    private const int SIZE = 4;
+    private const int SIZE = 5;
 
     private Point lastPoint;
     private List<PointLink> links;
@@ -119,11 +119,11 @@ public class LevelGenerator : MonoBehaviour
                 {
                     point.risk = Random.Range(2, 7);
                     point.type = PointType.RISK;
-                    if (UnityEngine.Random.Range(0, 4) == 1)
+                    if (UnityEngine.Random.Range(0, 8) == 1)
                     {
                         point.type = PointType.POISON;
                     }
-                    if (UnityEngine.Random.Range(0, 4) == 1)
+                    if (UnityEngine.Random.Range(0, 8) == 1)
                     {
                         point.type = PointType.GHOST;
                     }
@@ -168,15 +168,18 @@ public class LevelGenerator : MonoBehaviour
                 Debug.Log("found lonely node");
                 point.type = PointType.HEALTH;
                 point.risk = 0;
-                if (UnityEngine.Random.Range(0, 4) == 1)
+                if (UnityEngine.Random.Range(0, 3) == 1)
                 {
-                    point.type = PointType.POTION;
-                    point.risk = Random.Range(2, 7);
-                }
-                if (UnityEngine.Random.Range(0, 2) == 1)
-                {
-                    point.type = PointType.FRIEND;
-                    point.risk = Random.Range(2, 7);
+                    if (UnityEngine.Random.Range(0, 2) == 1)
+                    {
+                        point.type = PointType.POTION;
+                        point.risk = Random.Range(2, 7);
+                    }
+                    else
+                    {
+                        point.type = PointType.FRIEND;
+                        point.risk = Random.Range(2, 7);
+                    }
                 }
             }
         }

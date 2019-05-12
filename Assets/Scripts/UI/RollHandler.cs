@@ -11,6 +11,8 @@ public class RollHandler : MonoBehaviour
     public Text rollText;
     public GameObject rollButton;
     public GameObject missedImage;
+    public GameObject friend;
+    public GameObject ghost;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +32,7 @@ public class RollHandler : MonoBehaviour
             riskText.text = "" + referenceHolder.game.actionedNode.risk;
             if (referenceHolder.game.GetDiceRoll() > 0)
             {
-                rollText.text = "" + referenceHolder.game.GetDiceRoll();
+                rollText.text = "" + (referenceHolder.game.GetDiceRoll());
             }
             else
             {
@@ -42,6 +44,23 @@ public class RollHandler : MonoBehaviour
             } else
             {
                 missedImage.SetActive(false);
+            }
+            if (referenceHolder.game.friendHelp > 0)
+            {
+                friend.SetActive(true);
+                friend.GetComponentInChildren<Text>().text = "+" + referenceHolder.game.friendHelp;
+            }
+            else {
+                friend.SetActive(false);
+            }
+            if (referenceHolder.game.ghostHindrence > 0)
+            {
+                ghost.SetActive(true);
+                ghost.GetComponentInChildren<Text>().text = "-" + referenceHolder.game.ghostHindrence;
+            }
+            else
+            {
+                ghost.SetActive(false);
             }
         }
         else
