@@ -15,12 +15,14 @@ public class LevelGenerator : MonoBehaviour
     public GameObject healthPrefab;
     public GameObject potionPrefab;
     public GameObject poisonPrefab;
+    public GameObject swordPrefab;
+    public GameObject armourPrefab;
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
     public Transform map;
 
     private Point[][] points;
-    private const int SIZE = 5;
+    private const int SIZE = 4;
 
     private Point lastPoint;
     private List<PointLink> links;
@@ -168,17 +170,23 @@ public class LevelGenerator : MonoBehaviour
                 Debug.Log("found lonely node");
                 point.type = PointType.HEALTH;
                 point.risk = 0;
-                if (UnityEngine.Random.Range(0, 3) == 1)
+                if (UnityEngine.Random.Range(0, 2) == 1)
                 {
-                    if (UnityEngine.Random.Range(0, 2) == 1)
+                    point.risk = Random.Range(2, 7);
+                    switch (Random.Range(0, 4))
                     {
-                        point.type = PointType.POTION;
-                        point.risk = Random.Range(2, 7);
-                    }
-                    else
-                    {
-                        point.type = PointType.FRIEND;
-                        point.risk = Random.Range(2, 7);
+                        case 0:
+                            point.type = PointType.POTION;
+                            break;
+                        case 1:
+                            point.type = PointType.FRIEND;
+                            break;
+                        case 2:
+                            point.type = PointType.SWORD;
+                            break;
+                        case 3:
+                            point.type = PointType.ARMOUR;
+                            break;
                     }
                 }
             }
@@ -298,6 +306,14 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.FRIEND)
         {
             return dwarfPrefab;
+        }
+        if (type == PointType.SWORD)
+        {
+            return swordPrefab;
+        }
+        if (type == PointType.ARMOUR)
+        {
+            return armourPrefab;
         }
         return nodePrefab;
     }

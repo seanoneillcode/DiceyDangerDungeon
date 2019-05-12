@@ -51,6 +51,12 @@ public class Pickup : MonoBehaviour
             case Pickup.PickupType.GHOST:
                 game.ghostHindrence += 1;
                 break;
+            case Pickup.PickupType.SWORD:
+                game.swordHelp += 1;
+                break;
+            case Pickup.PickupType.ARMOUR:
+                game.armourHelp += 1;
+                break;
         }
     }
 
@@ -61,6 +67,8 @@ public class Pickup : MonoBehaviour
         MAX_HEALTH_DEC,
         TELEPORT,
         FRIEND,
+        ARMOUR,
+        SWORD,
         GHOST
     }
 }

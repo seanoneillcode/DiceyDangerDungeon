@@ -15,6 +15,8 @@ public class Game : MonoBehaviour
 
     public int friendHelp = 0;
     public int ghostHindrence = 0;
+    public int armourHelp = 0;
+    public int swordHelp = 0;
 
     public Player player;
     private ExplosionHandler explosionHandler;
@@ -23,6 +25,7 @@ public class Game : MonoBehaviour
     private bool isRolling;
     private bool hitEnemy;
     public int maxPlayerHealth = 5;
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +46,6 @@ public class Game : MonoBehaviour
                 Node node = GetOverlap(player);
                 if (node != null && node.risk > 0 && node != actionedNode)
                 {
-                    Debug.Log("perform the action at the node");
-                    Debug.Log("node is " + node.gameObject.name);
-
                     actionedNode = node;
                 }
                 if (node != null)
@@ -119,6 +119,11 @@ public class Game : MonoBehaviour
             if (playerHealth == 1 && finalDiceRoll < actionedNode.risk)
             {
                 finalDiceRoll = UnityEngine.Random.Range(1, 7);
+            }
+            if (swordHelp > 0)
+            {
+                finalDiceRoll = actionedNode.risk;
+                swordHelp -= 1;
             }
         }));
 

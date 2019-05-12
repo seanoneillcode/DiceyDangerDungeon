@@ -76,7 +76,13 @@ public class Node : MonoBehaviour
                 RemoveRisk();
             } else
             {
-                game.playerHealth -= 1;
+                if (game.armourHelp > 0)
+                {
+                    game.armourHelp -= 1;
+                } else
+                {
+                    game.playerHealth -= 1;
+                }
             }
         }
         if (pickup != null && !pickup.consumed)

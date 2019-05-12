@@ -240,6 +240,8 @@ MonoBehaviour:
   risk: 0
   actor: {fileID: 0}
   links: []
+  pickup: {fileID: 0}
+  character: {fileID: 0}
 --- !u!65 &5428539253635028227
 BoxCollider:
   m_ObjectHideFlags: 0
