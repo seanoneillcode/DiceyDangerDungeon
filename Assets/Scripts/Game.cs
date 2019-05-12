@@ -13,6 +13,9 @@ public class Game : MonoBehaviour
     public int finalDiceRoll = -1;
     public bool hasReachedGoal;
 
+    public bool hasFriend = false;
+    public bool hasGhost = false;
+
     public Player player;
     private ExplosionHandler explosionHandler;
     public Node actionedNode;
@@ -52,7 +55,7 @@ public class Game : MonoBehaviour
                     {
                         hasReachedGoal = true;
                     }
-                    Pickup pickup = node.gameObject.GetComponent<Pickup>();
+                    Pickup pickup = node.pickup;
                     if (pickup != null && !pickup.consumed)
                     {
                         if (pickup.type == Pickup.PickupType.HEALTH)
@@ -78,6 +81,11 @@ public class Game : MonoBehaviour
         {
             playerHealth = maxPlayerHealth;
         }
+    }
+
+    public void ExplodePosition(Vector3 pos)
+    {
+        explosionHandler.PickupPlant(pos);
     }
 
     public int GetDiceRoll()
@@ -108,6 +116,15 @@ public class Game : MonoBehaviour
             {
                 finalDiceRoll = UnityEngine.Random.Range(1, 7);
             }
+            if (hasFriend)
+            {
+                finalDiceRoll = finalDiceRoll + 1;
+            }
+            if (hasGhost)
+            {
+                finalDiceRoll = finalDiceRoll - 1;
+            }
+
         }));
 
         StartCoroutine(ExecuteAfterTime(0.8f, () => {
@@ -115,7 +132,7 @@ public class Game : MonoBehaviour
         }));
 
         StartCoroutine(ExecuteAfterTime(1.6f, () => {
-            if (hitEnemy)
+            if (!actionedNode.hasAction())
             {
                 if (playerHealth > 0)
                 {
@@ -140,60 +157,9 @@ public class Game : MonoBehaviour
         return false;
     }
 
-    private void ApplyPickupToPlayer(Pickup pickup)
-    {
-        switch (pickup.type)
-        {
-            case Pickup.PickupType.MAX_HEALTH_INC:
-                maxPlayerHealth += 1;
-                playerHealth += 1;
-                break;
-            case Pickup.PickupType.MAX_HEALTH_DEC:
-                maxPlayerHealth -= 1;
-                break;
-        }
-    }
-
     private void ResolveRolls(Node node)
     {
-        if (finalDiceRoll < node.risk)
-        {
-            if (node.actor != null)
-            {
-                playerHealth = playerHealth - 1;
-            }
-            Pickup pickup = node.gameObject.GetComponent<Pickup>();
-            if (pickup != null && !pickup.consumed)
-            {
-                pickup.Consume();
-                explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
-                hitEnemy = true;
-                node.RemoveRisk();
-                if (pickup.isCurse)
-                {
-                    ApplyPickupToPlayer(pickup);
-                }
-            }
-        }
-        else {
-            hitEnemy = true;
-            if (node.actor != null)
-            {
-                explosionHandler.Explode(node.actor.gameObject.transform.position);
-                Destroy(node.actor.gameObject);
-            }
-            Pickup pickup = node.gameObject.GetComponent<Pickup>();
-            if (pickup != null && !pickup.consumed)
-            {
-                pickup.Consume();
-                explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
-                if (!pickup.isCurse)
-                {
-                    ApplyPickupToPlayer(pickup);
-                }
-            }
-            node.RemoveRisk();
-        }
+        node.HandleRoll(finalDiceRoll >= node.risk, this);
         if (playerHealth < 1)
         {
             explosionHandler.Explode(player.gameObject.transform.position);
@@ -246,7 +212,7 @@ public class Game : MonoBehaviour
 
         if (selectedPlayer != null && node != null && actionedNode == null)
         {
-            if (node.actor != null && selectedPlayer.IsAtTarget())
+            if (node.hasAction() && selectedPlayer.IsAtTarget())
             {
                 Vector3 direction = Vector3.Normalize(node.transform.position - selectedPlayer.transform.position);
                 selectedPlayer.targetPos = node.transform.position - (direction * 0.8f);

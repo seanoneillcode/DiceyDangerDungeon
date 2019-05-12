@@ -34,6 +34,26 @@ public class Pickup : MonoBehaviour
         consumed = true;
     }
 
+    public void ApplyPickupToPlayer(Game game)
+    {
+        switch (this.type)
+        {
+            case Pickup.PickupType.MAX_HEALTH_INC:
+                game.maxPlayerHealth += 1;
+                game.playerHealth += 1;
+                break;
+            case Pickup.PickupType.MAX_HEALTH_DEC:
+                game.maxPlayerHealth -= 1;
+                break;
+            case Pickup.PickupType.FRIEND:
+                game.hasFriend = true;
+                break;
+            case Pickup.PickupType.GHOST:
+                game.hasGhost = true;
+                break;
+        }
+    }
+
     public enum PickupType
     {
         HEALTH,
