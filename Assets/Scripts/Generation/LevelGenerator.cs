@@ -263,6 +263,7 @@ public class LevelGenerator : MonoBehaviour
         GameObject nodeTypePrefab = GetPrefab(point.type);
         GameObject nodeObject = Instantiate(nodeTypePrefab, point.pos, Quaternion.identity, map);
         Node node = nodeObject.GetComponent<Node>();
+        point.node = node;
         node.risk = point.risk;
         if (point.type == PointType.RISK)
         {
@@ -282,6 +283,11 @@ public class LevelGenerator : MonoBehaviour
             {
                 linkObj.transform.Rotate(0, 90, 0);
             }
+            Link link = linkObj.GetComponent<Link>();
+            link.nodeA = from.node;
+            link.nodeB = to.node;
+            from.node.AddLink(link);
+            to.node.AddLink(link);
         }
     }
 

@@ -8,6 +8,7 @@ public class Point
     public PointType type;
     public Vector3 pos;
     public int risk;
+    public Node node;
 
     public Point(PointType type, Vector3 pos)
     {

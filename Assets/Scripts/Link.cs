@@ -9,7 +9,7 @@ public class Link : MonoBehaviour
 
     private void Start()
     {
-        SetNodes();
+        //SetNodes();
     }
 
     private void SetNodes()
