@@ -21,10 +21,11 @@ public class LevelGenerator : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject goldPrefab;
     public GameObject prisonerPrefab;
+    public GameObject portalPrefab;
     public Transform map;
 
     private Point[][] points;
-    private const int SIZE = 4;
+    public const int SIZE = 4;
 
     private Point lastPoint;
     private List<PointLink> links;
@@ -130,6 +131,10 @@ public class LevelGenerator : MonoBehaviour
                     if (UnityEngine.Random.Range(0, 8) == 1)
                     {
                         point.type = PointType.GHOST;
+                    }
+                    if (UnityEngine.Random.Range(0, 4) == 1)
+                    {
+                        point.type = PointType.TELEPORT;
                     }
                 }
             }
@@ -337,6 +342,10 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.PRISONER)
         {
             return prisonerPrefab;
+        }
+        if (type == PointType.TELEPORT)
+        {
+            return portalPrefab;
         }
         return nodePrefab;
     }

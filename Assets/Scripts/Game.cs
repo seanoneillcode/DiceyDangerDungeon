@@ -224,6 +224,26 @@ public class Game : MonoBehaviour
         selectedNode = node;
     }
 
+    internal void TeleportPlayerRandomly()
+    {
+        explosionHandler.PortalExplosion(player.transform.position);
+        explosionHandler.PortalExplosion(player.transform.position + new Vector3(0.8f, 0, 0));
+        explosionHandler.PortalExplosion(player.transform.position + new Vector3(0, 0, -0.8f));
+        actionedNode = null;
+        selectedNode = null;
+        finalDiceRoll = -1;
+        actionedNode = null;
+        hasRolled = false;
+        float x = UnityEngine.Random.Range(0, LevelGenerator.SIZE) * 4;
+        float z = UnityEngine.Random.Range(0, LevelGenerator.SIZE) * 4;
+        player.Teleport(new Vector3(x, 0, z));
+        explosionHandler.PortalExplosion(player.transform.position);
+        StartCoroutine(ExecuteAfterTime(0.2f, () => {
+            explosionHandler.PortalExplosion(player.transform.position + new Vector3(0, 0, -0.8f));
+            explosionHandler.PortalExplosion(player.transform.position + new Vector3(0.8f, 0, 0));
+        }));
+    }
+
     public bool isPlayerDead()
     {
         return playerHealth < 1 && actionedNode == null;

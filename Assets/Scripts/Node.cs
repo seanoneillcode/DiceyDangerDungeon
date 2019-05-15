@@ -66,33 +66,42 @@ public class Node : MonoBehaviour
 
     internal void HandleRoll(bool didSucceed, Game game)
     {
-        if (actor != null)
-        {
-            if (didSucceed)
-            {
-                game.ExplodePosition(actor.gameObject.transform.position);
-                Destroy(actor.gameObject);
-                actor = null;
-                RemoveRisk();
-            } else
-            {
-                if (game.armourHelp > 0)
-                {
-                    game.armourHelp -= 1;
-                } else
-                {
-                    game.playerHealth -= 1;
-                }
-            }
-        }
+        
         if (pickup != null && !pickup.consumed)
         {
             pickup.Consume();
             game.ExplodePosition(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
             RemoveRisk();
-            if ((!pickup.isCurse && didSucceed) || (pickup.isCurse && !didSucceed))
+            if (pickup.isCurse)
             {
-                pickup.ApplyPickupToPlayer(game);
+                if (!didSucceed)
+                {
+                    Debug.Log("curse applied; didsuceed " + didSucceed + " ; roll " + game.GetDiceRollWithmodifiers() + " ; risk " + game.actionedNode.risk);
+                    pickup.ApplyPickupToPlayer(game);
+                    if (character != null)
+                    {
+                        character.SetFollow(game.player.transform);
+                    }
+                }
+                else
+                {
+                    Destroy(character.gameObject);
+                    character = null;
+                }
+            }
+            else {
+                if (didSucceed)
+                {
+                    pickup.ApplyPickupToPlayer(game);
+                    if (character != null)
+                    {
+                        character.SetFollow(game.player.transform);
+                    }
+                } else
+                {
+                    Destroy(character.gameObject);
+                    character = null;
+                }
             }
             if (character != null)
             {
@@ -104,6 +113,27 @@ public class Node : MonoBehaviour
                 {
                     Destroy(character.gameObject);
                     character = null;
+                }
+            }
+        }
+        if (actor != null)
+        {
+            if (didSucceed)
+            {
+                game.ExplodePosition(actor.gameObject.transform.position);
+                Destroy(actor.gameObject);
+                actor = null;
+                RemoveRisk();
+            }
+            else
+            {
+                if (game.armourHelp > 0)
+                {
+                    game.armourHelp -= 1;
+                }
+                else
+                {
+                    game.playerHealth -= 1;
                 }
             }
         }

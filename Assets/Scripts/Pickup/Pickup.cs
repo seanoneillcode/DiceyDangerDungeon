@@ -13,11 +13,6 @@ public class Pickup : MonoBehaviour
     void Start()
     {
         consumed = false;
-        isCurse = false;
-        if (type == PickupType.MAX_HEALTH_DEC || type == PickupType.GHOST)
-        {
-            isCurse = true;
-        }
     }
 
     // Update is called once per frame
@@ -56,6 +51,9 @@ public class Pickup : MonoBehaviour
                 break;
             case Pickup.PickupType.ARMOUR:
                 game.armourHelp += 1;
+                break;
+            case Pickup.PickupType.TELEPORT:
+                game.TeleportPlayerRandomly();
                 break;
         }
     }
