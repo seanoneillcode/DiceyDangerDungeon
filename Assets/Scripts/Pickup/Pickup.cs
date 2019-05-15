@@ -69,6 +69,8 @@ public class Pickup : MonoBehaviour
         FRIEND,
         ARMOUR,
         SWORD,
+        GOLD,
+        PRISONER,
         GHOST
     }
 }

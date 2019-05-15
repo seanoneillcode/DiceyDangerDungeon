@@ -67,6 +67,8 @@ public enum PointType {
     GHOST,
     FRIEND,
     SWORD,
+    GOLD,
+    PRISONER,
     ARMOUR
 }
 

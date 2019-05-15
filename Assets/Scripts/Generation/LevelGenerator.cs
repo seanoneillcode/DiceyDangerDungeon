@@ -19,6 +19,8 @@ public class LevelGenerator : MonoBehaviour
     public GameObject armourPrefab;
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
+    public GameObject goldPrefab;
+    public GameObject prisonerPrefab;
     public Transform map;
 
     private Point[][] points;
@@ -173,7 +175,7 @@ public class LevelGenerator : MonoBehaviour
                 if (UnityEngine.Random.Range(0, 2) == 1)
                 {
                     point.risk = Random.Range(2, 7);
-                    switch (Random.Range(0, 4))
+                    switch (Random.Range(0, 6))
                     {
                         case 0:
                             point.type = PointType.POTION;
@@ -186,6 +188,13 @@ public class LevelGenerator : MonoBehaviour
                             break;
                         case 3:
                             point.type = PointType.ARMOUR;
+                            break;
+                        case 4:
+                            point.type = PointType.PRISONER;
+                            break;
+                        case 5:
+                            point.type = PointType.GOLD;
+                            point.risk = 1;
                             break;
                     }
                 }
@@ -314,6 +323,14 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.ARMOUR)
         {
             return armourPrefab;
+        }
+        if (type == PointType.GOLD)
+        {
+            return goldPrefab;
+        }
+        if (type == PointType.PRISONER)
+        {
+            return prisonerPrefab;
         }
         return nodePrefab;
     }
