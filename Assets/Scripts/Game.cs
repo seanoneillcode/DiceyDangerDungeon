@@ -159,6 +159,7 @@ public class Game : MonoBehaviour
 
     private void ResolveRolls(Node node)
     {
+        Debug.Log("rolled a " + GetDiceRollWithmodifiers() + " against a risk of " + node.risk);
         node.HandleRoll(GetDiceRollWithmodifiers() >= node.risk, this);
         if (playerHealth < 1)
         {

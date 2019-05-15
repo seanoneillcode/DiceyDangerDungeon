@@ -8,6 +8,7 @@ public class Pickup : MonoBehaviour
     public bool consumed;
     public PickupType type;
     public bool isCurse;
+    public GameObject trapActor;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +56,11 @@ public class Pickup : MonoBehaviour
             case Pickup.PickupType.TELEPORT:
                 game.TeleportPlayerRandomly();
                 break;
+            case Pickup.PickupType.TRAP:
+                // find actor and enable
+                trapActor.SetActive(true);
+                GetComponent<Node>().SetRisk(UnityEngine.Random.Range(1, 7));
+                break;
         }
     }
 
@@ -69,6 +75,7 @@ public class Pickup : MonoBehaviour
         SWORD,
         GOLD,
         PRISONER,
+        TRAP,
         GHOST
     }
 }

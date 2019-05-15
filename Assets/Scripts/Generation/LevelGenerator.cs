@@ -22,6 +22,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject goldPrefab;
     public GameObject prisonerPrefab;
     public GameObject portalPrefab;
+    public GameObject trapPrefab;
     public Transform map;
 
     private Point[][] points;
@@ -124,17 +125,23 @@ public class LevelGenerator : MonoBehaviour
                 {
                     point.risk = Random.Range(2, 7);
                     point.type = PointType.RISK;
-                    if (UnityEngine.Random.Range(0, 8) == 1)
+                    if (UnityEngine.Random.Range(0, 3) == 0)
                     {
-                        point.type = PointType.POISON;
-                    }
-                    if (UnityEngine.Random.Range(0, 8) == 1)
-                    {
-                        point.type = PointType.GHOST;
-                    }
-                    if (UnityEngine.Random.Range(0, 4) == 1)
-                    {
-                        point.type = PointType.TELEPORT;
+                        switch (Random.Range(0, 4))
+                        {
+                            case 0:
+                                point.type = PointType.POISON;
+                                break;
+                            case 1:
+                                point.type = PointType.GHOST;
+                                break;
+                            case 2:
+                                point.type = PointType.TELEPORT;
+                                break;
+                            case 3:
+                                point.type = PointType.TRAP;
+                                break;
+                        }
                     }
                 }
             }
@@ -174,7 +181,6 @@ public class LevelGenerator : MonoBehaviour
             }
             if (count < 2)
             {
-                Debug.Log("found lonely node");
                 point.type = PointType.HEALTH;
                 point.risk = 0;
                 if (UnityEngine.Random.Range(0, 2) == 1)
@@ -346,6 +352,10 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.TELEPORT)
         {
             return portalPrefab;
+        }
+        if (type == PointType.TRAP)
+        {
+            return trapPrefab;
         }
         return nodePrefab;
     }

@@ -337,6 +337,7 @@ MonoBehaviour:
   links: []
   pickup: {fileID: 0}
   character: {fileID: 0}
+  riskText: {fileID: 0}
 --- !u!65 &307970879204617193
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -364,8 +365,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   consumedItem: {fileID: 2707675218189223556}
   consumed: 0
-  type: 9
+  type: 10
   isCurse: 1
+  trapActor: {fileID: 0}
 --- !u!1 &3456854221889886753
 GameObject:
   m_ObjectHideFlags: 0

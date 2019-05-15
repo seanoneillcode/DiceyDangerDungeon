@@ -71,6 +71,7 @@ public enum PointType {
     GOLD,
     PRISONER,
     TELEPORT,
+    TRAP,
     ARMOUR
 }
 

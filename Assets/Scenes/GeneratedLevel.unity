@@ -4152,6 +4152,8 @@ MonoBehaviour:
     type: 3}
   portalPrefab: {fileID: 1986924096775626304, guid: 5d0c2941b92772b46b9dad980494355d,
     type: 3}
+  trapPrefab: {fileID: 3177061525140361166, guid: dd9ecdfe199f8bb4c89dd857ec64b93d,
+    type: 3}
   map: {fileID: 1912703448}
 --- !u!4 &1953637888
 Transform:

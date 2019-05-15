@@ -11,6 +11,7 @@ public class Node : MonoBehaviour
     public List<Link> links;
     public Pickup pickup;
     public Character character;
+    public Text riskText;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +20,7 @@ public class Node : MonoBehaviour
         {
             links = new List<Link>();
         }
-        Text riskText = GetComponentInChildren<Text>();
+        riskText = GetComponentInChildren<Text>();
         if (riskText != null) {
             if (risk > 0)
             {
@@ -41,10 +42,19 @@ public class Node : MonoBehaviour
     public void RemoveRisk()
     {
         risk = 0;
-        Text riskText = GetComponentInChildren<Text>();
         if (riskText != null)
         {
             riskText.gameObject.SetActive(false);
+        }
+    }
+
+    public void SetRisk(int newRisk)
+    {
+        risk = newRisk;
+        if (riskText != null)
+        {
+            riskText.gameObject.SetActive(true);
+            riskText.text = "" + newRisk;
         }
     }
 
@@ -76,7 +86,6 @@ public class Node : MonoBehaviour
             {
                 if (!didSucceed)
                 {
-                    Debug.Log("curse applied; didsuceed " + didSucceed + " ; roll " + game.GetDiceRollWithmodifiers() + " ; risk " + game.actionedNode.risk);
                     pickup.ApplyPickupToPlayer(game);
                     if (character != null)
                     {
@@ -85,8 +94,11 @@ public class Node : MonoBehaviour
                 }
                 else
                 {
-                    Destroy(character.gameObject);
-                    character = null;
+                    if (character != null)
+                    {
+                        Destroy(character.gameObject);
+                        character = null;
+                    }
                 }
             }
             else {
@@ -99,8 +111,11 @@ public class Node : MonoBehaviour
                     }
                 } else
                 {
-                    Destroy(character.gameObject);
-                    character = null;
+                    if (character != null)
+                    {
+                        Destroy(character.gameObject);
+                        character = null;
+                    }
                 }
             }
             if (character != null)
