@@ -19,6 +19,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject armourPrefab;
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
+    public GameObject golemPrefab;
     public GameObject goldPrefab;
     public GameObject prisonerPrefab;
     public GameObject portalPrefab;
@@ -278,7 +279,12 @@ public class LevelGenerator : MonoBehaviour
         node.risk = point.risk;
         if (point.type == PointType.RISK)
         {
-            GameObject enemyObject = Instantiate(enemyPrefab, point.pos, Quaternion.identity, map);
+            GameObject prefab = enemyPrefab;
+            if (point.risk >= 6)
+            {
+                prefab = golemPrefab;
+            }
+            GameObject enemyObject = Instantiate(prefab, point.pos, Quaternion.identity, map);
             Actor enemyActor = enemyObject.GetComponent<Actor>();
             node.actor = enemyActor;
             enemyActor.node = node;
