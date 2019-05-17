@@ -10,6 +10,7 @@ public class RollHandler : MonoBehaviour
     public Text riskText;
     public Text rollText;
     public GameObject rollButton;
+    public GameObject runButton;
     public GameObject missedImage;
     public GameObject friend;
     public GameObject ghost;
@@ -21,6 +22,7 @@ public class RollHandler : MonoBehaviour
         panel = transform.GetChild(0).gameObject;
         panel.SetActive(false);
         missedImage.SetActive(false);
+        runButton.SetActive(false);
     }
 
     // Update is called once per frame
@@ -62,6 +64,13 @@ public class RollHandler : MonoBehaviour
             {
                 ghost.SetActive(false);
             }
+            if (referenceHolder.game.canRun)
+            {
+                runButton.SetActive(true);
+            } else
+            {
+                runButton.SetActive(false);
+            }
         }
         else
         {
@@ -69,6 +78,11 @@ public class RollHandler : MonoBehaviour
         }
         
         
+    }
+
+    public void RunAway()
+    {
+        referenceHolder.game.RunAway();
     }
 
     public void RollDice()

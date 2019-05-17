@@ -138,6 +138,7 @@ public class Node : MonoBehaviour
                 game.ExplodePosition(actor.gameObject.transform.position);
                 Destroy(actor.gameObject);
                 actor = null;
+                game.canRun = false;
                 RemoveRisk();
             }
             else
@@ -148,6 +149,7 @@ public class Node : MonoBehaviour
                 }
                 else
                 {
+                    game.canRun = true;
                     game.playerHealth -= 1;
                 }
             }

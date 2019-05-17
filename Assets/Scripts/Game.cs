@@ -25,6 +25,8 @@ public class Game : MonoBehaviour
     private bool isRolling;
     private bool hitEnemy;
     public int maxPlayerHealth = 5;
+    internal bool canRun;
+    private Vector3 lastValidPosition;
 
 
     // Start is called before the first frame update
@@ -34,6 +36,7 @@ public class Game : MonoBehaviour
         hasReachedGoal = false;
         hasRolled = false;
         hitEnemy = false;
+        canRun = false;
     }
 
     // Update is called once per frame
@@ -80,6 +83,20 @@ public class Game : MonoBehaviour
         if (playerHealth > maxPlayerHealth)
         {
             playerHealth = maxPlayerHealth;
+        }
+    }
+
+    internal void RunAway()
+    {
+        if (lastValidPosition != null)
+        {
+            actionedNode = null;
+            selectedNode = null;
+            finalDiceRoll = -1;
+            actionedNode = null;
+            hasRolled = false;
+            player.targetPos = lastValidPosition;
+            canRun = false;
         }
     }
 
@@ -171,6 +188,7 @@ public class Game : MonoBehaviour
     }
 
     private void MovePlayerAction(Player player, Node node) {
+        lastValidPosition = player.transform.position;
         player.targetPos = node.transform.position;
     }
 
@@ -213,6 +231,7 @@ public class Game : MonoBehaviour
 
         if (selectedPlayer != null && node != null && actionedNode == null)
         {
+            lastValidPosition = selectedPlayer.transform.position;
             if (node.hasAction() && selectedPlayer.IsAtTarget())
             {
                 Vector3 direction = Vector3.Normalize(node.transform.position - selectedPlayer.transform.position);
