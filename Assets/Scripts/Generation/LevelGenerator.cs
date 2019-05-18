@@ -26,239 +26,36 @@ public class LevelGenerator : MonoBehaviour
     public GameObject trapPrefab;
     public Transform map;
 
-    private Point[][] points;
-    public const int SIZE = 4;
-
-    private Point lastPoint;
-    private List<PointLink> links;
+    
+    public const int SIZE = 8;
+    private LayoutGenerator layoutGenerator;
 
     // Start is called before the first frame update
     void Start()
     {
         game = FindObjectOfType<Game>();
-        points = new Point[SIZE + 1][];
-        for (int i = 0; i < SIZE; i++)
-        {
-            points[i] = new Point[SIZE + 1];
-        }
-        links = new List<PointLink>();
+        layoutGenerator = GetComponent<LayoutGenerator>();
         GenerateLevel();
     }
-
-    private HashSet<Point> MergeGroups(HashSet<Point> groupA, HashSet<Point> groupB)
-    {
-        if (groupA.Equals(groupB))
-        {
-            return groupA;
-        }
-        foreach (Point point in groupB)
-        {
-            groupA.Add(point);
-        }
-        return groupA;
-    }
-
-    private HashSet<Point> GetGroup(List<HashSet<Point>> groups, Point point)
-    {
-        if (point == null)
-        {
-            return null;
-        }
-        foreach (HashSet<Point> group in groups)
-        {
-            if (group.Contains(point))
-            {
-                return group;
-            }
-        }
-        return null;
-    }
-
-    private Point GenerateGrid()
-    {
-        List<HashSet<Point>> groups = new List<HashSet<Point>>();
-
-        for (int x = 0; x < SIZE; x++)
-        {
-            for (int z = 0; z < SIZE; z++)
-            {
-                PointType thisType = PointType.NONE;
-                
-                Point point = new Point(thisType, new Vector3(x * 4, 0, z * 4));
-                point.risk = 0;
-                AddPoint(point);
-
-                HashSet<Point> newGroup = new HashSet<Point>();
-                newGroup.Add(point);
-                groups.Add(newGroup);
-
-                if (x > 0 && RollCheck(2))
-                {
-                    Point previousPoint = GetPoint(new Vector3(point.pos.x - 4, point.pos.y, point.pos.z));
-                    if (previousPoint != null)
-                    {
-                        links.Add(new PointLink(point, previousPoint));
-                        HashSet<Point> otherGroup = GetGroup(groups, previousPoint);
-                        if (!otherGroup.Equals(newGroup))
-                        {
-                            MergeGroups(otherGroup, newGroup);
-                            groups.Remove(newGroup);
-                        }
-                        newGroup = otherGroup;
-                    }
-                }
-                if (z > 0 && RollCheck(2))
-                {
-                    Point previousPoint = GetPoint(new Vector3(point.pos.x, point.pos.y, point.pos.z - 4));
-                    if (previousPoint != null)
-                    {
-                        links.Add(new PointLink(point, previousPoint));
-                        HashSet<Point> otherGroup = GetGroup(groups, previousPoint);
-                        if (!otherGroup.Equals(newGroup))
-                        {
-                            MergeGroups(otherGroup, newGroup);
-                            groups.Remove(newGroup);
-                        }
-                        newGroup = otherGroup;
-                    }
-                }
-                if ((z + 1 + (x % 2)) % 2 == 0)
-                {
-                    point.risk = Random.Range(2, 7);
-                    point.type = PointType.RISK;
-                    if (UnityEngine.Random.Range(0, 3) == 0)
-                    {
-                        switch (Random.Range(0, 4))
-                        {
-                            case 0:
-                                point.type = PointType.POISON;
-                                break;
-                            case 1:
-                                point.type = PointType.GHOST;
-                                break;
-                            case 2:
-                                point.type = PointType.TELEPORT;
-                                break;
-                            case 3:
-                                point.type = PointType.TRAP;
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-
-        // if there's more than 1 group
-        while (groups.Count > 1)
-        {
-            // get the first group
-            HashSet<Point> group = new HashSet<Point>(groups[0]);
-            // iterate over ever point
-            foreach ( Point point in group)
-            {
-                // if point has neighbour point in other group
-                Point left = GetPoint(point.pos + new Vector3(-4, 0, 0));
-                Point right = GetPoint(point.pos + new Vector3(4, 0, 0));
-                Point up = GetPoint(point.pos + new Vector3(0, 0, 4));
-                Point down = GetPoint(point.pos + new Vector3(0, 0, -4));
-
-                CheckPoint(groups, point, left);
-                CheckPoint(groups, point, right);
-                CheckPoint(groups, point, up);
-                CheckPoint(groups, point, down);
-            }
-        }
-
-        // iterate over ever point
-        foreach (Point point in groups[0])
-        {
-            int count = 0;
-            foreach (PointLink link in links)
-            {
-                if (link.from.Equals(point) || link.to.Equals(point))
-                {
-                    count++;
-                }
-            }
-            if (count < 2)
-            {
-                point.type = PointType.HEALTH;
-                point.risk = 0;
-                if (UnityEngine.Random.Range(0, 2) == 1)
-                {
-                    point.risk = Random.Range(2, 7);
-                    switch (Random.Range(0, 6))
-                    {
-                        case 0:
-                            point.type = PointType.POTION;
-                            break;
-                        case 1:
-                            point.type = PointType.FRIEND;
-                            break;
-                        case 2:
-                            point.type = PointType.SWORD;
-                            break;
-                        case 3:
-                            point.type = PointType.ARMOUR;
-                            break;
-                        case 4:
-                            point.type = PointType.PRISONER;
-                            break;
-                        case 5:
-                            point.type = PointType.GOLD;
-                            point.risk = 1;
-                            break;
-                    }
-                }
-            }
-        }
-
-        Point startPoint = points[0][0];
-        lastPoint = points[SIZE - 1][SIZE - 1];
-        startPoint.type = PointType.START;
-        startPoint.risk = 0;
-        lastPoint.type = PointType.END;
-        lastPoint.risk = 0;
-        return startPoint;
-    }
-
-    private void CheckPoint(List<HashSet<Point>> groups, Point origin, Point other)
-    {
-        HashSet<Point> otherGroup = GetGroup(groups, other);
-        if (otherGroup != null && !otherGroup.Contains(origin))
-        {
-            links.Add(new PointLink(origin, other));
-            HashSet<Point> originGroup = GetGroup(groups, origin);
-            if (!originGroup.Equals(otherGroup))
-            {
-                MergeGroups(originGroup, otherGroup);
-                groups.Remove(otherGroup);
-            }
-            else {
-                Debug.LogError("wat");
-            }
-        }
-    }
+    
 
     public void GenerateLevel()
     {
-        //Point startPoint = GeneratePoints();
-
-        Point startPoint = GenerateGrid();
+        Point startPoint = layoutGenerator.GenerateLayout();
 
         for (int i = 0; i < SIZE; i++)
         {
             for (int j = 0; j < SIZE; j++)
             {
-                if (points[i][j] != null)
+                if (layoutGenerator.points[i][j] != null)
                 {
-                    ConvertPoint(points[i][j]);
+                    ConvertPoint(layoutGenerator.points[i][j]);
                 }
             }
         }
 
-        Debug.Log("adding links " + links.Count);
-        foreach (PointLink pointLink in links)
+        Debug.Log("adding links " + layoutGenerator.links.Count);
+        foreach (PointLink pointLink in layoutGenerator.links)
         {
             CreateLink(pointLink.from, pointLink.to);
         }
@@ -306,11 +103,6 @@ public class LevelGenerator : MonoBehaviour
             from.node.AddLink(link);
             to.node.AddLink(link);
         }
-    }
-
-    private bool RollCheck(int odds)
-    {
-        return Random.Range(1, odds + 1) == 1;
     }
 
     private GameObject GetPrefab(PointType type)
@@ -364,107 +156,5 @@ public class LevelGenerator : MonoBehaviour
             return trapPrefab;
         }
         return nodePrefab;
-    }
-
-    private Point GeneratePoints()
-    {
-        // start point
-        Point startPoint = new Point(PointType.START, new Vector3(24, 0, 0));
-        AddPoint(startPoint);
-
-        GenerateLine(startPoint, 7);
-
-        // end point
-        lastPoint.type = PointType.END;
-
-        return startPoint;
-    }
-
-    private void GenerateLine(Point startPoint, int numPoints)
-    {
-        List<Split> splits = new List<Split>();
-        int currentRisk = 2;
-        bool isDone = false;
-        Point currentPoint = startPoint;
-        int riskNodeCounter = 0;
-        int currentPoints = numPoints;
-        while (!isDone)
-        {
-            PointType thisType = PointType.NONE;
-            if (riskNodeCounter % 2 == 0)
-            {
-                thisType = PointType.RISK;
-                if (currentRisk < 6)
-                {
-                    currentRisk++;
-                }
-            }
-            // add point to current
-            Point nextPoint = new Point(thisType, currentPoint.pos + new Vector3(0, 0, 4));
-            AddPoint(nextPoint);
-            nextPoint.risk = currentRisk;
-
-            // split
-            if (RollCheck(4) && currentPoints > 1)
-            {
-                Point splitPoint = GetPoint(currentPoint.pos + new Vector3(4, 0, 0));
-                if (splitPoint == null)
-                {
-                    Debug.Log("splitting");
-                    splitPoint = new Point(PointType.NONE, currentPoint.pos + new Vector3(4, 0, 0));
-                    AddPoint(splitPoint);
-                    links.Add(new PointLink(currentPoint, splitPoint));
-                    splits.Add(new Split(splitPoint, currentPoints));
-                }
-            }
-
-            // merge
-            if (RollCheck(6))
-            {
-                Debug.Log("merging");
-                Point mergePoint = GetPoint(currentPoint.pos - new Vector3(4, 0, 0));
-                if (mergePoint != null)
-                {
-                    Debug.Log("found merge point");
-                    links.Add(new PointLink(currentPoint, mergePoint));
-                    isDone = true;
-                }
-            }
-
-            links.Add(new PointLink(currentPoint, nextPoint));
-            currentPoint = nextPoint;
-            riskNodeCounter++;
-            currentPoints--;
-            if (currentPoints == 0)
-            {
-                isDone = true;
-            }
-        }
-        lastPoint = currentPoint;
-
-        foreach (Split split in splits)
-        {
-            GenerateLine(split.point, split.points);
-        }
-    }
-
-    private void AddPoint(Point point)
-    {
-        points[Mathf.FloorToInt(point.pos.z / 4)][Mathf.FloorToInt(point.pos.x / 4)] = point;
-    }
-
-    private void RemovePoint(Point point)
-    {
-        points[Mathf.FloorToInt(point.pos.z / 4)][Mathf.FloorToInt(point.pos.x / 4)] = null;
-    }
-
-    private Point GetPoint(Vector3 pos)
-    {
-        if (pos.x < 0 || pos.z < 0 || pos.x > (SIZE * 4) - 1 || pos.z > (SIZE * 4) - 1)
-        {
-            //Debug.LogError("tried to get point that doesn't exist. " + pos.x + "," + pos.z);
-            return null;
-        }
-        return points[Mathf.FloorToInt(pos.z / 4)][Mathf.FloorToInt(pos.x / 4)];
     }
 }
