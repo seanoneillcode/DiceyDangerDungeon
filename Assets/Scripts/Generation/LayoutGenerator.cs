@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LayoutGenerator : MonoBehaviour
@@ -8,6 +9,7 @@ public class LayoutGenerator : MonoBehaviour
     internal Point[][] points;
     internal List<PointLink> links;
     private Point lastPoint;
+    internal List<Point> pointList;
 
     private bool RollCheck(int odds)
     {
@@ -74,6 +76,7 @@ public class LayoutGenerator : MonoBehaviour
             if (point == null)
             {
                 point = new Point(PointType.NONE, new Vector3(currentPos.x * 4, 0, currentPos.y * 4));
+                pointList.Add(point);
             }
             point.risk = 0;
             SetPoint(point);
@@ -108,6 +111,7 @@ public class LayoutGenerator : MonoBehaviour
         if (finalPoint == null)
         {
             finalPoint = new Point(PointType.NONE, new Vector3(currentPos.x * 4, 0, currentPos.y * 4));
+            pointList.Add(finalPoint);
         }
         finalPoint.risk = 0;
         SetPoint(finalPoint);
@@ -118,8 +122,111 @@ public class LayoutGenerator : MonoBehaviour
         }
     }
 
+    internal void PushPoints()
+    {
+        Point a = null;
+        Point b = null;
+
+        int count = 0;
+        bool done = false;
+        while (!done && count < 40)
+        {
+            count++;
+            int index = Random.Range(1, pointList.Count - 1);
+            if (pointList[index].pos.x == pointList[index + 1].pos.x) {
+                done = true;
+                a = pointList[index];
+                b = pointList[index + 1];
+                break;
+            }
+            if (pointList[index].pos.z == pointList[index + 1].pos.z)
+            {
+                done = true;
+                a = pointList[index];
+                b = pointList[index + 1];
+            }
+        }
+        if (a == null || b == null)
+        {
+            return;
+        }
+        Debug.Log("got two points");
+        Debug.Log("point a " + a.pos.x / 4 + " " + a.pos.z / 4);
+        Debug.Log("point b " + b.pos.x / 4 + " " + b.pos.z / 4);
+
+        if (a.pos.x == b.pos.x)
+        {
+            int val = 4;
+            if (Random.Range(0, 2) == 0)
+            {
+                val = -4;
+            }
+            Point c = GetPoint(a.pos + new Vector3(val, 0, 0));
+            Point d = GetPoint(b.pos + new Vector3(val, 0, 0));
+            if (c == null && d == null)
+            {
+                Debug.Log("c and d are null");
+                if(IsPosValid(a.pos + new Vector3(val, 0, 0)) && IsPosValid(b.pos + new Vector3(val, 0, 0)))
+                {
+                    Debug.Log("c and d are valid");
+                    movePoints(a, b, new Vector3(val, 0, 0));
+                }
+            } else
+            {
+                Debug.Log("c or d are not null");
+            }
+        } else
+        {
+            int val = 4;
+            if (Random.Range(0, 2) == 0)
+            {
+                val = -4;
+            }
+            Point c = GetPoint(a.pos + new Vector3(0, 0, val));
+            Point d = GetPoint(b.pos + new Vector3(0, 0, val));
+            if (c == null && d == null)
+            {
+                Debug.Log("c and d are null");
+                if (IsPosValid(a.pos + new Vector3(0, 0, val)) && IsPosValid(b.pos + new Vector3(0, 0, val)))
+                {
+                    Debug.Log("c and d are valid");
+                    movePoints(a, b, new Vector3(0, 0, val));
+                }
+            }
+            else
+            {
+                Debug.Log("c or d are not null");
+            }
+        }
+    }
+
+    private void movePoints(Point a, Point b, Vector3 move)
+    {
+        Point c = new Point(PointType.NONE, a.pos + move);
+        pointList.Add(c);    
+        c.risk = 0;
+        SetPoint(c);
+        links.Add(new PointLink(a, c));
+
+        Point d = new Point(PointType.NONE, b.pos + move);
+        pointList.Add(d);
+        d.risk = 0;
+        SetPoint(d);
+        links.Add(new PointLink(b, d));
+        links.Add(new PointLink(c, d));
+
+        bool didBreak = links.Remove(new PointLink(a,b));
+        if (!didBreak)
+        {
+            Debug.LogError("failed to remove link");
+        }
+        //links = links.Where(link => (link.from == b && link.to == a)).ToList();
+        Debug.Log("pushed two points");
+    }
+
     internal Point GenerateLayout()
     {
+        pointList = new List<Point>();
         points = new Point[LevelGenerator.SIZE + 1][];
         for (int i = 0; i < LevelGenerator.SIZE; i++)
         {
@@ -138,7 +245,6 @@ public class LayoutGenerator : MonoBehaviour
         Debug.Log("set point c " + c.x + " " + c.y);
         GenerateLine(a, c);
         GenerateLine(b, c);
-        //GenerateLine(c, b);
 
         // other side
         Vector2Int e = new Vector2Int(LevelGenerator.SIZE / 2, UnityEngine.Random.Range(0, LevelGenerator.SIZE - 1 - 1));
@@ -146,6 +252,18 @@ public class LayoutGenerator : MonoBehaviour
         Vector2Int g = new Vector2Int(UnityEngine.Random.Range((LevelGenerator.SIZE / 2) + 1, LevelGenerator.SIZE - 1), UnityEngine.Random.Range(e.y, f.y + 1));
         GenerateLine(e, g);
         GenerateLine(f, g);
+
+        // push points
+        for (int j = 0; j < pointList.Count; j++)
+        {
+            Debug.Log("point " + pointList[j].pos.x / 4 + " " + pointList[j].pos.z / 4);
+        }
+        int numPushes = LevelGenerator.SIZE * LevelGenerator.SIZE;
+        for (int i = 0; i < numPushes; i++)
+        {
+            PushPoints();
+        }
+
 
         Point startPoint = points[0][LevelGenerator.SIZE / 2];
         lastPoint = points[LevelGenerator.SIZE - 1][LevelGenerator.SIZE / 2];
@@ -306,7 +424,7 @@ public class LayoutGenerator : MonoBehaviour
 
     private void SetPoint(Point point)
     {
-        if (point.pos.x < 0 || point.pos.z < 0 || point.pos.x > (LevelGenerator.SIZE * 4) - 1 || point.pos.z > (LevelGenerator.SIZE * 4) - 1)
+        if (!IsPosValid(point.pos))
         {
             Debug.LogError("setting point out of bounds " + point.pos.x + " " + point.pos.z);
         }
@@ -320,10 +438,19 @@ public class LayoutGenerator : MonoBehaviour
 
     private Point GetPoint(Vector3 pos)
     {
-        if (pos.x < 0 || pos.z < 0 || pos.x > (LevelGenerator.SIZE * 4) - 1 || pos.z > (LevelGenerator.SIZE * 4) - 1)
+        if (!IsPosValid(pos))
         {
             return null;
         }
         return points[Mathf.FloorToInt(pos.z / 4)][Mathf.FloorToInt(pos.x / 4)];
+    }
+
+    private bool IsPosValid(Vector3 pos)
+    {
+        if (pos.x < 0 || pos.z < 0 || pos.x > (LevelGenerator.SIZE * 4) - 1 || pos.z > (LevelGenerator.SIZE * 4) - 1)
+        {
+            return false;
+        }
+        return true;
     }
 }

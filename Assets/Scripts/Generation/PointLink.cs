@@ -11,4 +11,17 @@ public class PointLink
         this.from = from;
         this.to = to;
     }
+
+    public override bool Equals(object obj)
+    {
+        if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+        {
+            return false;
+        }
+        else
+        {
+            PointLink p = (PointLink)obj;
+            return (from == p.from && to == p.to) || (from == p.to && to == p.from);
+        }
+    }
 }

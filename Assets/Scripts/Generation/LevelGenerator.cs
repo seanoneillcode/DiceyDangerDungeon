@@ -27,7 +27,7 @@ public class LevelGenerator : MonoBehaviour
     public Transform map;
 
     
-    public const int SIZE = 8;
+    public const int SIZE = 6;
     private LayoutGenerator layoutGenerator;
 
     // Start is called before the first frame update
@@ -37,7 +37,6 @@ public class LevelGenerator : MonoBehaviour
         layoutGenerator = GetComponent<LayoutGenerator>();
         GenerateLevel();
     }
-    
 
     public void GenerateLevel()
     {
