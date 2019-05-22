@@ -12,6 +12,7 @@ public class Game : MonoBehaviour
     private int diceResult = -1;
     public int finalDiceRoll = -1;
     public bool hasReachedGoal;
+    public GameObject map;
 
     public int friendHelp = 0;
     public int ghostHindrence = 0;
@@ -150,7 +151,7 @@ public class Game : MonoBehaviour
         }));
 
         StartCoroutine(ExecuteAfterTime(1.6f, () => {
-            if (!actionedNode.hasAction())
+            if (actionedNode != null && !actionedNode.hasAction())
             {
                 if (playerHealth > 0)
                 {
@@ -255,9 +256,16 @@ public class Game : MonoBehaviour
         finalDiceRoll = -1;
         actionedNode = null;
         hasRolled = false;
-        float x = UnityEngine.Random.Range(0, LevelGenerator.SIZE) * 4;
-        float z = UnityEngine.Random.Range(0, LevelGenerator.SIZE) * 4;
-        player.Teleport(new Vector3(x, 0, z));
+        List<Transform> children = new List<Transform>();
+        foreach (Transform child in map.transform)
+        {
+            if (child.gameObject.GetComponent<Node>() != null)
+            {
+                children.Add(child);
+            }
+        }
+        int choiceIndex = UnityEngine.Random.Range(0, children.Count);
+        player.Teleport(children[choiceIndex].position);
         explosionHandler.PortalExplosion(player.transform.position);
         StartCoroutine(ExecuteAfterTime(0.2f, () => {
             explosionHandler.PortalExplosion(player.transform.position + new Vector3(0, 0, -0.8f));

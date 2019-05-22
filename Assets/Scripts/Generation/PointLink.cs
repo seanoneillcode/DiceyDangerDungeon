@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 public class PointLink
 {
@@ -23,5 +24,12 @@ public class PointLink
             PointLink p = (PointLink)obj;
             return (from == p.from && to == p.to) || (from == p.to && to == p.from);
         }
+    }
+
+    public override int GetHashCode()
+    {
+        var hashCode = -1951484959;
+        hashCode = hashCode * -1521134295 + (EqualityComparer<Point>.Default.GetHashCode(from) * EqualityComparer<Point>.Default.GetHashCode(to));
+        return hashCode;
     }
 }

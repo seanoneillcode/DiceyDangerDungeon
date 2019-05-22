@@ -182,6 +182,7 @@ MonoBehaviour:
   playerHealth: 5
   finalDiceRoll: -1
   hasReachedGoal: 0
+  map: {fileID: 1912703447}
   friendHelp: 0
   ghostHindrence: 0
   armourHelp: 0
