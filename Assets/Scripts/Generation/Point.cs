@@ -9,11 +9,13 @@ public class Point
     public Vector3 pos;
     public int risk;
     public Node node;
+    internal int amount;
 
     public Point(PointType type, Vector3 pos)
     {
         this.type = type;
         this.pos = pos;
+        risk = 0;
     }
 
     public static bool operator == (Point a, Point b)

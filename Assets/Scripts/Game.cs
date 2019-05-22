@@ -64,8 +64,9 @@ public class Game : MonoBehaviour
                         if (pickup.type == Pickup.PickupType.HEALTH)
                         {
                             pickup.Consume();
+                            node.UpdateRiskText();
                             explosionHandler.PickupPlant(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
-                            playerHealth++;
+                            playerHealth += pickup.amount;
                         }
                     }
                 }

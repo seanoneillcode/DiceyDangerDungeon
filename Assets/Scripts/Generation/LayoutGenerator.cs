@@ -6,11 +6,10 @@ using UnityEngine;
 
 public class LayoutGenerator : MonoBehaviour
 {
-
-    internal Point[][] points;
     internal List<PointLink> links;
     private Point lastPoint;
-    
+    private List<List<Point>> channels;
+    private Dictionary<String, Point> points;
 
     private void GenerateLine(Vector2Int from, Vector2Int to, List<Point> channel)
     {
@@ -26,7 +25,6 @@ public class LayoutGenerator : MonoBehaviour
                 point = new Point(PointType.NONE, new Vector3(currentPos.x * 4, 0, currentPos.y * 4));
                 channel.Add(point);
             }
-            point.risk = 0;
             SetPoint(point);
             Debug.Log("set point " + currentPos.x + " " + currentPos.y);
             if (previousPoint != null && point != null)
@@ -61,7 +59,6 @@ public class LayoutGenerator : MonoBehaviour
             finalPoint = new Point(PointType.NONE, new Vector3(currentPos.x * 4, 0, currentPos.y * 4));
             channel.Add(finalPoint);
         }
-        finalPoint.risk = 0;
         SetPoint(finalPoint);
         Debug.Log("setting final line point " + currentPos.x + " " + currentPos.y);
         if (previousPoint != null && finalPoint != null)
@@ -110,10 +107,7 @@ public class LayoutGenerator : MonoBehaviour
             Point d = GetPoint(b.pos + new Vector3(val, 0, 0));
             if (c == null && d == null)
             {
-                if(IsPosValid(a.pos + new Vector3(val, 0, 0)) && IsPosValid(b.pos + new Vector3(val, 0, 0)))
-                {
-                    movePoints(a, b, new Vector3(val, 0, 0), channel);
-                }
+                movePoints(a, b, new Vector3(val, 0, 0), channel);
             }
         } else
         {
@@ -126,10 +120,7 @@ public class LayoutGenerator : MonoBehaviour
             Point d = GetPoint(b.pos + new Vector3(0, 0, val));
             if (c == null && d == null)
             {
-                if (IsPosValid(a.pos + new Vector3(0, 0, val)) && IsPosValid(b.pos + new Vector3(0, 0, val)))
-                {
-                    movePoints(a, b, new Vector3(0, 0, val), channel);
-                }
+                movePoints(a, b, new Vector3(0, 0, val), channel);
             }
         }
     }
@@ -137,14 +128,12 @@ public class LayoutGenerator : MonoBehaviour
     private void movePoints(Point a, Point b, Vector3 move, List<Point> channel)
     {
         Point c = new Point(PointType.NONE, a.pos + move);
-        channel.Add(c);    
-        c.risk = 0;
+        channel.Add(c);
         SetPoint(c);
         links.Add(new PointLink(a, c));
 
         Point d = new Point(PointType.NONE, b.pos + move);
         channel.Add(d);
-        d.risk = 0;
         SetPoint(d);
 
         bool didBreak = links.Remove(new PointLink(a,b));
@@ -161,24 +150,33 @@ public class LayoutGenerator : MonoBehaviour
     {
         Point newPoint = new Point(PointType.NONE, newPointPos);
         channel.Add(newPoint);
-        newPoint.risk = 0;
         SetPoint(newPoint);
         links.Add(new PointLink(oldPoint, newPoint));
         return newPoint;
     }
 
+    internal List<Point> GetAllPoints()
+    {
+        List<Point> allPoints = new List<Point>();
+        foreach(List<Point> channel in channels)
+        {
+            allPoints.AddRange(channel);
+        }
+        return allPoints;
+    }
+
     internal Point GenerateLayout()
     {
-        points = new Point[LevelGenerator.SIZE + 1][];
-        for (int i = 0; i < LevelGenerator.SIZE; i++)
-        {
-            points[i] = new Point[LevelGenerator.SIZE + 1];
-        }
+        points = new Dictionary<string, Point>();
         links = new List<PointLink>();
 
         List<Point> mainChannel = new List<Point>();
         List<Point> leftChannel = new List<Point>();
         List<Point> rightChannel = new List<Point>();
+        channels = new List<List<Point>>();
+        channels.Add(mainChannel);
+        channels.Add(leftChannel);
+        channels.Add(rightChannel);
 
         GenerateLine(new Vector2Int(LevelGenerator.SIZE / 2, 0), new Vector2Int(LevelGenerator.SIZE / 2, LevelGenerator.SIZE - 1), mainChannel);
 
@@ -211,13 +209,11 @@ public class LayoutGenerator : MonoBehaviour
         }
 
         // choose start point
-        Point startPoint = points[0][LevelGenerator.SIZE / 2];
+        Point startPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, 0))];
+        lastPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, (LevelGenerator.SIZE - 1) * 4))];
 
         // add enemies to channels
-        List<List<Point>> channels = new List<List<Point>>();
-        channels.Add(mainChannel);
-        channels.Add(leftChannel);
-        channels.Add(rightChannel);
+
         channels = channels.OrderBy(channel => UnityEngine.Random.value).ToList();
         int avgRisk = UnityEngine.Random.Range(2,4);
         foreach (List<Point> channel in channels)
@@ -227,7 +223,7 @@ public class LayoutGenerator : MonoBehaviour
         }
 
         // choose endpoint
-        lastPoint = points[LevelGenerator.SIZE - 1][LevelGenerator.SIZE / 2];
+        lastPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, (LevelGenerator.SIZE - 1) * 4))];
         lastPoint.type = PointType.END;
         lastPoint.risk = 0;
 
@@ -271,7 +267,7 @@ public class LayoutGenerator : MonoBehaviour
         int riskTotal = 0;
         foreach ( Point point in channel)
         {
-            if (point.risk == 0 && gap % 3 != 0)
+            if (point.risk == 0 && gap % 3 != 0 && point.type == PointType.NONE)
             {
                 point.risk = GetRisk(avgRisk);
                 riskTotal += point.risk;
@@ -307,6 +303,11 @@ public class LayoutGenerator : MonoBehaviour
         while (currentRisk > 0 && preventInfinite < 100)
         {
             Point point = channel[UnityEngine.Random.Range(0, channel.Count)];
+            if (point.Equals(lastPoint))
+            {
+                preventInfinite++;
+                continue;
+            }
             Vector3 offset = new Vector3();
             if (UnityEngine.Random.Range(0, 2) == 0)
             {
@@ -319,12 +320,40 @@ public class LayoutGenerator : MonoBehaviour
             Point c = GetPoint(newPointPos);
             if (c == null)
             {
-                if (IsPosValid(newPointPos))
+                Point newPoint = movePoint(point, newPointPos, channel);
+                
+                if (UnityEngine.Random.Range(0, 4) == 0)
                 {
-                    Point newPoint = movePoint(point, newPointPos, channel);
+                    switch (UnityEngine.Random.Range(0, 4))
+                    {
+                        case 1:
+                            newPoint.type = PointType.ARMOUR;
+                            newPoint.risk = 2;
+                            currentRisk -= 6;
+                            break;
+                        case 2:
+                            newPoint.type = PointType.FRIEND;
+                            newPoint.risk = 2;
+                            currentRisk -= 6;
+                            break;
+                        case 3:
+                            newPoint.type = PointType.POTION;
+                            newPoint.risk = 2;
+                            currentRisk -= 6;
+                            break;
+                        case 0:
+                            newPoint.type = PointType.SWORD;
+                            newPoint.risk = 2;
+                            currentRisk -= 6;
+                            break;
+                    }
+                } else
+                {
                     newPoint.risk = 0;
                     newPoint.type = PointType.HEALTH;
-                    currentRisk -= 3;
+                    int amount = UnityEngine.Random.Range(1, 4);
+                    currentRisk -= (amount * 3);
+                    newPoint.amount = amount;
                 }
             }
             preventInfinite++;
@@ -333,33 +362,26 @@ public class LayoutGenerator : MonoBehaviour
 
     private void SetPoint(Point point)
     {
-        if (!IsPosValid(point.pos))
-        {
-            Debug.LogError("setting point out of bounds " + point.pos.x + " " + point.pos.z);
-        }
-        points[Mathf.FloorToInt(point.pos.z / 4)][Mathf.FloorToInt(point.pos.x / 4)] = point;
+        points[GetKey(point.pos)] = point;
+    }
+
+    private String GetKey(Vector3 pos)
+    {
+        return "" + Mathf.FloorToInt(pos.z / 4) + ":" + Mathf.FloorToInt(pos.x / 4);
     }
 
     private void RemovePoint(Point point)
     {
-        points[Mathf.FloorToInt(point.pos.z / 4)][Mathf.FloorToInt(point.pos.x / 4)] = null;
+        points[GetKey(point.pos)] = null;
     }
 
     private Point GetPoint(Vector3 pos)
     {
-        if (!IsPosValid(pos))
+        String key = GetKey(pos);
+        if (!points.ContainsKey(key))
         {
             return null;
         }
-        return points[Mathf.FloorToInt(pos.z / 4)][Mathf.FloorToInt(pos.x / 4)];
-    }
-
-    private bool IsPosValid(Vector3 pos)
-    {
-        if (pos.x < 0 || pos.z < 0 || pos.x > (LevelGenerator.SIZE * 4) - 1 || pos.z > (LevelGenerator.SIZE * 4) - 1)
-        {
-            return false;
-        }
-        return true;
+        return points[key];
     }
 }

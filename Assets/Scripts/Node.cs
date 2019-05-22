@@ -12,6 +12,9 @@ public class Node : MonoBehaviour
     public Pickup pickup;
     public Character character;
     public Text riskText;
+    private Color32 orangeColor = new Color32(247, 118, 34, 255);
+    private Color32 blueColor = new Color32(0, 149, 233, 255);
+    private Color32 purpleColor = new Color32(228, 59, 68, 255);
 
     // Start is called before the first frame update
     void Start()
@@ -21,17 +24,9 @@ public class Node : MonoBehaviour
             links = new List<Link>();
         }
         riskText = GetComponentInChildren<Text>();
-        if (riskText != null) {
-            if (risk > 0)
-            {
-                riskText.text = "" + risk;
-            } else
-            {
-                riskText.gameObject.SetActive(false);
-            }
-        }
         pickup = GetComponent<Pickup>();
         character = GetComponentInChildren<Character>();
+        UpdateRiskText();
     }
 
     // Update is called once per frame
@@ -42,19 +37,55 @@ public class Node : MonoBehaviour
     public void RemoveRisk()
     {
         risk = 0;
-        if (riskText != null)
-        {
-            riskText.gameObject.SetActive(false);
-        }
+        UpdateRiskText();
     }
 
     public void SetRisk(int newRisk)
     {
         risk = newRisk;
+        UpdateRiskText();
+    }
+
+    internal void UpdateRiskText()
+    {
         if (riskText != null)
         {
-            riskText.gameObject.SetActive(true);
-            riskText.text = "" + newRisk;
+            if (risk > 0 || (pickup != null))
+            {
+                if (risk > 0)
+                {
+                    riskText.text = "" + risk;
+                    if (pickup != null)
+                    {
+                        if (pickup.isCurse)
+                        {
+                            riskText.color = purpleColor;
+                        } else
+                        {
+                            riskText.color = blueColor;
+                        }
+                    } else
+                    {
+                        riskText.color = orangeColor;
+                    }
+                }
+                else
+                {
+                    if (pickup != null && pickup.amount > 0 && !pickup.consumed)
+                    {
+                        riskText.text = "" + pickup.amount;
+                        riskText.color = blueColor;
+                    }
+                    else
+                    {
+                        riskText.gameObject.SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                riskText.gameObject.SetActive(false);
+            }
         }
     }
 

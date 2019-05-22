@@ -41,16 +41,11 @@ public class LevelGenerator : MonoBehaviour
     public void GenerateLevel()
     {
         Point startPoint = layoutGenerator.GenerateLayout();
+        List<Point> points = layoutGenerator.GetAllPoints();
 
-        for (int i = 0; i < SIZE; i++)
+        foreach( Point point in points)
         {
-            for (int j = 0; j < SIZE; j++)
-            {
-                if (layoutGenerator.points[i][j] != null)
-                {
-                    ConvertPoint(layoutGenerator.points[i][j]);
-                }
-            }
+            ConvertPoint(point);
         }
 
         Debug.Log("adding links " + layoutGenerator.links.Count);
@@ -84,6 +79,11 @@ public class LevelGenerator : MonoBehaviour
             Actor enemyActor = enemyObject.GetComponent<Actor>();
             node.actor = enemyActor;
             enemyActor.node = node;
+        }
+        Pickup pickup = nodeObject.GetComponent<Pickup>();
+        if (pickup != null)
+        {
+            pickup.amount = point.amount;
         }
     }
 

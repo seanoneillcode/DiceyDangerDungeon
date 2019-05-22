@@ -9,6 +9,7 @@ public class Pickup : MonoBehaviour
     public PickupType type;
     public bool isCurse;
     public GameObject trapActor;
+    public int amount;
 
     // Start is called before the first frame update
     void Start()
