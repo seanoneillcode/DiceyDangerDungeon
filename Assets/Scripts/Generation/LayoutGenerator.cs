@@ -157,6 +157,16 @@ public class LayoutGenerator : MonoBehaviour
         links.Add(new PointLink(c, d));
     }
 
+    private Point movePoint(Point oldPoint, Vector3 newPointPos, List<Point> channel)
+    {
+        Point newPoint = new Point(PointType.NONE, newPointPos);
+        channel.Add(newPoint);
+        newPoint.risk = 0;
+        SetPoint(newPoint);
+        links.Add(new PointLink(oldPoint, newPoint));
+        return newPoint;
+    }
+
     internal Point GenerateLayout()
     {
         points = new Point[LevelGenerator.SIZE + 1][];
@@ -202,9 +212,19 @@ public class LayoutGenerator : MonoBehaviour
 
         // choose start point
         Point startPoint = points[0][LevelGenerator.SIZE / 2];
-        
+
         // add enemies to channels
-        AddEnemiesToChannel(startPoint, false);
+        List<List<Point>> channels = new List<List<Point>>();
+        channels.Add(mainChannel);
+        channels.Add(leftChannel);
+        channels.Add(rightChannel);
+        channels = channels.OrderBy(channel => UnityEngine.Random.value).ToList();
+        int avgRisk = UnityEngine.Random.Range(2,4);
+        foreach (List<Point> channel in channels)
+        {
+            AddGameplayToChannel(channel, avgRisk);
+            avgRisk += 1;
+        }
 
         // choose endpoint
         lastPoint = points[LevelGenerator.SIZE - 1][LevelGenerator.SIZE / 2];
@@ -218,67 +238,96 @@ public class LayoutGenerator : MonoBehaviour
         return startPoint;
     }
 
-    private int GetRisk()
+    private int GetRisk(int avgRisk)
     {
-        int chances = UnityEngine.Random.Range(0, 10);
-        if (chances <= 1)
+        int chances = UnityEngine.Random.Range(0, 100);
+        if (chances <= 10)
         {
-            return 2;
+            return GetSafeRisk(avgRisk - 2);
         }
-        if (chances <= 4)
+        if (chances <= 35)
         {
-            return 3;
+            return GetSafeRisk(avgRisk - 1);
         }
-        if (chances <= 7)
+        if (chances <= 65)
         {
-            return 4;
+            return GetSafeRisk(avgRisk);
         }
-        if (chances <= 8)
+        if (chances <= 90)
         {
-            return 5;
+            return GetSafeRisk(avgRisk + 1);
         }
-        if (chances <= 9)
-        {
-            return 6;
-        }
-        return 1;
+        return GetSafeRisk(avgRisk + 2);
     }
 
-    private void AddEnemiesToChannel(Point point, bool flip)
+    private int GetSafeRisk(int risk)
     {
-        if (point.risk != 0)
+        return Mathf.Min(Mathf.Max(1, risk), 6);
+    }
+
+    private void AddGameplayToChannel(List<Point> channel, int avgRisk)
+    {
+        int gap =  UnityEngine.Random.Range(0,3);
+        int riskTotal = 0;
+        foreach ( Point point in channel)
         {
-            return;
-        }
-        if (flip)
-        {
-            point.risk = GetRisk();
-            point.type = PointType.RISK;
-            if (UnityEngine.Random.Range(0, 4) == 0)
+            if (point.risk == 0 && gap % 3 != 0)
             {
-                switch (UnityEngine.Random.Range(0, 4))
+                point.risk = GetRisk(avgRisk);
+                riskTotal += point.risk;
+                point.type = PointType.RISK;
+                if (UnityEngine.Random.Range(0, 4) == 0)
                 {
-                    case 0:
-                        point.type = PointType.POISON;
-                        break;
-                    case 1:
-                        point.type = PointType.GHOST;
-                        break;
-                    case 2:
-                        point.type = PointType.TELEPORT;
-                        break;
-                    case 3:
-                        point.type = PointType.TRAP;
-                        break;
+                    switch (UnityEngine.Random.Range(0, 4))
+                    {
+                        case 0:
+                            point.type = PointType.POISON;
+                            break;
+                        case 1:
+                            point.type = PointType.GHOST;
+                            break;
+                        case 2:
+                            point.type = PointType.TELEPORT;
+                            break;
+                        case 3:
+                            point.type = PointType.TRAP;
+                            break;
+                    }
                 }
             }
+            gap += 1;
         }
-        flip = !flip;
-        List<PointLink> neighbours = links.Where(l => l.from == point || l.to == point).ToList();
-        foreach ( PointLink link in neighbours)
+        AddHealthToChannel(channel, riskTotal);
+    }
+
+    private void AddHealthToChannel(List<Point> channel, int riskTotal)
+    {
+        int currentRisk = riskTotal;
+        int preventInfinite = 0;
+        while (currentRisk > 0 && preventInfinite < 100)
         {
-            Point other = link.from == point ? link.to : link.from;
-            AddEnemiesToChannel(other, flip);
+            Point point = channel[UnityEngine.Random.Range(0, channel.Count)];
+            Vector3 offset = new Vector3();
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+                offset.x = UnityEngine.Random.Range(0, 2) == 0 ? -4 : 4;
+            }
+            else {
+                offset.z = UnityEngine.Random.Range(0, 2) == 0 ? -4 : 4;
+            }
+            Vector3 newPointPos = point.pos + offset;
+            Point c = GetPoint(newPointPos);
+            if (c == null)
+            {
+                if (IsPosValid(newPointPos))
+                {
+                    Point newPoint = movePoint(point, newPointPos, channel);
+                    newPoint.risk = 0;
+                    newPoint.type = PointType.HEALTH;
+                    currentRisk -= 3;
+                }
+            }
+            preventInfinite++;
         }
     }
 
