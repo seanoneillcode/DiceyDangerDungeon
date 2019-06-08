@@ -1079,6 +1079,10 @@ MonoBehaviour:
     type: 3}
   permHealthPrefab: {fileID: 7278128849506088512, guid: 49f0b33b284d87444a2c9bf604a1ba36,
     type: 3}
+  permRollIncPrefab: {fileID: 7032512517446314458, guid: 28820fc42c8912f489ef29566f080b44,
+    type: 3}
+  permShieldIncPrefab: {fileID: 9219565817163592322, guid: 6ae4f9562dbe0ae499dc832941dc556e,
+    type: 3}
   map: {fileID: 1912703448}
 --- !u!4 &1953637888
 Transform:
