@@ -64,6 +64,12 @@ public class Pickup : MonoBehaviour
             case PickupType.PERM_HEALTH_INC:
                 StaticState.AddPermHealth();
                 break;
+            case PickupType.PERM_ROLL_INC:
+                StaticState.AddPermRollBonus();
+                break;
+            case PickupType.PERM_SHIELD_INC:
+                StaticState.AddPermShieldBonus();
+                break;
         }
     }
 

@@ -25,6 +25,8 @@ public class LevelGenerator : MonoBehaviour
     public GameObject portalPrefab;
     public GameObject trapPrefab;
     public GameObject permHealthPrefab;
+    public GameObject permRollIncPrefab;
+    public GameObject permShieldIncPrefab;
     public Transform map;
 
     
@@ -156,6 +158,14 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.PERM_HEALTH_INC)
         {
             return permHealthPrefab;
+        }
+        if (type == PointType.PERM_ROLL_INC)
+        {
+            return permRollIncPrefab;
+        }
+        if (type == PointType.PERM_START_ARMOUR)
+        {
+            return permShieldIncPrefab;
         }
         return nodePrefab;
     }

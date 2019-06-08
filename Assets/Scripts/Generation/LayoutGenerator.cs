@@ -223,8 +223,14 @@ public class LayoutGenerator : MonoBehaviour
         }
 
         // add perm item
-        Point permPoint = rightChannel[rightChannel.Count / 2];
-        permPoint.type = PointType.PERM_HEALTH_INC;
+        List<Point> permChannel = UnityEngine.Random.Range(0, 2) == 0 ? leftChannel : rightChannel;
+        Point permPoint = permChannel[rightChannel.Count / 2];
+
+        permPoint.type = new List<PointType>() {
+            PointType.PERM_HEALTH_INC,
+            PointType.PERM_ROLL_INC,
+            PointType.PERM_START_ARMOUR
+        } [UnityEngine.Random.Range(0, 3)];
         permPoint.risk = 1;
 
         // choose endpoint
