@@ -74,6 +74,9 @@ public enum PointType {
     PRISONER,
     TELEPORT,
     TRAP,
-    ARMOUR
+    ARMOUR,
+    PERM_HEALTH_INC,
+    PERM_ROLL_INC,
+    PERM_START_ARMOUR
 }
 

@@ -17,9 +17,12 @@ public class GoalPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (referenceHolder.game.hasReachedGoal)
+        if (referenceHolder.game.reachedGoal != null)
         {
             panel.SetActive(true);
+        } else
+        {
+            panel.SetActive(false);
         }
     }
 }

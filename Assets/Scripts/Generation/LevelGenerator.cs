@@ -24,6 +24,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject prisonerPrefab;
     public GameObject portalPrefab;
     public GameObject trapPrefab;
+    public GameObject permHealthPrefab;
     public Transform map;
 
     
@@ -151,6 +152,10 @@ public class LevelGenerator : MonoBehaviour
         if (type == PointType.TRAP)
         {
             return trapPrefab;
+        }
+        if (type == PointType.PERM_HEALTH_INC)
+        {
+            return permHealthPrefab;
         }
         return nodePrefab;
     }

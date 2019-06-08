@@ -11,7 +11,7 @@ public class Game : MonoBehaviour
     public int playerHealth = 2;
     private int diceResult = -100;
     public int finalDiceRoll = -100;
-    public bool hasReachedGoal;
+    public Goal reachedGoal;
     public GameObject map;
 
     public int friendHelp = 0;
@@ -31,15 +31,43 @@ public class Game : MonoBehaviour
     internal bool canRun;
     private Vector3 lastValidPosition;
 
+    internal int bossLevel = 3;
+
 
     // Start is called before the first frame update
     void Start()
     {
         explosionHandler = FindObjectOfType<ExplosionHandler>();
-        hasReachedGoal = false;
+        reachedGoal = null;
         hasRolled = false;
         hitEnemy = false;
         canRun = false;
+        maxPlayerHealth = StaticState.permHealthBonus + maxPlayerHealth;
+        playerHealth = StaticState.permHealthBonus + playerHealth;
+        armourHelp = StaticState.permShieldBonus + armourHelp;
+        friendHelp = StaticState.permRollBonus + friendHelp;
+    }
+
+    internal void EmbarkOnNextLevel()
+    {
+        StaticState.currentLevel += 1;
+        if (StaticState.currentLevel > bossLevel)
+        {
+            StaticState.currentLevel = 0;
+        }
+    }
+
+    internal string GetNextLevelName()
+    {
+        if (StaticState.currentLevel == bossLevel)
+        {
+            return "BossScene";
+        }
+        if (StaticState.currentLevel == 0)
+        {
+            return "HomeScene";
+        }
+        return "GeneratedLevel";
     }
 
     // Update is called once per frame
@@ -59,7 +87,7 @@ public class Game : MonoBehaviour
                     Goal goal = node.gameObject.GetComponent<Goal>();
                     if (goal != null)
                     {
-                        hasReachedGoal = true;
+                        reachedGoal = goal;
                     }
                     Pickup pickup = node.pickup;
                     if (pickup != null && !pickup.consumed)
@@ -86,11 +114,16 @@ public class Game : MonoBehaviour
         }
     }
 
+    internal void CancelEmbark()
+    {
+        RunAway();
+        reachedGoal = null;
+    }
+
     internal void RunAway()
     {
         if (lastValidPosition != null)
         {
-            actionedNode = null;
             selectedNode = null;
             finalDiceRoll = -100;
             actionedNode = null;
@@ -162,8 +195,14 @@ public class Game : MonoBehaviour
                     MovePlayerAction(player, actionedNode);
                 }
             }
+            if (actionedNode != null)
+            {
+                if (actionedNode.risk < 1)
+                {
+                    actionedNode = null;
+                }
+            }
             finalDiceRoll = -100;
-            actionedNode = null;
             hasRolled = false;
         }));
     }
@@ -189,6 +228,7 @@ public class Game : MonoBehaviour
             Destroy(player.gameObject);
             player = null;
             hitEnemy = true;
+            actionedNode = null;
         }
     }
 
@@ -257,7 +297,6 @@ public class Game : MonoBehaviour
         actionedNode = null;
         selectedNode = null;
         finalDiceRoll = -100;
-        actionedNode = null;
         hasRolled = false;
         List<Transform> children = new List<Transform>();
         foreach (Transform child in map.transform)

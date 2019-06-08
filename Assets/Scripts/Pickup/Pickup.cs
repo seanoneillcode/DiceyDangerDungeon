@@ -20,7 +20,7 @@ public class Pickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (consumed && consumedItem.activeSelf)
+        if (consumed && consumedItem != null && consumedItem.activeSelf)
         {
             consumedItem.SetActive(false);
         }
@@ -61,6 +61,9 @@ public class Pickup : MonoBehaviour
                 trapActor.SetActive(true);
                 GetComponent<Node>().SetRisk(UnityEngine.Random.Range(1, 7));
                 break;
+            case PickupType.PERM_HEALTH_INC:
+                StaticState.AddPermHealth();
+                break;
         }
     }
 
@@ -76,6 +79,9 @@ public class Pickup : MonoBehaviour
         GOLD,
         PRISONER,
         TRAP,
-        GHOST
+        GHOST,
+        PERM_HEALTH_INC,
+        PERM_ROLL_INC,
+        PERM_SHIELD_INC
     }
 }

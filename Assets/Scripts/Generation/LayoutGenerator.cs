@@ -13,7 +13,7 @@ public class LayoutGenerator : MonoBehaviour
 
     private void GenerateLine(Vector2Int from, Vector2Int to, List<Point> channel)
     {
-        Debug.Log("starting line");
+        //Debug.Log("starting line");
 
         Point previousPoint = null;
         Vector2Int currentPos = new Vector2Int(from.x, from.y);
@@ -26,7 +26,7 @@ public class LayoutGenerator : MonoBehaviour
                 channel.Add(point);
             }
             SetPoint(point);
-            Debug.Log("set point " + currentPos.x + " " + currentPos.y);
+            //Debug.Log("set point " + currentPos.x + " " + currentPos.y);
             if (previousPoint != null && point != null)
             {
                 links.Add(new PointLink(point, previousPoint));
@@ -60,7 +60,7 @@ public class LayoutGenerator : MonoBehaviour
             channel.Add(finalPoint);
         }
         SetPoint(finalPoint);
-        Debug.Log("setting final line point " + currentPos.x + " " + currentPos.y);
+        //Debug.Log("setting final line point " + currentPos.x + " " + currentPos.y);
         if (previousPoint != null && finalPoint != null)
         {
             links.Add(new PointLink(finalPoint, previousPoint));
@@ -186,9 +186,9 @@ public class LayoutGenerator : MonoBehaviour
         Vector2Int a = new Vector2Int(LevelGenerator.SIZE / 2, UnityEngine.Random.Range(0, sectionLength));
         Vector2Int b = new Vector2Int(LevelGenerator.SIZE / 2, a.y + UnityEngine.Random.Range(sectionLength, sectionLength * 2));
         Vector2Int c = new Vector2Int(UnityEngine.Random.Range(1, (LevelGenerator.SIZE / 2)), UnityEngine.Random.Range(a.y, b.y + 1));
-        Debug.Log("set point a " + a.x + " " + a.y);
-        Debug.Log("set point b " + b.x + " " + b.y);
-        Debug.Log("set point c " + c.x + " " + c.y);
+        //Debug.Log("set point a " + a.x + " " + a.y);
+        //Debug.Log("set point b " + b.x + " " + b.y);
+        //Debug.Log("set point c " + c.x + " " + c.y);
         GenerateLine(a, c, leftChannel);
         GenerateLine(b, c, leftChannel);
 
@@ -221,6 +221,11 @@ public class LayoutGenerator : MonoBehaviour
             AddGameplayToChannel(channel, avgRisk);
             avgRisk += 1;
         }
+
+        // add perm item
+        Point permPoint = rightChannel[rightChannel.Count / 2];
+        permPoint.type = PointType.PERM_HEALTH_INC;
+        permPoint.risk = 1;
 
         // choose endpoint
         lastPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, (LevelGenerator.SIZE - 1) * 4))];

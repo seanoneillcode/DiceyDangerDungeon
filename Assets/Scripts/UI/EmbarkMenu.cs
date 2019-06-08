@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuPanel : MonoBehaviour
+public class EmbarkMenu : MonoBehaviour
 {
     private ReferenceHolder referenceHolder;
     private bool once;
@@ -21,28 +21,31 @@ public class MenuPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (referenceHolder.game.isPlayerDead() && !once)
+        if (referenceHolder.game.reachedGoal != null && !once && !referenceHolder.game.isPlayerDead())
         {
             once = true;
             StartCoroutine(ExecuteAfterTime(0.8f));
         }
     }
 
-    public void Restart()
-    {
-        StaticState.currentLevel = 0;
-        SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
-    }
-
-    public void Exit()
-    {
-        Application.Quit();
-    }
-
     public void Toggle()
     {
         this.isVisible = !this.isVisible;
         UpdateVisible();
+    }
+
+    public void CancelEmbark()
+    {
+        referenceHolder.game.CancelEmbark();
+        this.isVisible = false;
+        once = false;
+        UpdateVisible();
+    }
+
+    public void Embark()
+    {
+        referenceHolder.game.EmbarkOnNextLevel();
+        SceneManager.LoadScene(referenceHolder.game.GetNextLevelName(), LoadSceneMode.Single);
     }
 
     public void UpdateVisible()
