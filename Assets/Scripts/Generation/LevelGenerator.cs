@@ -47,8 +47,6 @@ public class LevelGenerator : MonoBehaviour
         {
             ConvertPoint(point);
         }
-
-        Debug.Log("adding links " + layoutGenerator.links.Count);
         foreach (PointLink pointLink in layoutGenerator.links)
         {
             CreateLink(pointLink.from, pointLink.to);

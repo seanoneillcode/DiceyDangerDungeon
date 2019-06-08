@@ -35,7 +35,7 @@ public class InputHandler : MonoBehaviour
                 }
                 game.SelectNode(node);
 
-                if (node == null)
+                if (node == null && player != null)
                 {
                     
                     game.SelectPlayer(player);
@@ -46,7 +46,7 @@ public class InputHandler : MonoBehaviour
                 {
                     return;
                 }
-                game.SelectPlayer(null);
+                //game.SelectPlayer(null);
                 game.SelectNode(null);
             }
         }

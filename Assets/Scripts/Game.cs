@@ -9,8 +9,8 @@ public class Game : MonoBehaviour
     [HideInInspector]  public Node selectedNode;
 
     public int playerHealth = 2;
-    private int diceResult = -1;
-    public int finalDiceRoll = -1;
+    private int diceResult = -100;
+    public int finalDiceRoll = -100;
     public bool hasReachedGoal;
     public GameObject map;
 
@@ -24,6 +24,8 @@ public class Game : MonoBehaviour
     public Node actionedNode;
     private bool hasRolled;
     private bool isRolling;
+
+
     private bool hitEnemy;
     public int maxPlayerHealth = 5;
     internal bool canRun;
@@ -80,11 +82,7 @@ public class Game : MonoBehaviour
         }
         else
         {
-            diceResult = -1;
-        }
-        if (playerHealth > maxPlayerHealth)
-        {
-            playerHealth = maxPlayerHealth;
+            diceResult = -100;
         }
     }
 
@@ -94,13 +92,19 @@ public class Game : MonoBehaviour
         {
             actionedNode = null;
             selectedNode = null;
-            finalDiceRoll = -1;
+            finalDiceRoll = -100;
             actionedNode = null;
             hasRolled = false;
             player.targetPos = lastValidPosition;
             canRun = false;
         }
     }
+
+    internal bool HasDiceRoll()
+    {
+        return GetDiceRoll() > -50;
+    }
+
 
     public void ExplodePosition(Vector3 pos)
     {
@@ -158,7 +162,7 @@ public class Game : MonoBehaviour
                     MovePlayerAction(player, actionedNode);
                 }
             }
-            finalDiceRoll = -1;
+            finalDiceRoll = -100;
             actionedNode = null;
             hasRolled = false;
         }));
@@ -178,7 +182,6 @@ public class Game : MonoBehaviour
 
     private void ResolveRolls(Node node)
     {
-        Debug.Log("rolled a " + GetDiceRollWithmodifiers() + " against a risk of " + node.risk);
         node.HandleRoll(GetDiceRollWithmodifiers() >= node.risk, this);
         if (playerHealth < 1)
         {
@@ -253,7 +256,7 @@ public class Game : MonoBehaviour
         explosionHandler.PortalExplosion(player.transform.position + new Vector3(0, 0, -0.8f));
         actionedNode = null;
         selectedNode = null;
-        finalDiceRoll = -1;
+        finalDiceRoll = -100;
         actionedNode = null;
         hasRolled = false;
         List<Transform> children = new List<Transform>();

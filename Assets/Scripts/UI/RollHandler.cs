@@ -32,8 +32,9 @@ public class RollHandler : MonoBehaviour
         {
             panel.SetActive(true);
             riskText.text = "" + referenceHolder.game.actionedNode.risk;
-            if (referenceHolder.game.GetDiceRoll() > 0)
+            if (referenceHolder.game.HasDiceRoll())
             {
+                Debug.Log("roll text is:" + referenceHolder.game.GetDiceRoll());
                 rollText.text = "" + (referenceHolder.game.GetDiceRoll());
             }
             else

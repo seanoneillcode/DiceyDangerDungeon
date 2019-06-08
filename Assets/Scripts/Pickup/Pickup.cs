@@ -36,11 +36,10 @@ public class Pickup : MonoBehaviour
         switch (this.type)
         {
             case Pickup.PickupType.MAX_HEALTH_INC:
-                game.maxPlayerHealth += 1;
-                game.playerHealth += 1;
+                game.playerHealth += 3;
                 break;
             case Pickup.PickupType.MAX_HEALTH_DEC:
-                game.maxPlayerHealth -= 1;
+                game.playerHealth -= 3;
                 break;
             case Pickup.PickupType.FRIEND:
                 game.friendHelp += 1;

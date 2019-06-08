@@ -278,6 +278,7 @@ public class LayoutGenerator : MonoBehaviour
                     {
                         case 0:
                             point.type = PointType.POISON;
+                            point.risk = 3;
                             break;
                         case 1:
                             point.type = PointType.GHOST;
@@ -338,7 +339,7 @@ public class LayoutGenerator : MonoBehaviour
                             break;
                         case 3:
                             newPoint.type = PointType.POTION;
-                            newPoint.risk = 2;
+                            newPoint.risk = 4;
                             currentRisk -= 6;
                             break;
                         case 0:

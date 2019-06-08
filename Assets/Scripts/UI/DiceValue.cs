@@ -22,7 +22,7 @@ public class DiceValue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (referenceHolder.game.GetDiceRoll() > 0)
+        if (referenceHolder.game.HasDiceRoll())
         {
             panel.SetActive(true);
             numberText.text = "" + referenceHolder.game.GetDiceRoll();

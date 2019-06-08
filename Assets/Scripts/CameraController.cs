@@ -64,7 +64,7 @@ public class CameraController : MonoBehaviour
         if (game.selectedPlayer != null)
         {
             targetPos = game.selectedPlayer.transform.position;
-            transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 2);
         }
 
 
