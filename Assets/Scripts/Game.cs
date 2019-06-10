@@ -22,16 +22,17 @@ public class Game : MonoBehaviour
     public Player player;
     private ExplosionHandler explosionHandler;
     public Node actionedNode;
-    private bool hasRolled;
-    private bool isRolling;
+    public bool hasRolled;
+    public bool isRolling;
 
 
-    private bool hitEnemy;
+    public bool hitEnemy;
     public int maxPlayerHealth = 5;
     internal bool canRun;
     private Vector3 lastValidPosition;
 
     internal int bossLevel = 3;
+    public bool didSucceed;
 
 
     // Start is called before the first frame update
@@ -46,6 +47,10 @@ public class Game : MonoBehaviour
         playerHealth = StaticState.permHealthBonus + playerHealth;
         armourHelp = StaticState.permShieldBonus + armourHelp;
         friendHelp = StaticState.permRollBonus + friendHelp;
+        if (player != null)
+        {
+            selectedPlayer = player;
+        }
     }
 
     internal void EmbarkOnNextLevel()
@@ -181,6 +186,7 @@ public class Game : MonoBehaviour
                 finalDiceRoll = actionedNode.risk;
                 swordHelp -= 1;
             }
+            this.didSucceed = GetDiceRollWithmodifiers() >= actionedNode.risk;
         }));
 
         StartCoroutine(ExecuteAfterTime(0.8f, () => {
@@ -221,6 +227,7 @@ public class Game : MonoBehaviour
 
     private void ResolveRolls(Node node)
     {
+        this.didSucceed = false;
         node.HandleRoll(GetDiceRollWithmodifiers() >= node.risk, this);
         if (playerHealth < 1)
         {

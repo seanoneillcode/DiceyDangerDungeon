@@ -66,7 +66,7 @@ public class HighlightController : MonoBehaviour
 
         if (game.selectedPlayer != null)
         {
-            game.selectedPlayer.Highlight(highlightSelectMaterial);
+            //game.selectedPlayer.Highlight(highlightSelectMaterial);
             lastSelectedPlayer = game.selectedPlayer;
         } else
         {

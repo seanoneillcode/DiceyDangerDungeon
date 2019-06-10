@@ -2609,6 +2609,9 @@ MonoBehaviour:
     type: 3}
   trapPrefab: {fileID: 3177061525140361166, guid: dd9ecdfe199f8bb4c89dd857ec64b93d,
     type: 3}
+  permHealthPrefab: {fileID: 0}
+  permRollIncPrefab: {fileID: 0}
+  permShieldIncPrefab: {fileID: 0}
   map: {fileID: 1912703448}
 --- !u!4 &1953637888
 Transform:
@@ -2863,6 +2866,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7526907729312082504, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_Text
+      value: YOU WIN!
+      objectReference: {fileID: 0}
     - target: {fileID: 7526907728072588168, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -3027,6 +3035,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2135786239190639730, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_Text
+      value: GO HOME
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65db0325cef2271489c8e3fb5f6009a6, type: 3}

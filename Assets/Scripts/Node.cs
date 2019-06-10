@@ -107,7 +107,6 @@ public class Node : MonoBehaviour
 
     internal void HandleRoll(bool didSucceed, Game game)
     {
-        
         if (pickup != null && !pickup.consumed)
         {
             pickup.Consume();
