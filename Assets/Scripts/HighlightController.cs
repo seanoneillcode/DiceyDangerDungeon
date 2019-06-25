@@ -27,7 +27,7 @@ public class HighlightController : MonoBehaviour
     {
         if (lastHighlightedPlayer != null)
         {
-            lastHighlightedPlayer.Highlight(null);
+            //lastHighlightedPlayer.Highlight(null);
             lastHighlightedPlayer = null;
         }
 
@@ -38,7 +38,7 @@ public class HighlightController : MonoBehaviour
             Player player = hit.transform.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                player.Highlight(highlightMouseMaterial);
+                //player.Highlight(highlightMouseMaterial);
                 lastHighlightedPlayer = player;
             }
             
@@ -51,17 +51,17 @@ public class HighlightController : MonoBehaviour
                     node = actor.node;
                 }
             }
-            if (node != null && node != game.selectedNode && game.CanHighlightNode(node))
-            {
-                floorMouseHighlight.SetActive(true);
-                floorMouseHighlight.transform.position = node.gameObject.transform.position;
-            } else
-            {
-                floorMouseHighlight.SetActive(false);
-            }
+            //if (node != null && node != game.selectedNode && game.CanHighlightNode(node))
+            //{
+            //    floorMouseHighlight.SetActive(true);
+            //    floorMouseHighlight.transform.position = node.gameObject.transform.position;
+            //} else
+            //{
+            //    floorMouseHighlight.SetActive(false);
+            //}
         } else
         {
-            floorMouseHighlight.SetActive(false);
+            //floorMouseHighlight.SetActive(false);
         }
 
         if (game.selectedPlayer != null)
@@ -72,7 +72,7 @@ public class HighlightController : MonoBehaviour
         {
             if (lastSelectedPlayer != null)
             {
-                lastSelectedPlayer.Highlight(null);
+                //lastSelectedPlayer.Highlight(null);
                 lastSelectedPlayer = null;
             }
         }
@@ -82,14 +82,14 @@ public class HighlightController : MonoBehaviour
 
     private void HighlightFloors()
     {
-        if (game.selectedNode != null && game.CanHighlightNode(game.selectedNode))
-        {
-            floorHighlight.SetActive(true);
-            floorHighlight.transform.position = game.selectedNode.gameObject.transform.position;
-        }
-        else
-        {
-            floorHighlight.SetActive(false);
-        }
+        //if (game.selectedNode != null && game.CanHighlightNode(game.selectedNode))
+        //{
+        //    floorHighlight.SetActive(true);
+        //    floorHighlight.transform.position = game.selectedNode.gameObject.transform.position;
+        //}
+        //else
+        //{
+        //    floorHighlight.SetActive(false);
+        //}
     }
 }

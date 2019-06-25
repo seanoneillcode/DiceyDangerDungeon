@@ -154,6 +154,8 @@ MonoBehaviour:
   player: {fileID: 0}
   actionedNode: {fileID: 0}
   hasRolled: 0
+  isRolling: 0
+  hitEnemy: 0
   maxPlayerHealth: 5
   didSucceed: 0
 --- !u!4 &16249514
@@ -233,6 +235,9 @@ MonoBehaviour:
   boundary: 48
   speed: 8
   mouseMoveEnabled: 0
+  followPlayer: 1
+  lockToPosition: 0
+  testPos: {fileID: 0}
 --- !u!4 &307311629
 Transform:
   m_ObjectHideFlags: 0
@@ -433,8 +438,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: -0, y: 6.51, z: -6.51}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 8.09, z: -8.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 307311629}
@@ -1069,6 +1074,16 @@ MonoBehaviour:
     type: 3}
   enemyPrefab: {fileID: 1821397455156227461, guid: ac5f8a576cd20634f8be6eff4f650439,
     type: 3}
+  goblinPrefab: {fileID: 7979327849146341901, guid: 6fba52c13f821cf4d9779bbd91b617c7,
+    type: 3}
+  orcPrefab: {fileID: 4006209841771040301, guid: 9a2b900794f4a4644921e29117dc674d,
+    type: 3}
+  shamanPrefab: {fileID: 1824868098747829356, guid: d00d4da9e7be536418f24327b378c0d6,
+    type: 3}
+  wargPrefab: {fileID: 7806275263967845067, guid: 84f77017279e2584faf27126d191d330,
+    type: 3}
+  trollPrefab: {fileID: 2879578159362099510, guid: cf408384310cfb340832b0f069f00c73,
+    type: 3}
   golemPrefab: {fileID: 6008719893702868311, guid: 2d7f3417b0d04e146947bd72d2435d2b,
     type: 3}
   goldPrefab: {fileID: 5969401745493265156, guid: 646514c35c359264a8b509a0de91710b,
@@ -1112,3 +1127,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c19f85bcfa5d4848a99ac812ba21f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2056238068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2056238070}
+  - component: {fileID: 2056238069}
+  m_Layer: 0
+  m_Name: ConvoHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2056238069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056238068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11c543a4e25d79a4fa7460a82b54af94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentConvo: {fileID: 0}
+--- !u!4 &2056238070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056238068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.4896097, y: -1.7639961, z: 4.3922896}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

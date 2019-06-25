@@ -27,9 +27,13 @@ public class Player : MonoBehaviour
     void Update()
     {
         float dist = Vector3.Distance(targetPos, transform.position);
+        if (dist < 0.01f)
+        {
+            dist = 0;
+            transform.position = targetPos;
+        }
         if (dist > 0f)
         {
-
             if (targetPos.z > transform.position.z || targetPos.x < transform.position.x)
             {
                 spriteRenderer.flipX = true;

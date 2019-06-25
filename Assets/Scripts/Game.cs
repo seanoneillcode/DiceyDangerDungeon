@@ -35,6 +35,8 @@ public class Game : MonoBehaviour
     public bool didSucceed;
 
 
+    private List<Node> waypoints;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +53,7 @@ public class Game : MonoBehaviour
         {
             selectedPlayer = player;
         }
+        waypoints = new List<Node>();
     }
 
     internal void EmbarkOnNextLevel()
@@ -59,6 +62,15 @@ public class Game : MonoBehaviour
         if (StaticState.currentLevel > bossLevel)
         {
             StaticState.currentLevel = 0;
+        }
+    }
+
+    internal void MovePlayer(Vector3 position)
+    {
+        Debug.Log("moving player");
+        if (selectedPlayer != null)
+        {
+            selectedPlayer.targetPos = position;
         }
     }
 
@@ -107,6 +119,14 @@ public class Game : MonoBehaviour
                     }
                 }
 
+            }
+            if (waypoints.Count > 0)
+            {
+                player.targetPos = waypoints[waypoints.Count - 1].transform.position;
+                if (player.IsAtTarget())
+                {
+                    waypoints.Remove(waypoints[waypoints.Count - 1]);
+                }
             }
         }
         if (isRolling)
@@ -215,7 +235,28 @@ public class Game : MonoBehaviour
 
     public bool IsConnected(Node nodeA, Node nodeB)
     {
-        foreach( Link link in nodeA.links)
+        List<Node> waypoints = GetNodeWaypoints(nodeA, nodeB, new List<Node>());
+        
+        Debug.Log("waypoints " + waypoints.Count);
+
+        if (waypoints.Contains(nodeB))
+        {
+            Debug.Log("can be reached");
+        } else
+        {
+            Debug.Log("can NOT be reached");
+        }
+
+        int i = 0;
+        foreach ( Node node in waypoints)
+        {
+            Debug.Log("Node " + i);
+            i++;
+            Debug.Log("risk " + node.risk);
+            Debug.Log("pos x:" + node.transform.position.x + " z:" + node.transform.position.z);
+        }
+
+        foreach ( Link link in nodeA.links)
         {
             if (link.nodeA == nodeB || link.nodeB == nodeB)
             {
@@ -223,6 +264,46 @@ public class Game : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private List<Node> GetNodeWaypoints(Node currentNode, Node target, List<Node> nodesSoFar)
+    {
+        nodesSoFar.Add(currentNode);
+        List<Node> connectedNodes = new List<Node>();
+
+        foreach (Link link in currentNode.links)
+        {
+            if (link.nodeA == target || link.nodeB == target)
+            {
+                connectedNodes.Add(target);
+                connectedNodes.Add(currentNode);
+                return connectedNodes;
+            }
+        }
+        
+        foreach (Link link in currentNode.links)
+        {
+            if (link.nodeA != currentNode && !nodesSoFar.Contains(link.nodeA) && link.nodeA.risk < 1)
+            {
+                List<Node> waypoints = GetNodeWaypoints(link.nodeA, target, nodesSoFar);
+                if (waypoints.Count > 0)
+                {
+                    waypoints.Add(currentNode);
+                    return waypoints;
+                }
+            }
+            if (link.nodeB != currentNode && !nodesSoFar.Contains(link.nodeB) && link.nodeB.risk < 1)
+            {
+                List<Node> waypoints = GetNodeWaypoints(link.nodeB, target, nodesSoFar);
+                if (waypoints.Count > 0)
+                {
+                    waypoints.Add(currentNode);
+                    return waypoints;
+                }
+            }
+        }
+
+        return connectedNodes;
     }
 
     private void ResolveRolls(Node node)
@@ -263,10 +344,16 @@ public class Game : MonoBehaviour
         return null;
     }
 
-    public bool CanHighlightNode(Node node)
+    public List<Node> GetNodePlayerCanReach(Node node)
     {
         Node playerNode = GetOverlap(selectedPlayer);
-        return playerNode != null && IsConnected(playerNode, node);
+        if (playerNode == null)
+        {
+            return new List<Node>();
+        }
+        List<Node> nodes = GetNodeWaypoints(playerNode, node, new List<Node>());
+        nodes.Remove(playerNode);
+        return nodes;
     }
 
     internal void SelectPlayer(Player player)
@@ -274,26 +361,31 @@ public class Game : MonoBehaviour
         selectedPlayer = player;
     }
 
-    internal void SelectNode(Node node)
+    internal void MoveToNode(Node node)
     {
-        if (!CanHighlightNode(node))
+        Debug.Log("select node");
+        List<Node> reachableNodes = GetNodePlayerCanReach(node);
+        if (reachableNodes.Count < 1)
         {
             return;
         }
 
+
         if (selectedPlayer != null && node != null && actionedNode == null)
         {
+            Debug.Log("movin node");
             lastValidPosition = selectedPlayer.transform.position;
-            if (node.hasAction() && selectedPlayer.IsAtTarget())
-            {
-                Vector3 direction = Vector3.Normalize(node.transform.position - selectedPlayer.transform.position);
-                selectedPlayer.targetPos = node.transform.position - (direction * 0.8f);
-            } else
-            {
-                selectedPlayer.targetPos = node.transform.position;
-            }
+            //if (node.hasAction() && selectedPlayer.IsAtTarget())
+            //{
+            //    Vector3 direction = Vector3.Normalize(node.transform.position - selectedPlayer.transform.position);
+            //    selectedPlayer.targetPos = node.transform.position - (direction * 0.8f);
+            //} else
+            //{
+            //    selectedPlayer.targetPos = node.transform.position;
+            //}
         }
         selectedNode = node;
+        waypoints = reachableNodes;
     }
 
     internal void TeleportPlayerRandomly()
