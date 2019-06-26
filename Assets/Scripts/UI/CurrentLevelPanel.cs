@@ -18,13 +18,13 @@ public class CurrentLevelPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float percentageComplete = Mathf.Ceil((StaticState.currentLevel) / ((float) referenceHolder.game.bossLevel) * 100f);
+        float percentageComplete = Mathf.Ceil((StaticState.currentLevel - 1) / ((float) referenceHolder.game.bossLevel - 1) * 100f);
         if (percentageComplete == 100f)
         {
             text.text = "BOSS";
         } else
         {
-            if (percentageComplete == 0f)
+            if (percentageComplete < 0f)
             {
                 text.text = "HOME";
             } else

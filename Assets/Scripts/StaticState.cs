@@ -12,7 +12,7 @@ public class StaticState
 
     public void embark()
     {
-        currentLevel = 1;
+        currentLevel = 0;
     }
 
     internal static void AddPermHealth()
@@ -28,5 +28,13 @@ public class StaticState
     internal static void AddPermShieldBonus()
     {
         permShieldBonus += 1;
+    }
+
+    internal static void Reset()
+    {
+        currentLevel = 0;
+        permHealthBonus = 0;
+        permRollBonus = 0;
+        permShieldBonus = 0;
     }
 }

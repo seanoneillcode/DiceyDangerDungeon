@@ -107,7 +107,30 @@ public class Node : MonoBehaviour
 
     internal void HandleRoll(bool didSucceed, Game game)
     {
-        if (pickup != null && !pickup.consumed)
+        if (actor != null)
+        {
+            if (didSucceed)
+            {
+                game.ExplodePosition(actor.gameObject.transform.position);
+                Destroy(actor.gameObject);
+                actor = null;
+                game.canRun = false;
+                RemoveRisk();
+            }
+            else
+            {
+                if (game.armourHelp > 0)
+                {
+                    game.armourHelp -= 1;
+                }
+                else
+                {
+                    game.canRun = true;
+                    game.playerHealth -= 1;
+                }
+            }
+        }
+        if (pickup != null && !pickup.consumed && actor == null)
         {
             pickup.Consume();
             game.ExplodePosition(pickup.gameObject.transform.position + new Vector3(0, 0.4f, 0.4f));
@@ -131,7 +154,8 @@ public class Node : MonoBehaviour
                     }
                 }
             }
-            else {
+            else
+            {
                 if (didSucceed)
                 {
                     pickup.ApplyPickupToPlayer(game);
@@ -139,7 +163,8 @@ public class Node : MonoBehaviour
                     {
                         character.SetFollow(game.player.transform);
                     }
-                } else
+                }
+                else
                 {
                     if (character != null)
                     {
@@ -158,29 +183,6 @@ public class Node : MonoBehaviour
                 {
                     Destroy(character.gameObject);
                     character = null;
-                }
-            }
-        }
-        if (actor != null)
-        {
-            if (didSucceed)
-            {
-                game.ExplodePosition(actor.gameObject.transform.position);
-                Destroy(actor.gameObject);
-                actor = null;
-                game.canRun = false;
-                RemoveRisk();
-            }
-            else
-            {
-                if (game.armourHelp > 0)
-                {
-                    game.armourHelp -= 1;
-                }
-                else
-                {
-                    game.canRun = true;
-                    game.playerHealth -= 1;
                 }
             }
         }

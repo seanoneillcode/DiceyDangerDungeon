@@ -31,6 +31,7 @@ public class Game : MonoBehaviour
     internal bool canRun;
     private Vector3 lastValidPosition;
 
+
     internal int bossLevel = 3;
     public bool didSucceed;
 
@@ -80,7 +81,7 @@ public class Game : MonoBehaviour
         {
             return "BossScene";
         }
-        if (StaticState.currentLevel == 0)
+        if (StaticState.currentLevel == -1)
         {
             return "HomeScene";
         }
@@ -122,7 +123,17 @@ public class Game : MonoBehaviour
             }
             if (waypoints.Count > 0)
             {
-                player.targetPos = waypoints[waypoints.Count - 1].transform.position;
+                if (waypoints.Count > 1)
+                {
+                    player.targetPos = waypoints[waypoints.Count - 1].transform.position;
+                } else
+                {
+                    if ()
+                    {
+
+                    }
+                    player.targetPos = waypoints[waypoints.Count - 1].transform.position;
+                }
                 if (player.IsAtTarget())
                 {
                     waypoints.Remove(waypoints[waypoints.Count - 1]);
@@ -428,5 +439,10 @@ public class Game : MonoBehaviour
     public bool DidMissEnemy()
     {
         return !hitEnemy && GetDiceRollWithmodifiers() > -1 && GetDiceRollWithmodifiers() < actionedNode.risk;
+    }
+
+    public bool DidWinRoll()
+    {
+        return GetDiceRollWithmodifiers() > -1 && GetDiceRollWithmodifiers() > actionedNode.risk;
     }
 }

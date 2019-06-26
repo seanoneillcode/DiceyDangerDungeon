@@ -15,6 +15,10 @@ public class RollHandler : MonoBehaviour
     public GameObject friend;
     public GameObject ghost;
 
+    private Color32 myGreen = new Color32(99, 199, 77, 255);
+    private Color32 myRed = new Color32(158, 40, 53, 255);
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,9 +47,18 @@ public class RollHandler : MonoBehaviour
             if (referenceHolder.game.DidMissEnemy())
             {
                 missedImage.SetActive(true);
+                missedImage.GetComponent<Animator>().Play("missed-ui");
+                rollText.color = myRed;
             } else
             {
                 missedImage.SetActive(false);
+                if (referenceHolder.game.DidWinRoll()) {
+                    rollText.color = myGreen;
+                }
+                else
+                {
+                    rollText.color = Color.white;
+                }
             }
             if (referenceHolder.game.friendHelp > 0)
             {

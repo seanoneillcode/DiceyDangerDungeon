@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using UnityEditor;
-
-public class Split
+namespace Lovely
 {
-    public Point point;
-    public int points;
-
-    public Split(Point point, int points)
+    public class Split
     {
-        this.point = point;
-        this.points = points;
+        public Point point;
+        public int points;
+
+        public Split(Point point, int points)
+        {
+            this.point = point;
+            this.points = points;
+        }
     }
 }

@@ -30,7 +30,8 @@ public class MenuPanel : MonoBehaviour
 
     public void Restart()
     {
-        StaticState.currentLevel = 0;
+        StaticState.currentLevel = -1;
+        StaticState.Reset();
         SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
     }
 
