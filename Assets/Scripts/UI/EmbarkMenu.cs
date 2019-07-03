@@ -48,6 +48,13 @@ public class EmbarkMenu : MonoBehaviour
         SceneManager.LoadScene(referenceHolder.game.GetNextLevelName(), LoadSceneMode.Single);
     }
 
+    public void GoHome()
+    {
+        StaticState.currentLevel = -1;
+        StaticState.Reset();
+        SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
+    }
+
     public void UpdateVisible()
     {
         foreach (Transform transform in transform)

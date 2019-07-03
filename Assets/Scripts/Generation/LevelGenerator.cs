@@ -34,6 +34,7 @@ namespace Lovely
         public GameObject permHealthPrefab;
         public GameObject permRollIncPrefab;
         public GameObject permShieldIncPrefab;
+        public GameObject infoPrefab;
         public Transform map;
 
 
@@ -190,6 +191,10 @@ namespace Lovely
             if (type == PointType.PERM_START_ARMOUR)
             {
                 return permShieldIncPrefab;
+            }
+            if (type == PointType.INFO)
+            {
+                return infoPrefab;
             }
             return nodePrefab;
         }

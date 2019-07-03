@@ -118,6 +118,13 @@ public class Game : MonoBehaviour
                             playerHealth += pickup.amount;
                         }
                     }
+                    GameInfo gameInfo = node.gameObject.GetComponentInChildren<GameInfo>();
+                    if (gameInfo != null && !gameInfo.isShown)
+                    {
+                        ConvoHandler convoHandler = FindObjectOfType<ConvoHandler>();
+                        convoHandler.ShowInfo(gameInfo);
+                        gameInfo.Consume();
+                    }
                 }
 
             }
@@ -128,11 +135,15 @@ public class Game : MonoBehaviour
                     player.targetPos = waypoints[waypoints.Count - 1].transform.position;
                 } else
                 {
-                    if ()
+                    if (selectedNode != null && selectedNode.risk > 0)
                     {
-
+                        Vector3 direction = Vector3.Normalize(selectedNode.transform.position - selectedPlayer.transform.position);
+                        selectedPlayer.targetPos = selectedNode.transform.position - (direction * 1f);
                     }
-                    player.targetPos = waypoints[waypoints.Count - 1].transform.position;
+                    else
+                    {
+                        player.targetPos = waypoints[waypoints.Count - 1].transform.position;
+                    }
                 }
                 if (player.IsAtTarget())
                 {
@@ -244,39 +255,6 @@ public class Game : MonoBehaviour
         }));
     }
 
-    public bool IsConnected(Node nodeA, Node nodeB)
-    {
-        List<Node> waypoints = GetNodeWaypoints(nodeA, nodeB, new List<Node>());
-        
-        Debug.Log("waypoints " + waypoints.Count);
-
-        if (waypoints.Contains(nodeB))
-        {
-            Debug.Log("can be reached");
-        } else
-        {
-            Debug.Log("can NOT be reached");
-        }
-
-        int i = 0;
-        foreach ( Node node in waypoints)
-        {
-            Debug.Log("Node " + i);
-            i++;
-            Debug.Log("risk " + node.risk);
-            Debug.Log("pos x:" + node.transform.position.x + " z:" + node.transform.position.z);
-        }
-
-        foreach ( Link link in nodeA.links)
-        {
-            if (link.nodeA == nodeB || link.nodeB == nodeB)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private List<Node> GetNodeWaypoints(Node currentNode, Node target, List<Node> nodesSoFar)
     {
         nodesSoFar.Add(currentNode);
@@ -374,7 +352,6 @@ public class Game : MonoBehaviour
 
     internal void MoveToNode(Node node)
     {
-        Debug.Log("select node");
         List<Node> reachableNodes = GetNodePlayerCanReach(node);
         if (reachableNodes.Count < 1)
         {
@@ -384,16 +361,7 @@ public class Game : MonoBehaviour
 
         if (selectedPlayer != null && node != null && actionedNode == null)
         {
-            Debug.Log("movin node");
             lastValidPosition = selectedPlayer.transform.position;
-            //if (node.hasAction() && selectedPlayer.IsAtTarget())
-            //{
-            //    Vector3 direction = Vector3.Normalize(node.transform.position - selectedPlayer.transform.position);
-            //    selectedPlayer.targetPos = node.transform.position - (direction * 0.8f);
-            //} else
-            //{
-            //    selectedPlayer.targetPos = node.transform.position;
-            //}
         }
         selectedNode = node;
         waypoints = reachableNodes;

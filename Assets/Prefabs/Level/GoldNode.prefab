@@ -587,6 +587,7 @@ MonoBehaviour:
   links: []
   pickup: {fileID: 0}
   character: {fileID: 0}
+  riskText: {fileID: 0}
 --- !u!65 &8764746409370914669
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -616,6 +617,8 @@ MonoBehaviour:
   consumed: 0
   type: 7
   isCurse: 0
+  trapActor: {fileID: 0}
+  amount: 0
 --- !u!1 &6251388566470362267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,7 +1176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 884c390d282ea0e43938fe0bfda99ecd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.759
+      value: -2.41
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 884c390d282ea0e43938fe0bfda99ecd, type: 3}
       propertyPath: m_LocalPosition.z

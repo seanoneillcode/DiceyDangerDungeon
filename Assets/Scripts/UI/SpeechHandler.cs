@@ -29,7 +29,7 @@ public class SpeechHandler : MonoBehaviour
     {
         referenceHolder = FindObjectOfType<ReferenceHolder>();
         lineIndex = 0;
-        currentConvo = referenceHolder.convoHandler.currentConvo;
+        //currentConvo = referenceHolder.convoHandler != null ? referenceHolder.convoHandler.currentConvo : null;
         UpdateSpeechBubble();
     }
 

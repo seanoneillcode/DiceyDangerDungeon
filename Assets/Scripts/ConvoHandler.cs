@@ -9,6 +9,8 @@ public class ConvoHandler : MonoBehaviour
     private CameraController cameraController;
     private Game game;
 
+    public GameInfo currentGameInfo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,9 +38,19 @@ public class ConvoHandler : MonoBehaviour
         game.MovePlayer(distanceTarget);
     }
 
+    internal void ShowInfo(GameInfo gameInfo)
+    {
+        currentGameInfo = gameInfo;
+    }
+
     internal void Done()
     {
         currentConvo = null;
         cameraController.ResetPosition();
+    }
+
+    internal void CloseInfo()
+    {
+        currentGameInfo = null;
     }
 }

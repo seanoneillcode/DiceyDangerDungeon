@@ -9,7 +9,8 @@ public class StaticState
     public static int permHealthBonus = 0;
     public static int permRollBonus = 0;
     public static int permShieldBonus = 0;
-
+    public static int infoCounter = 0;
+        
     public void embark()
     {
         currentLevel = 0;

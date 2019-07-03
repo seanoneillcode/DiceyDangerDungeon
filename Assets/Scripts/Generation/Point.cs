@@ -80,6 +80,7 @@ namespace Lovely
         ARMOUR,
         PERM_HEALTH_INC,
         PERM_ROLL_INC,
-        PERM_START_ARMOUR
+        PERM_START_ARMOUR,
+        INFO
     }
 }

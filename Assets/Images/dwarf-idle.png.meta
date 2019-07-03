@@ -113,7 +113,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 869da512a6a589d4295e8b726d2cd196
+      spriteID: 2fff6284586002f469aaa504a26e6840
       vertices: []
       indices: 
       edges: []
@@ -133,7 +133,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7db565bae6e24c44a9acd616853011bc
+      spriteID: 2f2afac4edfdda14caa983eb61da0fa3
       vertices: []
       indices: 
       edges: []
@@ -153,27 +153,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e19a6bba73dcd54fa5d8b6a5e3d25c4
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: dwarf-idle_3
-      rect:
-        serializedVersion: 2
-        x: 72
-        y: 0
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f90a3d76cf935724eb755442bddbb8a6
+      spriteID: 3f406578488106f419ea407e7edc1bf0
       vertices: []
       indices: 
       edges: []
