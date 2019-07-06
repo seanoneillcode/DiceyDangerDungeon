@@ -158,6 +158,7 @@ MonoBehaviour:
   hitEnemy: 0
   maxPlayerHealth: 5
   didSucceed: 0
+  celebrating: 0
 --- !u!4 &16249514
 Transform:
   m_ObjectHideFlags: 0
@@ -238,6 +239,7 @@ MonoBehaviour:
   followPlayer: 1
   lockToPosition: 0
   testPos: {fileID: 0}
+  zoomToGoal: 0
 --- !u!4 &307311629
 Transform:
   m_ObjectHideFlags: 0
@@ -706,6 +708,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5749199359203180448, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7526907729033057985, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -931,31 +938,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4604656787131846522, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3512472547896689579, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000045776367
-      objectReference: {fileID: 0}
-    - target: {fileID: 3512472547896689579, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.08998871
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116145758665861266, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5749199359203180448, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8738502143224727883, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -986,6 +968,31 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4604656787131846522, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512472547896689579, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000045776367
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512472547896689579, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.08998871
+      objectReference: {fileID: 0}
+    - target: {fileID: 8116145758665861266, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265657083856729867, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1340710002797471844, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_IsActive
@@ -1000,11 +1007,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0.8000183
-      objectReference: {fileID: 0}
-    - target: {fileID: 1265657083856729867, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65db0325cef2271489c8e3fb5f6009a6, type: 3}
@@ -1170,6 +1172,7 @@ MonoBehaviour:
   infoPrefab: {fileID: 2854380869610012672, guid: 682ef988b571eea49baa496f3c1ae154,
     type: 3}
   map: {fileID: 1912703448}
+  levelSizes: 03000000030000000300000004000000040000000500000006000000070000000800000009000000
 --- !u!4 &1953637888
 Transform:
   m_ObjectHideFlags: 0

@@ -51,7 +51,7 @@ public class Pickup : MonoBehaviour
                 game.swordHelp += 1;
                 break;
             case Pickup.PickupType.ARMOUR:
-                game.armourHelp += 1;
+                game.armourHelp += 3;
                 break;
             case Pickup.PickupType.TELEPORT:
                 game.TeleportPlayerRandomly();

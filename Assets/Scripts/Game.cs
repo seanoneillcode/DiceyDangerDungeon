@@ -32,7 +32,7 @@ public class Game : MonoBehaviour
     private Vector3 lastValidPosition;
 
 
-    internal int bossLevel = 3;
+    internal int bossLevel = 10;
     public bool didSucceed;
 
 
@@ -54,9 +54,9 @@ public class Game : MonoBehaviour
         if (player != null)
         {
             selectedPlayer = player;
+            lastValidPosition = player.transform.position;
         }
         waypoints = new List<Node>();
-
     }
 
     internal void EmbarkOnNextLevel()

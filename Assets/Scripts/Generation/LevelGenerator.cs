@@ -37,8 +37,12 @@ namespace Lovely
         public GameObject infoPrefab;
         public Transform map;
 
+        public List<int> levelSizes = new List<int>()
+        {
+            6,6,6,6,6,6,6,6,6
+        };
 
-        public const int SIZE = 6;
+        private int defaultSize = 6;
         private LayoutGenerator layoutGenerator;
         private Vector3 goalPoint;
 
@@ -51,9 +55,18 @@ namespace Lovely
             FindObjectOfType<CameraController>().ShowGoal(game.player.transform.position, goalPoint);
         }
 
+        internal int GetSize()
+        {
+            if (StaticState.currentLevel > -1 && StaticState.currentLevel < levelSizes.Count - 1)
+            {
+                return levelSizes[StaticState.currentLevel];
+            }
+            return defaultSize;
+        }
+
         public void GenerateLevel()
         {
-            layoutGenerator.GenerateLayout();
+            layoutGenerator.GenerateLayout(GetSize());
             Point startPoint = layoutGenerator.startPoint;
             
             goalPoint = layoutGenerator.lastPoint.pos;

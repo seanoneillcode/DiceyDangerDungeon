@@ -14,6 +14,9 @@ namespace Lovely
         private List<List<Point>> channels;
         private Dictionary<String, Point> points;
 
+        private int leftChannelMinSize = 3;
+        private int rightChannelMinSize = 6;
+
         private void GenerateLine(Vector2Int from, Vector2Int to, List<Point> channel)
         {
             //Debug.Log("starting line");
@@ -72,6 +75,11 @@ namespace Lovely
 
         internal void PushPoints(List<Point> channel)
         {
+            if (channel.Count < 3)
+            {
+                Debug.Log("channel count is only " + channel.Count);
+                return;
+            }
             Point a = null;
             Point b = null;
 
@@ -170,7 +178,7 @@ namespace Lovely
             return allPoints;
         }
 
-        internal void GenerateLayout()
+        internal void GenerateLayout(int size)
         {
             points = new Dictionary<string, Point>();
             links = new List<PointLink>();
@@ -179,43 +187,56 @@ namespace Lovely
             List<Point> leftChannel = new List<Point>();
             List<Point> rightChannel = new List<Point>();
             channels = new List<List<Point>>();
+
+            // main channel
             channels.Add(mainChannel);
-            channels.Add(leftChannel);
-            channels.Add(rightChannel);
+            GenerateLine(new Vector2Int(size / 2, 0), new Vector2Int(size / 2, size - 1), mainChannel);
 
-            GenerateLine(new Vector2Int(LevelGenerator.SIZE / 2, 0), new Vector2Int(LevelGenerator.SIZE / 2, LevelGenerator.SIZE - 1), mainChannel);
+            if (size >= leftChannelMinSize)
+            {
+                int sectionLength = size / 3;
+                // one side
+                Vector2Int a = new Vector2Int(size / 2, UnityEngine.Random.Range(0, sectionLength));
+                Vector2Int b = new Vector2Int(size / 2, a.y + UnityEngine.Random.Range(sectionLength, sectionLength * 2));
+                Vector2Int c = new Vector2Int(UnityEngine.Random.Range(1, (size / 2)), UnityEngine.Random.Range(a.y, b.y + 1));
+                channels.Add(leftChannel);
+                GenerateLine(a, c, leftChannel);
+                GenerateLine(b, c, leftChannel);
 
-            int sectionLength = LevelGenerator.SIZE / 3;
+                if (size >= rightChannelMinSize)
+                {
+                    // other side
+                    channels.Add(rightChannel);
+                    Vector2Int e = new Vector2Int(size / 2, UnityEngine.Random.Range(0, sectionLength));
+                    Vector2Int f = new Vector2Int(size / 2, e.y + UnityEngine.Random.Range(sectionLength, sectionLength * 2));
+                    Vector2Int g = new Vector2Int(UnityEngine.Random.Range((size / 2) + 1, size), UnityEngine.Random.Range(e.y, f.y + 1));
+                    GenerateLine(e, g, rightChannel);
+                    GenerateLine(f, g, rightChannel);
+                }
+            }
 
-            // one side
-            Vector2Int a = new Vector2Int(LevelGenerator.SIZE / 2, UnityEngine.Random.Range(0, sectionLength));
-            Vector2Int b = new Vector2Int(LevelGenerator.SIZE / 2, a.y + UnityEngine.Random.Range(sectionLength, sectionLength * 2));
-            Vector2Int c = new Vector2Int(UnityEngine.Random.Range(1, (LevelGenerator.SIZE / 2)), UnityEngine.Random.Range(a.y, b.y + 1));
-            //Debug.Log("set point a " + a.x + " " + a.y);
-            //Debug.Log("set point b " + b.x + " " + b.y);
-            //Debug.Log("set point c " + c.x + " " + c.y);
-            GenerateLine(a, c, leftChannel);
-            GenerateLine(b, c, leftChannel);
-
-            // other side
-            Vector2Int e = new Vector2Int(LevelGenerator.SIZE / 2, UnityEngine.Random.Range(0, sectionLength));
-            Vector2Int f = new Vector2Int(LevelGenerator.SIZE / 2, e.y + UnityEngine.Random.Range(sectionLength, sectionLength * 2));
-            Vector2Int g = new Vector2Int(UnityEngine.Random.Range((LevelGenerator.SIZE / 2) + 1, LevelGenerator.SIZE), UnityEngine.Random.Range(e.y, f.y + 1));
-            GenerateLine(e, g, rightChannel);
-            GenerateLine(f, g, rightChannel);
 
             // push points
             int numPushes = 2;
             for (int i = 0; i < numPushes; i++)
             {
-                PushPoints(mainChannel);
-                PushPoints(leftChannel);
-                PushPoints(rightChannel);
+                if (mainChannel.Count > 2)
+                {
+                    PushPoints(mainChannel);
+                }
+                if (size >= leftChannelMinSize)
+                {
+                    PushPoints(leftChannel);
+                }
+                if (size >= rightChannelMinSize)
+                {
+                    PushPoints(rightChannel);
+                }
             }
 
             // choose start point
-            startPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, 0))];
-            lastPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, (LevelGenerator.SIZE - 1) * 4))];
+            startPoint = points[GetKey(new Vector3((size / 2) * 4, 0, 0))];
+            lastPoint = points[GetKey(new Vector3((size / 2) * 4, 0, (size - 1) * 4))];
 
             // add enemies to channels
 
@@ -227,25 +248,28 @@ namespace Lovely
                 avgRisk += 1;
             }
 
-            // add perm item
-            List<Point> permChannel = UnityEngine.Random.Range(0, 2) == 0 ? leftChannel : rightChannel;
-            Point permPoint = permChannel[permChannel.Count / 2];
+            if (size >= rightChannelMinSize && size >= leftChannelMinSize)
+            {
+                // add perm item
+                List<Point> permChannel = UnityEngine.Random.Range(0, 2) == 0 ? leftChannel : rightChannel;
+                Point permPoint = permChannel[permChannel.Count / 2];
 
-            permPoint.type = new List<PointType>() {
-                PointType.PERM_HEALTH_INC,
-                PointType.PERM_ROLL_INC,
-                PointType.PERM_START_ARMOUR
-            }[UnityEngine.Random.Range(0, 3)];
-            permPoint.risk = 1;
+                permPoint.type = new List<PointType>() {
+                    PointType.PERM_HEALTH_INC,
+                    PointType.PERM_ROLL_INC,
+                    PointType.PERM_START_ARMOUR
+                }[UnityEngine.Random.Range(0, 3)];
+                permPoint.risk = 1;
+                List<Point> infoChannel = permChannel == leftChannel ? rightChannel : leftChannel;
+                Point infoPoint = infoChannel[infoChannel.Count / 2];
 
-            List<Point> infoChannel = permChannel == leftChannel ? rightChannel : leftChannel;
-            Point infoPoint = infoChannel[infoChannel.Count / 2];
+                infoPoint.type = PointType.INFO;
+                infoPoint.risk = 0;
+            }
 
-            infoPoint.type = PointType.INFO;
-            infoPoint.risk = 0;
 
             // choose endpoint
-            lastPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, (LevelGenerator.SIZE - 1) * 4))];
+            lastPoint = points[GetKey(new Vector3((size / 2) * 4, 0, (size - 1) * 4))];
             lastPoint.type = PointType.END;
             lastPoint.risk = 0;
 

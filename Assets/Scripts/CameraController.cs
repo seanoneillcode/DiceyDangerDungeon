@@ -23,9 +23,8 @@ public class CameraController : MonoBehaviour
 
     public Transform testPos;
     private bool next = false;
-    
+    public bool zoomToGoal = true;
     Vector3 zoomVector = new Vector3(3, -4.5f, 3);
-    internal Vector3 goalPoint;
 
     private void Start()
     {
@@ -93,21 +92,6 @@ public class CameraController : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 2);
         }
 
-        if (Input.GetKeyDown("space"))
-        {
-            print("space key was pressed");
-            //Camera.main.transform.position += (Camera.main.transform.forward * 0.5f);
-            if (next)
-            {
-                Debug.Log("reset going to " + oldPosition.x + ":" + oldPosition.y);
-                ResetPosition();
-            } else
-            {
-                ZoomToPosition(goalPoint);
-            }
-            next = !next;
-        }
-
         if (lockToPosition && newPosition != null && !transform.position.Equals(newPosition))
         {
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * 2);
@@ -117,6 +101,10 @@ public class CameraController : MonoBehaviour
     internal void ShowGoal(Vector3 playerPos, Vector3 goalPoint)
     {
         transform.position = playerPos;
+        if (!zoomToGoal)
+        {
+            return;
+        }
         StartCoroutine(ExecuteAfterTime(1f, () => {
             ZoomToPosition(goalPoint);
         }));

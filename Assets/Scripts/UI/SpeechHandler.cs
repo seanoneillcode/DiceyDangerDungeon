@@ -13,11 +13,7 @@ public class SpeechHandler : MonoBehaviour
     private int lineIndex;
     public Text speechText;
 
-    private float minWidth = 131;
-    private float minHeight = 75;
-
     private float maxLineWidth = 515;
-    private float widthStep = 8;
     private float lineHeight = 40;
 
     private float charsPerLine = 21;
