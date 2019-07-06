@@ -40,6 +40,7 @@ namespace Lovely
 
         public const int SIZE = 6;
         private LayoutGenerator layoutGenerator;
+        private Vector3 goalPoint;
 
         // Start is called before the first frame update
         void Start()
@@ -47,12 +48,16 @@ namespace Lovely
             game = FindObjectOfType<Game>();
             layoutGenerator = GetComponent<LayoutGenerator>();
             GenerateLevel();
+            FindObjectOfType<CameraController>().ShowGoal(game.player.transform.position, goalPoint);
         }
 
         public void GenerateLevel()
         {
-            Point startPoint = layoutGenerator.GenerateLayout();
-            List<Point> points = layoutGenerator.GetAllPoints();
+            layoutGenerator.GenerateLayout();
+            Point startPoint = layoutGenerator.startPoint;
+            
+            goalPoint = layoutGenerator.lastPoint.pos;
+            List <Point> points = layoutGenerator.GetAllPoints();
 
             foreach (Point point in points)
             {

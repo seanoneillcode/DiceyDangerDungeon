@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Lovely;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -21,6 +23,9 @@ public class CameraController : MonoBehaviour
 
     public Transform testPos;
     private bool next = false;
+    
+    Vector3 zoomVector = new Vector3(3, -4.5f, 3);
+    internal Vector3 goalPoint;
 
     private void Start()
     {
@@ -30,6 +35,12 @@ public class CameraController : MonoBehaviour
         oldCameraPosition = Camera.main.transform.localPosition;
         newCameraPosition = Camera.main.transform.localPosition;
         lockToPosition = false;
+    }
+
+    IEnumerator ExecuteAfterTime(float time, Action task)
+    {
+        yield return new WaitForSeconds(time);
+        task();
     }
 
     void Update()
@@ -92,8 +103,7 @@ public class CameraController : MonoBehaviour
                 ResetPosition();
             } else
             {
-                Debug.Log(" going to " + testPos.position.x + ":" + testPos.position.y);
-                ZoomToPosition(testPos);
+                ZoomToPosition(goalPoint);
             }
             next = !next;
         }
@@ -104,11 +114,23 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void ZoomToPosition(Transform pos)
+    internal void ShowGoal(Vector3 playerPos, Vector3 goalPoint)
     {
+        transform.position = playerPos;
+        StartCoroutine(ExecuteAfterTime(1f, () => {
+            ZoomToPosition(goalPoint);
+        }));
+        StartCoroutine(ExecuteAfterTime(3f, () => {
+            ResetPosition();
+        }));
+    }
+
+    public void ZoomToPosition(Vector3 pos)
+    {
+        Debug.Log(" going to " + pos.x + ":" + pos.y);
         oldPosition = transform.position;
         lockToPosition = true;
-        newPosition = pos.position;
+        newPosition = pos + zoomVector;
     }
 
     public void ResetPosition() {

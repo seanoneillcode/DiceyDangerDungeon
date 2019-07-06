@@ -163,6 +163,7 @@ public class Node : MonoBehaviour
                     {
                         character.SetFollow(game.player.transform);
                     }
+                    game.PlayerCelebrate();
                 }
                 else
                 {

@@ -37,6 +37,7 @@ public class Game : MonoBehaviour
 
 
     private List<Node> waypoints;
+    public bool celebrating;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +56,7 @@ public class Game : MonoBehaviour
             selectedPlayer = player;
         }
         waypoints = new List<Node>();
+
     }
 
     internal void EmbarkOnNextLevel()
@@ -159,6 +161,14 @@ public class Game : MonoBehaviour
         {
             diceResult = -100;
         }
+    }
+
+    internal void PlayerCelebrate()
+    {
+        celebrating = true;
+        StartCoroutine(ExecuteAfterTime(2f, () => {
+            celebrating = false;
+        }));
     }
 
     internal void CancelEmbark()

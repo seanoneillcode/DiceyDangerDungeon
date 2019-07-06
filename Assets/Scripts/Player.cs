@@ -74,8 +74,17 @@ public class Player : MonoBehaviour
                 animator.SetBool("isPlayerHit", false);
                 animator.SetBool("isPlayerFighting", false);
             }
+            
         }
-        
+        if (game.celebrating)
+        {
+            animator.SetBool("isPlayerCelebrating", true);
+        }
+        else
+        {
+            animator.SetBool("isPlayerCelebrating", false);
+        }
+
     }
 
     internal void Highlight(Material highlightMaterial)

@@ -158,6 +158,7 @@ MonoBehaviour:
   hitEnemy: 0
   maxPlayerHealth: 5
   didSucceed: 0
+  celebrating: 0
 --- !u!4 &16249514
 Transform:
   m_ObjectHideFlags: 0
@@ -1809,6 +1810,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793408447668374497, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7172501552980373214, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 263521200478410021, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597922567023075662, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597922567023075662, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597922567023075662, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 778142226983636339, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 778142226983636339, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.6150002
+      objectReference: {fileID: 0}
+    - target: {fileID: 778142226983636339, guid: a7681e388315afc4a95b9013040daa0c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.49999997
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7681e388315afc4a95b9013040daa0c, type: 3}
@@ -10266,6 +10312,51 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5749199359203180448, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: dialog.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: speechBubble
+      value: 
+      objectReference: {fileID: 273463597}
+    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: dialog.Array.data[3]
+      value: There's an angry dwarf in the corner
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: dialog.Array.data[1]
+      value: You look tough...
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: dialog.Array.data[2]
+      value: Can you help me out ?
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: dialog.Array.data[0]
+      value: Hey!
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: dialog.Array.data[4]
+      value: If you sort him out, you can drink for free all night!
+      objectReference: {fileID: 0}
+    - target: {fileID: 8824710193745782742, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7526907729033057985, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10581,11 +10672,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 352.2
       objectReference: {fileID: 0}
-    - target: {fileID: 8824710193745782742, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6997482864910930188, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -10656,11 +10742,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5749199359203180448, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6539383906411055371, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10700,41 +10781,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: dialog.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: speechBubble
-      value: 
-      objectReference: {fileID: 273463597}
-    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: dialog.Array.data[3]
-      value: There's an angry dwarf in the corner
-      objectReference: {fileID: 0}
-    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: dialog.Array.data[1]
-      value: You look tough...
-      objectReference: {fileID: 0}
-    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: dialog.Array.data[2]
-      value: Can you help me out ?
-      objectReference: {fileID: 0}
-    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: dialog.Array.data[0]
-      value: Hey!
-      objectReference: {fileID: 0}
-    - target: {fileID: 5283360727015474350, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: dialog.Array.data[4]
-      value: If you sort him out, you can drink for free all night!
       objectReference: {fileID: 0}
     - target: {fileID: 7682518402041585583, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}

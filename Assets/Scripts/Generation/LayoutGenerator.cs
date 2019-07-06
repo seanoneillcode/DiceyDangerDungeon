@@ -9,7 +9,8 @@ namespace Lovely
     public class LayoutGenerator : MonoBehaviour
     {
         internal List<PointLink> links;
-        private Point lastPoint;
+        public Point lastPoint;
+        public Point startPoint;
         private List<List<Point>> channels;
         private Dictionary<String, Point> points;
 
@@ -169,7 +170,7 @@ namespace Lovely
             return allPoints;
         }
 
-        internal Point GenerateLayout()
+        internal void GenerateLayout()
         {
             points = new Dictionary<string, Point>();
             links = new List<PointLink>();
@@ -213,7 +214,7 @@ namespace Lovely
             }
 
             // choose start point
-            Point startPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, 0))];
+            startPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, 0))];
             lastPoint = points[GetKey(new Vector3((LevelGenerator.SIZE / 2) * 4, 0, (LevelGenerator.SIZE - 1) * 4))];
 
             // add enemies to channels
@@ -252,7 +253,6 @@ namespace Lovely
             startPoint.type = PointType.START;
             startPoint.risk = 0;
 
-            return startPoint;
         }
 
         private int GetRisk(int avgRisk)
