@@ -18,16 +18,6 @@ public class MenuPanel : MonoBehaviour
         UpdateVisible();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (referenceHolder.game.isPlayerDead() && !once)
-        {
-            once = true;
-            StartCoroutine(ExecuteAfterTime(0.8f));
-        }
-    }
-
     public void Restart()
     {
         StaticState.currentLevel = -1;
@@ -46,17 +36,16 @@ public class MenuPanel : MonoBehaviour
         UpdateVisible();
     }
 
+    public void ShowOptions()
+    {
+
+    }
+
     public void UpdateVisible()
     {
         foreach (Transform transform in transform)
         {
             transform.gameObject.SetActive(this.isVisible);
         }
-    }
-
-    IEnumerator ExecuteAfterTime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Toggle();
     }
 }

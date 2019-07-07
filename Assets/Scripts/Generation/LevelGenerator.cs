@@ -35,6 +35,8 @@ namespace Lovely
         public GameObject permRollIncPrefab;
         public GameObject permShieldIncPrefab;
         public GameObject infoPrefab;
+        public GameObject buddyPrefab;
+
         public Transform map;
 
         public List<int> levelSizes = new List<int>()
@@ -86,6 +88,11 @@ namespace Lovely
             player.speed = 4f;
             game.player = player;
             game.selectedPlayer = player;
+            if (StaticState.permRollBonus > 0)
+            {
+                GameObject buddyObj = Instantiate(buddyPrefab, startPoint.pos, Quaternion.identity, map);
+                buddyObj.GetComponent<Character>().SetFollow(player.transform);
+            }
         }
 
         private void ConvertPoint(Point point)

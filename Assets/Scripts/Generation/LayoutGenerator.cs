@@ -253,20 +253,14 @@ namespace Lovely
                 // add perm item
                 List<Point> permChannel = UnityEngine.Random.Range(0, 2) == 0 ? leftChannel : rightChannel;
                 Point permPoint = permChannel[permChannel.Count / 2];
+                SetPointType(permPoint);
 
-                permPoint.type = new List<PointType>() {
-                    PointType.PERM_HEALTH_INC,
-                    PointType.PERM_ROLL_INC,
-                    PointType.PERM_START_ARMOUR
-                }[UnityEngine.Random.Range(0, 3)];
-                permPoint.risk = 1;
                 List<Point> infoChannel = permChannel == leftChannel ? rightChannel : leftChannel;
                 Point infoPoint = infoChannel[infoChannel.Count / 2];
 
                 infoPoint.type = PointType.INFO;
                 infoPoint.risk = 0;
             }
-
 
             // choose endpoint
             lastPoint = points[GetKey(new Vector3((size / 2) * 4, 0, (size - 1) * 4))];
@@ -277,6 +271,28 @@ namespace Lovely
             startPoint.type = PointType.START;
             startPoint.risk = 0;
 
+        }
+
+        private void SetPointType(Point permPoint)
+        {
+            List<PointType> validTypes = new List<PointType>();
+            if (StaticState.permRollBonus == 0)
+            {
+                validTypes.Add(PointType.PERM_ROLL_INC);
+            }
+            if (StaticState.permHealthBonus == 0)
+            {
+                validTypes.Add(PointType.PERM_HEALTH_INC);
+            }
+            if (StaticState.permShieldBonus == 0)
+            {
+                validTypes.Add(PointType.PERM_START_ARMOUR);
+            }
+            if (validTypes.Count > 0)
+            {
+                permPoint.type = validTypes[UnityEngine.Random.Range(0, validTypes.Count)];
+                permPoint.risk = 1;
+            }
         }
 
         private int GetRisk(int avgRisk)
