@@ -369,6 +369,10 @@ public class Game : MonoBehaviour
             return;
         }
 
+        if (actionedNode != null && actionedNode.risk > 0) {
+            return;
+        }
+
 
         if (selectedPlayer != null && node != null && actionedNode == null)
         {

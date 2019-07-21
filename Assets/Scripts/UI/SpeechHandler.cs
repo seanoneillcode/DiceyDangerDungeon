@@ -9,6 +9,7 @@ public class SpeechHandler : MonoBehaviour
     Conversation currentConvo;
 
     public GameObject speechBubble;
+    public GameObject avatar;
 
     private int lineIndex;
     public Text speechText;
@@ -34,12 +35,23 @@ public class SpeechHandler : MonoBehaviour
         if (referenceHolder.convoHandler.currentConvo == null)
         {
             speechBubble.SetActive(false);
+            avatar.SetActive(false);
         } else
         {
             currentConvo = referenceHolder.convoHandler.currentConvo;
             speechBubble.SetActive(true);
+            avatar.SetActive(true);
             UpdateSpeechBubble();
         }
+    }
+
+    public void CancelDialog()
+    {
+        speechBubble.SetActive(false);
+        avatar.SetActive(false);
+        referenceHolder.convoHandler.Done();
+        lineIndex = 0;
+        currentConvo = null;
     }
 
     public bool IsDone()
@@ -57,6 +69,7 @@ public class SpeechHandler : MonoBehaviour
         if (IsDone())
         {
             speechBubble.SetActive(false);
+            avatar.SetActive(false);
             referenceHolder.convoHandler.Done();
             lineIndex = 0;
             currentConvo = null;
@@ -71,15 +84,6 @@ public class SpeechHandler : MonoBehaviour
     private void UpdateSpeechBubble()
     {
         speechText.text = currentConvo != null ? currentConvo.lines[lineIndex] : "";
-        RectTransform speechTransform = speechBubble.GetComponent<RectTransform>();
-        string dialog = currentConvo != null ? currentConvo.lines[lineIndex] : "";
-        int numLines = Mathf.CeilToInt(dialog.Length / charsPerLine);
-        float width = maxLineWidth;
-        if (numLines <= 1)
-        {
-            numLines = 1;
-            width = 100 + (dialog.Length * 22);
-        }
-        speechTransform.sizeDelta = new Vector2(width, 35 + (numLines * lineHeight));
+
     }
 }

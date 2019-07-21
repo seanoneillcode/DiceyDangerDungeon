@@ -1,13 +1,12 @@
 fileFormatVersion: 2
-guid: a53e42f4ae450984abbc7711756590a5
+guid: bd6a90d9d07598c469d4164a23f8586d
 TextureImporter:
   fileIDToRecycleName:
-    21300000: dragon-parts_0
-    21300002: dragon-parts_1
-    21300004: dragon-parts_2
-    21300006: dragon-parts_3
-    21300008: dragon-parts_4
-    21300010: dragon-parts_5
+    21300000: dragon-next_0
+    21300002: dragon-next_1
+    21300004: dragon-next_2
+    21300006: dragon-next_3
+    21300008: dragon-next_4
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -87,6 +86,17 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -101,87 +111,87 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: dragon-parts_0
+      name: dragon-next_0
       rect:
         serializedVersion: 2
-        x: 3.0860004
-        y: 71.303
-        width: 54.914
-        height: 56.697
-      alignment: 9
-      pivot: {x: 0.49921694, y: 0.50614667}
+        x: 8
+        y: 89
+        width: 45
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 29a0226a466509b4c89ff3a4b8945bbe
+      spriteID: 903ab79d4af140046bb5d97380acaf87
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dragon-parts_1
+      name: dragon-next_1
       rect:
         serializedVersion: 2
-        x: 62
-        y: 80.083
-        width: 53
-        height: 41.761
-      alignment: 9
-      pivot: {x: 0.5, y: 0.500874}
+        x: 67
+        y: 85
+        width: 43
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e3bffeea54bd9d46b4dbbca0eb06364
+      spriteID: d3097c9de8071124bbeaede67c37b074
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dragon-parts_2
+      name: dragon-next_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 57
-        height: 70
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47857144}
+        x: 5
+        y: 2
+        width: 47
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a3b0337a460e0e04f83930fea1fc6c5b
+      spriteID: d09c1672d9173ae41a4b3b875b6acc2a
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dragon-parts_3
+      name: dragon-next_3
       rect:
         serializedVersion: 2
-        x: 54
-        y: 0
-        width: 74
-        height: 34.633
-      alignment: 9
-      pivot: {x: 0.5135135, y: 0.43311295}
+        x: 90
+        y: 49
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7a7db42d4e356434c88be125bf871360
+      spriteID: 8be98993cfa8a394fa714bfaff097f26
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dragon-parts_4
+      name: dragon-next_4
       rect:
         serializedVersion: 2
         x: 59
@@ -195,7 +205,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aaa2785ebf5b7e346b3730149726320e
+      spriteID: 0f509005edbca96488276a40391e2355
       vertices: []
       indices: 
       edges: []
@@ -203,7 +213,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 651fa25bc38896345b9356ca8576f6ef
+    spriteID: 4e0bab7747dc3b74ba99751b2bed12e7
     vertices: []
     indices: 
     edges: []
@@ -211,6 +221,6 @@ TextureImporter:
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
-  userData: 636971374235542062
+  userData: 
   assetBundleName: 
   assetBundleVariant: 

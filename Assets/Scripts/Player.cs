@@ -52,8 +52,8 @@ public class Player : MonoBehaviour
             {
                 transform.position += movement;
             }
+            animator.SetBool("isPlayerCelebrating", false);
             animator.SetBool("isPlayerRunning", true);
-            
         } else
         {
             animator.SetBool("isPlayerRunning", false);
@@ -74,16 +74,16 @@ public class Player : MonoBehaviour
                 animator.SetBool("isPlayerHit", false);
                 animator.SetBool("isPlayerFighting", false);
             }
-            
+            if (game.celebrating)
+            {
+                animator.SetBool("isPlayerCelebrating", true);
+            }
+            else
+            {
+                animator.SetBool("isPlayerCelebrating", false);
+            }
         }
-        if (game.celebrating)
-        {
-            animator.SetBool("isPlayerCelebrating", true);
-        }
-        else
-        {
-            animator.SetBool("isPlayerCelebrating", false);
-        }
+        
 
     }
 

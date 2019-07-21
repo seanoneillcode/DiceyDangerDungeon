@@ -19,8 +19,17 @@ public class InputHandler : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            Ray ray = Camera.main.ScreenPointToRay(touch.position);
-            HandleClickOrTap(ray);
+            if (touch.phase == TouchPhase.Ended)
+            {
+                int id = touch.fingerId;
+                if (EventSystem.current.IsPointerOverGameObject(id))
+                {
+                    return;
+                }
+                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                HandleClickOrTap(ray);
+
+            }
         }
         if (Input.GetMouseButtonDown(0))
         {

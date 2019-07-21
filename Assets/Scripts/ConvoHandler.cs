@@ -11,7 +11,8 @@ public class ConvoHandler : MonoBehaviour
 
     public GameInfo currentGameInfo;
 
-    private Vector3 zoomBuffer = new Vector3(-0.6f, 2, -2);
+    private Vector3 zoomBuffer = new Vector3(0, 0, 0);
+    Vector3 zoomVector = new Vector3(1.5f, -2.25f, 1.5f);
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,7 @@ public class ConvoHandler : MonoBehaviour
     internal void StartConvo(Conversation convo)
     {
         this.currentConvo = convo;
-        cameraController.ZoomToPosition(currentConvo.transform.position + zoomBuffer);
+        cameraController.ZoomToPosition(currentConvo.transform.position + zoomVector);
         Vector3 playerPos = game.player.transform.position;
         Vector3 targetPos = currentConvo.transform.position;
         Vector3 direction = (playerPos - targetPos);

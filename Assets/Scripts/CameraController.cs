@@ -21,10 +21,17 @@ public class CameraController : MonoBehaviour
     private Vector3 oldCameraPosition;
     private Vector3 newCameraPosition;
 
+    public bool zoomFightEnabled = true;
+
     public Transform testPos;
     private bool next = false;
     public bool zoomToGoal = true;
     Vector3 zoomVector = new Vector3(3, -4.5f, 3);
+    private bool canZoomToFight;
+
+    public Transform focusTransform;
+
+    Vector3 fightZoom = new Vector3(-1, 0.3f, 0f);
 
     private void Start()
     {
@@ -34,6 +41,7 @@ public class CameraController : MonoBehaviour
         oldCameraPosition = Camera.main.transform.localPosition;
         newCameraPosition = Camera.main.transform.localPosition;
         lockToPosition = false;
+        canZoomToFight = true;
     }
 
     IEnumerator ExecuteAfterTime(float time, Action task)
@@ -89,13 +97,51 @@ public class CameraController : MonoBehaviour
         if (game.selectedPlayer != null && followPlayer && !lockToPosition)
         {
             targetPos = game.selectedPlayer.transform.position;
-            transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 2);
+            transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 2f);
         }
 
         if (lockToPosition && newPosition != null && !transform.position.Equals(newPosition))
         {
-            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * 2);
+            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * 0.5f);
         }
+
+        if (game.actionedNode != null && game.actionedNode.risk > 0 && game.actionedNode.actor != null)
+        {
+            if (canZoomToFight && zoomFightEnabled)
+            {
+                canZoomToFight = false;
+                Debug.Log("zooming in");
+                ZoomToPosition(game.actionedNode.gameObject.transform.position + fightZoom + zoomVector);
+
+            }
+        } else
+        {
+            if (!canZoomToFight)
+            {
+                Debug.Log("zooming out");
+                canZoomToFight = true;
+                ResetPosition();
+            }
+        }
+
+        if (focusTransform != null)
+        {
+            transform.LookAt(focusTransform.position);
+        }
+
+        //Touch touch0 = Input.GetTouch(0);
+        //Touch touch1 = Input.GetTouch(1);
+        //if (touch0.phase == TouchPhase.Moved && touch1.phase == TouchPhase.Moved)
+        //{
+        //    Vector2 prevTouchPosition0 = touch0.position - touch0.deltaPosition;
+        //    Vector2 prevTouchPosition1 = touch1.position - touch1.deltaPosition;
+        //    float touchDistance = (touch1.position - touch0.position).magnitude;
+        //    float prevTouchDistance = (prevTouchPosition1 - prevTouchPosition1).magnitude;
+        //    float touchChangeMultiplier = touchDistance / prevTouchDistance;
+        //    Transform childCamera = transform.GetChild(0);
+        //    childCamera.Translate(touchChangeMultiplier * 0.01f * Vector3.forward, Space.Self);
+        //}
+
     }
 
     internal void ShowGoal(Vector3 playerPos, Vector3 goalPoint)
@@ -106,7 +152,7 @@ public class CameraController : MonoBehaviour
             return;
         }
         StartCoroutine(ExecuteAfterTime(1f, () => {
-            ZoomToPosition(goalPoint);
+            ZoomToPosition(goalPoint + zoomVector);
         }));
         StartCoroutine(ExecuteAfterTime(3f, () => {
             ResetPosition();
@@ -118,7 +164,7 @@ public class CameraController : MonoBehaviour
         Debug.Log(" going to " + pos.x + ":" + pos.y);
         oldPosition = transform.position;
         lockToPosition = true;
-        newPosition = pos + zoomVector;
+        newPosition = pos;
     }
 
     public void ResetPosition() {
