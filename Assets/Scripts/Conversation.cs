@@ -6,6 +6,7 @@ public class Conversation : MonoBehaviour
 {
     public List<string> lines;
     private ConvoHandler convoHandler;
+    public bool shouldMovePlayer = true;
 
     // Start is called before the first frame update
     void Start()

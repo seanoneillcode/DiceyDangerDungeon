@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-guid: f14bafc9a2c68c44ca868b73f570dc6f
+guid: 327f6b8ae816bef48a181a8b85bd35e2
 TextureImporter:
   fileIDToRecycleName:
-    21300000: talk-icon_0
-    21300002: talk-icon_1
-    21300004: talk-icon_2
+    21300000: dwarf-defend_0
+    21300002: dwarf-defend_1
+    21300004: dwarf-defend_2
+    21300006: dwarf-defend_3
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -48,7 +49,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 48
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -109,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: talk-icon_0
+      name: dwarf-defend_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 11
-        height: 10
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -123,19 +124,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f44cd1fcd56ca5b439bdb7c71f1bcad7
+      spriteID: e25eec825db062e4db571c3d70778dc1
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: talk-icon_1
+      name: dwarf-defend_1
       rect:
         serializedVersion: 2
-        x: 11
+        x: 24
         y: 0
-        width: 11
-        height: 10
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,19 +144,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ac40be916f749e340bda36d0fa40a696
+      spriteID: efab2f58a390dd141a4373c51eb57b22
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: talk-icon_2
+      name: dwarf-defend_2
       rect:
         serializedVersion: 2
-        x: 22
+        x: 48
         y: 0
-        width: 11
-        height: 10
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,7 +164,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 204b018ecef87f94ab39445b67dbdffd
+      spriteID: 659b2bd1d693b7949b8b556047ad615e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dwarf-defend_3
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb447b01afebda448833d8edc10fd2aa
       vertices: []
       indices: 
       edges: []
@@ -171,7 +192,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: d3a27399017ddc745ba38d86b1f415a7
+    spriteID: 3a4acaf372faee543948a62ece14e588
     vertices: []
     indices: 
     edges: []

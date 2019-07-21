@@ -14,11 +14,6 @@ public class SpeechHandler : MonoBehaviour
     private int lineIndex;
     public Text speechText;
 
-    private float maxLineWidth = 515;
-    private float lineHeight = 40;
-
-    private float charsPerLine = 21;
-
     private ReferenceHolder referenceHolder;
 
     // Use this for initialization

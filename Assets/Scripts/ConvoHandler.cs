@@ -25,14 +25,17 @@ public class ConvoHandler : MonoBehaviour
     {
         this.currentConvo = convo;
         cameraController.ZoomToPosition(currentConvo.transform.position + zoomVector);
-        Vector3 playerPos = game.player.transform.position;
-        Vector3 targetPos = currentConvo.transform.position;
-        Vector3 direction = (playerPos - targetPos);
-        direction.y = 0;
-        direction.Normalize();
-        Vector3 distanceTarget = targetPos + (direction * 2);
-        distanceTarget.y = 0;
-        game.MovePlayer(distanceTarget);
+        if (convo.shouldMovePlayer)
+        {
+            Vector3 playerPos = game.player.transform.position;
+            Vector3 targetPos = currentConvo.transform.position;
+            Vector3 direction = (playerPos - targetPos);
+            direction.y = 0;
+            direction.Normalize();
+            Vector3 distanceTarget = targetPos + (direction * 2);
+            distanceTarget.y = 0;
+            game.MovePlayer(distanceTarget);
+        }
     }
 
     internal void ShowInfo(GameInfo gameInfo)
