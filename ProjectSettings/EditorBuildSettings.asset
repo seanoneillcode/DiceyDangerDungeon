@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BedroomScene.unity
     guid: 18ec1947f57d5fa4b9b1566c413b37af
+  - enabled: 1
+    path: Assets/Scenes/CelebrateHome.unity
+    guid: 87f2f95c63e9ba446a65ea23e5923258
   m_configObjects: {}

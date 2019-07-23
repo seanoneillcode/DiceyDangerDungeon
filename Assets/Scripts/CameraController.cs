@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Lovely;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -15,11 +16,14 @@ public class CameraController : MonoBehaviour
     private Vector3 targetPos = new Vector3();
     public bool followPlayer;
     public bool lockToPosition;
+    public float focusSpeed;
 
     private Vector3 oldPosition;
     private Vector3 newPosition;
     private Vector3 oldCameraPosition;
     private Vector3 newCameraPosition;
+
+    private Vector3 smoothTarget;
 
     public bool zoomFightEnabled = true;
 
@@ -32,6 +36,10 @@ public class CameraController : MonoBehaviour
     public Transform focusTransform;
 
     Vector3 fightZoom = new Vector3(-1, 0.3f, 0f);
+    public float cameraSmoothing;
+
+    public bool applyCameraOffset = false;
+    private Vector3 cameraOffset = new Vector3(-0.5f,0,-0.5f);
 
     private void Start()
     {
@@ -91,13 +99,32 @@ public class CameraController : MonoBehaviour
             transform.position += (transform.right * pos.x * -dragSpeed);
             transform.position += (transform.forward * pos.y * -dragSpeed);
 
-            //transform.Translate(move, Space.World);
+            if (pos.magnitude > 0.01f)
+            {
+                followPlayer = false;
+            }
+        }
+
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Moved)
+            {
+                followPlayer = false;
+            }
         }
 
         if (game.selectedPlayer != null && followPlayer && !lockToPosition)
         {
-            targetPos = game.selectedPlayer.transform.position;
-            transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 2f);
+            if (smoothTarget == Vector3.zero)
+            {
+                smoothTarget = game.GetFocusPosition();
+            } else
+            {
+                smoothTarget = Vector3.Lerp(smoothTarget, game.GetFocusPosition(), Time.deltaTime * cameraSmoothing);
+            }
+            targetPos = smoothTarget + cameraOffset;
+            transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * focusSpeed);
         }
 
         if (lockToPosition && newPosition != null && !transform.position.Equals(newPosition))

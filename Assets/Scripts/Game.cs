@@ -428,4 +428,47 @@ public class Game : MonoBehaviour
     {
         return GetDiceRollWithmodifiers() > -1 && GetDiceRollWithmodifiers() > actionedNode.risk;
     }
+
+    public Vector3 GetFocusPosition()
+    {
+        Vector3 defaultPos = selectedPlayer.targetPos;
+        Node targetNode = selectedNode;
+        if (targetNode == null)
+        {
+            targetNode = GetOverlap(selectedPlayer);
+        }
+        if (targetNode == null)
+        {
+            return defaultPos;
+        }
+        List<Node> connectedNodes = GetNeighbourNodes(targetNode);
+        if (connectedNodes.Count < 1)
+        {
+            return defaultPos;
+        }
+        Vector3 combined = defaultPos;
+        int i = 1;
+        foreach(Node node in connectedNodes)
+        {
+            combined = combined + node.transform.position;
+            i++;
+        }
+        return combined / (float)i;
+    }
+
+    private List<Node> GetNeighbourNodes(Node currentNode)
+    {
+        List<Node> connectedNodes = new List<Node>();
+        foreach (Link link in currentNode.links)
+        {
+            if (link.nodeA == currentNode)
+            {
+                connectedNodes.Add(link.nodeB);
+            } else
+            {
+                connectedNodes.Add(link.nodeA);
+            }
+        }
+        return connectedNodes;
+    }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BossController : MonoBehaviour
 {
@@ -22,11 +23,13 @@ public class BossController : MonoBehaviour
     private bool deathHandled;
     public ExplosionHandler explosionHandler;
     public Transform explodePosition;
-    
+    private bool startedConvo;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        startedConvo = false;
         deathHandled = false;
         convoHandler = FindObjectOfType<ConvoHandler>();
         cameraController = FindObjectOfType<CameraController>();
@@ -71,6 +74,14 @@ public class BossController : MonoBehaviour
             StartBossDeathSequence();
         }
 
+        if (startedConvo && convoHandler.currentConvo == null)
+        {
+            // convo is over
+            StaticState.currentLevel = -1;
+            StaticState.Reset();
+            SceneManager.LoadScene("CelebrateHome", LoadSceneMode.Single);
+        }
+
     }
 
     private void StartBossDeathSequence()
@@ -96,6 +107,7 @@ public class BossController : MonoBehaviour
         StartCoroutine(ExecuteAfterTime(2f, () => {
             cameraController.focusTransform = null;
             convoHandler.StartConvo(conversation);
+            startedConvo = true;
         }));
 
         // fade out to pub

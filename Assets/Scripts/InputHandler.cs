@@ -6,11 +6,13 @@ using UnityEngine.EventSystems;
 public class InputHandler : MonoBehaviour
 {
     private Game game;
+    private CameraController cameraController;
 
     // Start is called before the first frame update
     void Start()
     {
         game = FindObjectOfType<Game>();
+        cameraController = FindObjectOfType<CameraController>();
     }
 
     // Update is called once per frame
@@ -47,6 +49,7 @@ public class InputHandler : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Nodes", "Actors")))
         {
+            cameraController.followPlayer = true;
             Debug.Log("hit node actors");
             Player player = hit.transform.gameObject.GetComponent<Player>();
             Node node = hit.transform.gameObject.GetComponent<Node>();
