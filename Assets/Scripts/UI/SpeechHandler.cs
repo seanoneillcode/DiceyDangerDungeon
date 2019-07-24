@@ -79,6 +79,10 @@ public class SpeechHandler : MonoBehaviour
     private void UpdateSpeechBubble()
     {
         speechText.text = currentConvo != null ? currentConvo.lines[lineIndex] : "";
-
+        Debug.Log(" current Convo is " + currentConvo);
+        if (currentConvo != null)
+        {
+            avatar.GetComponentInChildren<Image>().sprite = currentConvo.sprite;
+        }
     }
 }

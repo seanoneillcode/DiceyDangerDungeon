@@ -991,6 +991,7 @@ MonoBehaviour:
   - Now we can live in peace underground.
   - Thanks to you kind Hero... how can we repay you?
   shouldMovePlayer: 0
+  sprite: {fileID: 21300000, guid: 3c37439b9ad03ee4e8e0cc10eb9d74f0, type: 3}
 --- !u!4 &206752328 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7289090053332140705, guid: 6fd84e361f27f4c4789a2a4e044ea62a,
@@ -1549,10 +1550,13 @@ MonoBehaviour:
   mouseMoveEnabled: 0
   followPlayer: 1
   lockToPosition: 0
+  focusSpeed: 0
   zoomFightEnabled: 0
   testPos: {fileID: 0}
   zoomToGoal: 1
   focusTransform: {fileID: 2145539675}
+  cameraSmoothing: 0
+  applyCameraOffset: 0
 --- !u!4 &307311629
 Transform:
   m_ObjectHideFlags: 0
@@ -11421,10 +11425,75 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7526907729433681542, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000015258789
+      objectReference: {fileID: 0}
+    - target: {fileID: 7526907729433681542, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.099975586
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 658924803969509990, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7526907728101770262}
+    - target: {fileID: 658924803969509990, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GoHome
+      objectReference: {fileID: 0}
     - target: {fileID: 7526907729312082504, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
       propertyPath: m_Text
       value: YOU WIN!
+      objectReference: {fileID: 0}
+    - target: {fileID: 2135786239190639730, guid: 65db0325cef2271489c8e3fb5f6009a6,
+        type: 3}
+      propertyPath: m_Text
+      value: GO HOME
       objectReference: {fileID: 0}
     - target: {fileID: 7526907729906358595, guid: 65db0325cef2271489c8e3fb5f6009a6,
         type: 3}
@@ -11470,71 +11539,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7526907729433681542, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000015258789
-      objectReference: {fileID: 0}
-    - target: {fileID: 7526907729433681542, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.099975586
-      objectReference: {fileID: 0}
-    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6448218722783447660, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4979782557429909834, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 658924803969509990, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 7526907728101770262}
-    - target: {fileID: 658924803969509990, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: GoHome
-      objectReference: {fileID: 0}
-    - target: {fileID: 2135786239190639730, guid: 65db0325cef2271489c8e3fb5f6009a6,
-        type: 3}
-      propertyPath: m_Text
-      value: GO HOME
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65db0325cef2271489c8e3fb5f6009a6, type: 3}
